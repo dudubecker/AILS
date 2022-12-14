@@ -1,1 +1,3 @@
-Debug/main.cpp.o: main.cpp
+Debug/main.cpp.o: main.cpp Instance.hpp
+
+Instance.hpp:
