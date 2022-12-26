@@ -25,9 +25,9 @@ public:
 	
 	// Constructor/Destructor
 	// Constructor com objeto instance:
-	//Sol(Instance inst_val){
-	//	inst = inst_val;
-	//};
+	Sol(Instance inst_val){
+		inst = inst_val;
+	};
 	// Adicionado na última atualização:
 	Sol();
 	

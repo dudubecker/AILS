@@ -108,7 +108,10 @@ void Instance::read(std::string file_name){
 		for(int j = 0; j < 2*n + 2; j++)
 		{
 			// Calculando distância e atribuindo à variável
-			t[i][j] = floor(sqrt(pow(x[i]-x[j], 2) + pow(y[i]-y[j],2))*100.0)/100.00;
+			
+			// Alteração em relação à ALNS: colocando 3 casas decimais e não duas!
+			
+			t[i][j] = floor(sqrt(pow(x[i]-x[j], 2) + pow(y[i]-y[j],2))*1000.0)/1000.00;
 			
 					// Determinando maiores e menores tempos de viagem (útil para normalização dos dados)
 			if (t[i][j] > max_t){
@@ -120,7 +123,6 @@ void Instance::read(std::string file_name){
 			
 		}
 		
-
 		
 	}
 	

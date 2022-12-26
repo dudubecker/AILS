@@ -1,5 +1,8 @@
 #include <iostream>
+#include <vector>
 #include <Instance.hpp>
+#include <Sol.hpp>
+#include <Heuristic.hpp>
 
 using namespace std;
 
@@ -15,14 +18,21 @@ void print(std::vector<double> const &input)
 	
 }
 
-
 int main(){
 	
 	Instance inst;
 	
 	inst.read("BB30");
 	
-	print(inst.x);
+	// Inicializando a partir do objeto instância:
+	
+	Sol S(inst);
+	
+	Heuristic Constructive('C');
+	
+	S = Constructive.apply(S);
+	
+	
 	
 	
 }
