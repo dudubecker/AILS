@@ -36,6 +36,10 @@ public:
 	
 	int k2 {0};
 	
+	// Shift: retirando-se "k" nós adjacentes de uma rota e inserindo-os em outra:
+	int k {0};
+	
+	
 	// Heuristic();
 	
 	// Inicialização padrão, apenas com o character
@@ -51,6 +55,15 @@ public:
 		
 		k1 = k1_value;
 		k2 = k2_value;
+		
+	}
+	
+	// Inicialização da heurística de Shift
+	Heuristic(char heuristic_name, int k_value){
+		
+		name = heuristic_name;
+		
+		k = k_value;
 		
 	}
 	

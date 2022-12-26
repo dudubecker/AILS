@@ -32,15 +32,17 @@ int main(){
 	
 	Heuristic Constructive('C');
 	
-	S = Constructive.apply(S);
+	Constructive.apply(S);
 	
 	S.print_sol();
 	
-	Heuristic Swap('S',2,2);
+	//Heuristic Swap('S',2,2);
 	
-	Swap.apply(S);
+	//Swap.apply(S);
 	
-	cout << "\nSolucao apos insercoes: \n" << endl;
+	Heuristic Shift('T',4);
+	
+	Shift.apply(S);
 	
 	S.print_sol();
 	

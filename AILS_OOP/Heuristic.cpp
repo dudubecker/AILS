@@ -677,9 +677,77 @@ Sol Heuristic::apply(Sol &S){
 		
 		case 'T':{
 			
+			// Possível ponto de melhoria na heurística:
+			
 			// Calculando probabilidades de escolha: desejável que, quanto maior a rota, mais provável é sua escolha para ter pedidos removidos!
 			
+			// *obs: para reduzir o número de rotas, a lógica deve ser a oposta: quanto maior o número de pedidos na rota, menor a chance de ela ser destruída
 			
+			// Para gerar números aleatórios
+			srand(time(NULL));
+			
+			// Quantidade "m" de rotas na solução:
+			int m = S.Rotas.size();
+			
+			// Escolhendo índice da rota R1, que terá os nós removidos
+			double index_R1 = rand()%(m);
+			
+			// Escolhendo índice da rota R2, necessariamente diferente de R1:
+			double index_R2 = rand()%(m);
+			
+			while (index_R1 == index_R2){
+				
+				index_R2 = rand()%(m);
+				
+			}
+			
+			// Retirando subseção com "k" elementos da rota:
+			
+			// Número de nós da rota R1
+			int n_nodes = S.Rotas.at(index_R1).size();
+			
+			// Escolhendo índice do nó inicial para remoção (a partir do índice 1)
+			int index_no_inicial = 1 + rand()%(n_nodes - 1);
+			
+			// Escolhendo índice do nó final para remoção: mínimo entre o último nó visitado e "no_inicial + k" (não considerando o depósito central) 
+			int index_no_final = std::min(n_nodes - 2, index_no_inicial + k);
+			
+			// Contabilizando todos os pedidos contidos na seção de "index_no_inicial" a "index_no_final":
+			
+			// Obtendo seção:
+			std::vector<double> k_nodes = {S.Rotas.at(index_R1).begin() + index_no_inicial, S.Rotas.at(index_R1).begin() + index_no_final};
+			
+			std::cout << "\n";
+			
+			for (auto &node: k_nodes){
+				
+				std::cout << node << " ";
+				
+			}
+			
+			std::cout << "\n";
+			
+			for (auto &node: k_nodes){
+				
+				// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
+				if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
+					
+					std::cout << node << std::endl;
+					
+					S.remover_pedido(node, index_R1);
+					
+				}
+				
+			}
+			
+			
+			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
+			
+			//for (auto &pedido: S.L){
+				
+			//	S = melhor_insercao(S, pedido, index_R2);
+				
+			//}
 			
 			
 			break;
