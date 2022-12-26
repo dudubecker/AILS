@@ -28,11 +28,20 @@ int main(){
 	
 	Sol S(inst);
 	
+	// Heurística construtiva:
+	
 	Heuristic Constructive('C');
 	
 	S = Constructive.apply(S);
 	
+	S.print_sol();
 	
+	Heuristic Swap('S',2,2);
 	
+	Swap.apply(S);
+	
+	cout << "\nSolucao apos insercoes: \n" << endl;
+	
+	S.print_sol();
 	
 }

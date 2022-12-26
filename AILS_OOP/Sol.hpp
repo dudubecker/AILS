@@ -65,6 +65,9 @@ public:
 	// Método para remoção de um pedido
 	void remover_pedido(double &pedido);
 	
+	// Método para remoção de um pedido conhecida a rota
+	void remover_pedido(double &pedido, double &index_rota);
+	
 	// Checagem se uma solução é factível ou não:
 	bool isFeasible();
 	

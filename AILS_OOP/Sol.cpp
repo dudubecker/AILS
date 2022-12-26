@@ -164,6 +164,45 @@ void Sol::remover_pedido(double &pedido){
 	
 }
 
+// Método para remoção de um pedido sabendo-se o índice da rota
+void Sol::remover_pedido(double &pedido, double &index_rota){
+	
+	// Índice do nó de pickup correspondente ao request
+	int no_pickup {pedido};
+	
+	// Índice do nó de delivery correspondente ao request
+	int no_delivery {pedido + inst.n};
+	
+	// "Procurando" pedido (no_pickup) na solução:
+	
+	//for (auto &rota: Rotas){
+		
+		// Caso o nó esteja contido na rota
+		//if (count(rota.begin(), rota.end(), no_pickup)){
+			
+	// Removendo nó de pickup
+	
+	Rotas.at(index_rota).erase(std::remove_if(Rotas.at(index_rota).begin(), Rotas.at(index_rota).end(), [&no_pickup](int value) -> bool { return value == no_pickup; }), Rotas.at(index_rota).end());
+	
+	// Removendo nó de delivery
+	
+	Rotas.at(index_rota).erase(std::remove_if(Rotas.at(index_rota).begin(), Rotas.at(index_rota).end(), [&no_delivery](int value) -> bool { return value == no_delivery; }), Rotas.at(index_rota).end());
+	
+			// break;
+			
+		// }
+	// }
+	
+	// Adicionando pedido ao conjunto L
+	L.push_back(pedido);
+	
+	// Removendo pedido do conjunto A
+	A.erase(std::remove_if(A.begin(), A.end(), [&pedido](double value) -> bool { return value == pedido; }), A.end());
+	
+	
+}
+
+
 // Método para checar factibilidade
 bool Sol::isFeasible(){
 	

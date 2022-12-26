@@ -321,6 +321,8 @@ std::vector<double> delta_melhor_insercao(Sol &S, double &pedido, int &index_rot
 	
 }
 
+// Melhor inserção considerando todas as rotas:
+
 Sol melhor_insercao(Sol &S_in,double &pedido){
 	
 	// Criando uma cópia do objeto solução (construtiva deu um bug inexplicável se não fizesse isso)
@@ -401,6 +403,88 @@ Sol melhor_insercao(Sol &S_in,double &pedido){
 	
 }
 
+// Melhor inserção considerando uma rota específica
+
+Sol melhor_insercao(Sol &S_in,double &pedido, int index_rota){
+	
+	// Criando uma cópia do objeto solução (construtiva deu um bug inexplicável se não fizesse isso)
+	Sol S(S_in.Rotas, S_in.L, S_in.A, S_in.inst);
+	
+	// Índice do nó de pickup correspondente ao request
+	int no_pickup {pedido};
+	
+	// Índice do nó de delivery correspondente ao request
+	int no_delivery {pedido + S.inst.n};
+	
+	// Variável que controlará o número de rotas factíveis encontradas
+	int num_rotas_factiveis {0};
+	
+	// Delta mínimo pela inserção do pedido da iteração
+	double delta_min {9999};
+	
+	// Posição de inserção de nó de pickup com delta mínimo
+	int pos_insercao_no_pickup_min {};
+	
+	// Posição de inserção de nó de delivery com delta mínimo
+	int pos_insercao_no_delivery_min {};
+	
+	// Índice da rota com o menor valor de inserção
+	int index_rota_min {};
+	
+	// Realizando inserções
+	//for (auto index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
+		
+		for (auto pos_insercao_no_pickup {1}; pos_insercao_no_pickup < S.Rotas[index_rota].size() + 1; pos_insercao_no_pickup++){
+			
+			for (auto pos_insercao_no_delivery {1}; pos_insercao_no_delivery < S.Rotas[index_rota].size() + 1; pos_insercao_no_delivery++){
+				
+				// Testando apenas índices de inserção válidos: índice de delivery maior do que o de pickup (precedence) e diferente dele!
+				// A iteração começa em 1 e termina no tamanho da rota porque não se considera a primeira e última posição da rota, que são o depósito
+				if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
+					
+					// Criando cópia do objeto, para testar inserção
+					Sol S_teste = S;
+					
+					// Inserindo nós na rota, nas posições da iteração
+					S_teste.inserir_pedido(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
+					
+					if (S_teste.isFeasible(index_rota)){
+						
+						num_rotas_factiveis += 1;
+						
+						double delta_S = delta_FO_ins(S, pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
+						
+						if (delta_S < delta_min){
+							
+							delta_min = delta_S;
+							
+							pos_insercao_no_pickup_min = pos_insercao_no_pickup;
+							
+							pos_insercao_no_delivery_min = pos_insercao_no_delivery;
+							
+							index_rota_min = index_rota;
+							
+							
+						}
+						
+						
+					}
+					
+				}
+			}		
+		}			
+	//}
+	
+	if (num_rotas_factiveis > 0){
+		
+		S.inserir_pedido(pedido, index_rota_min, pos_insercao_no_pickup_min, pos_insercao_no_delivery_min);
+		
+	}
+	
+	return S;
+	
+}
+
 // Fim das funções utilizadas ao longo da implementação das heurísticas
 
 // Método principal das heurísticas
@@ -470,7 +554,139 @@ Sol Heuristic::apply(Sol &S){
 			
 			break;
 		}
-			default:
+		
+		// Estrutura de busca local: Swap
+		
+		case 'S':{
+			
+			// Para gerar números aleatórios (índices das rotas e pedidos escolhidos)
+			srand(time(NULL));
+			
+			// Quantidade "m" de rotas na solução:
+			int m = S.Rotas.size();
+			
+			// Escolhendo índice da rota R1:
+			double index_R1 = rand()%(m);
+			
+			// Escolhendo índice da rota R2, necessariamente diferente de R1:
+			double index_R2 = rand()%(m);
+			
+			while (index_R1 == index_R2){
+				
+				index_R2 = rand()%(m);
+				
+			}
+			
+			// Vetor com pedidos retirados da rota R1:
+			std::vector<double> pedidosRemovidos_R1 {};
+			
+			// Vetor com pedidos retirados da rota R2:
+			std::vector<double> pedidosRemovidos_R2 {};
+			
+			std::cout << "\nindex_R1: " << index_R1 << "\nindex_R2: " << index_R2 << std::endl;
+			
+			// Removendo pedidos:
+			
+			// Escolhendo aleatoriamente k1 pedidos da rota R1 para serem retirados:
+			for (int i {0}; i < k1; i++){
+				
+				// Número de nós da rota R1 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
+				int n_nodes = S.Rotas.at(index_R1).size();
+				
+				// Inicializando pedido a ser removido:
+				double pedido {9999};
+				
+				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
+				while (pedido > S.inst.n){
+				
+					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
+					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					
+					pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
+					
+				}
+				
+				std::cout << "\nPedido escolhido: " << pedido << std::endl;
+				
+				// Removendo pedido de R1:
+				
+				S.remover_pedido(pedido, index_R1);
+				pedidosRemovidos_R1.push_back(pedido);
+				
+			}
+			
+			// Escolhendo aleatoriamente k2 pedidos da rota R2 para serem retirados:
+			for (int i {0}; i < k2; i++){
+				
+				// Número de nós da rota R2 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
+				int n_nodes = S.Rotas.at(index_R2).size();
+				
+				// Inicializando pedido a ser removido:
+				double pedido {9999};
+				
+				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
+				while (pedido > S.inst.n){
+				
+					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
+					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					
+					pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
+					
+				}
+				
+				std::cout << "\nPedido escolhido: " << pedido << std::endl;
+				
+				// Removendo pedido de R2:
+				
+				S.remover_pedido(pedido);
+				pedidosRemovidos_R2.push_back(pedido);
+				
+			}
+			
+			
+			std::cout << "\nSolucao apos remocoes: \n" << std::endl;
+			
+			S.print_sol();
+			
+			// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
+			for (auto &pedido: pedidosRemovidos_R1){
+				
+				S = melhor_insercao(S, pedido, index_R2);
+				
+			}
+			
+			// Inserindo os "k2" pedidos na rota R2, na melhor posição factível:
+			
+			for (auto &pedido: pedidosRemovidos_R2){
+				
+				S = melhor_insercao(S, pedido, index_R1);
+				
+			}
+			
+			// Teste: inserindo em quaisquer posições os pedidos após tentar trocá-los:
+			
+			//for (auto &pedido: S.L){
+				
+			//	S = melhor_insercao(S, pedido);
+				
+			//}
+			
+			break;
+			
+		}
+		
+		case 'T':{
+			
+			// Calculando probabilidades de escolha: desejável que, quanto maior a rota, mais provável é sua escolha para ter pedidos removidos!
+			
+			
+			
+			
+			break;
+			
+		}
+		
+		default:
 			std::cout << "Invalido" << std::endl;
 			
 	}

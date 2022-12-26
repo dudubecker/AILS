@@ -9,7 +9,7 @@ class Heuristic
 {
 public:
 	
-		// Nome da heurística: 
+	// Nome da heurística: 
 	char name {};
 	
 	// Score da heurística, atualizado dinamicamente no algoritmo
@@ -30,9 +30,11 @@ public:
 	
 	// ... Demais parâmetros específicos de cada heurística
 	
+	// Swap: trocando "k1" pedidos de uma rota "r1" e por "k2" pedidos de uma rota "r2"
 	
+	int k1 {0};
 	
-	
+	int k2 {0};
 	
 	// Heuristic();
 	
@@ -40,6 +42,16 @@ public:
 	Heuristic(char heuristic_name){
 		
 		name = heuristic_name;
+	}
+	
+	// Inicialização da heurística de Swap
+	Heuristic(char heuristic_name, int k1_value, int k2_value){
+		
+		name = heuristic_name;
+		
+		k1 = k1_value;
+		k2 = k2_value;
+		
 	}
 	
 	
