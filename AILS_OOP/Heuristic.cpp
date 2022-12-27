@@ -826,20 +826,74 @@ Sol Heuristic::apply(Sol &S){
 			// Escolhendo índice da rota que terá os nós removidos
 			double index_rota = rand()%(m);
 			
+			// Número de nós contidos na rota:
+			int n_nodes = S.Rotas.at(index_rota).size();
+			
+			std::cout << "\nRota: " << index_rota << std::endl;
+			
 			// Escolhendo pedidos 1 e 2, tal que D1 é servido anteriormente à P2
 			
-			// Escolhendo pedido D1
+			// Índice do último nó de pickup visitado
+			int index_ultimo_no_pickup {};
 			
-			// Achando posição do P1 correspondente
+			// Achando último nó de pickup visitado:
+			for (int index_no {n_nodes - 2}; index_no > 0; index_no--){
+				
+				int node = S.Rotas.at(index_rota).at(index_no);
+				
+				if (node <= S.inst.n){
+					
+					index_ultimo_no_pickup = index_no;
+					
+					break;
+					
+				}
+			}
+			
+			// Escolhendo pedido D1 -> Deve estar antes do último nó de pickup visitado
+			int index_D1 {};
+			
+			int no_D1 {};
+			
+			// O pedido deve ser de delivery!
+			while (no_D1 <= S.inst.n){
+				
+				std::cout << "\nPrimeiro while" << std::endl;
+				
+				index_D1 = 1 + rand()%(index_ultimo_no_pickup - 1);
+				
+				no_D1 = S.Rotas.at(index_rota).at(index_D1);
+				
+			}
 			
 			// Escolhendo pedido P2, com ordinalidade necessariamente maior que D1
+			int index_P2 {};
 			
-			// Achando posição D2 correspondente
+			int no_P2 {9999};
+			
+			// O pedido deve ser de pickup!
+			while (no_P2 > S.inst.n){
+				
+				std::cout << "\nSegundo while" << std::endl;
+				
+				index_P2 = index_D1 + rand()%(n_nodes - index_D1 - 2);
+				
+				no_P2 = S.Rotas.at(index_rota).at(index_P2);
+				
+			}
+			
+			std::cout << "D1: " << no_D1 << "\nP2: " << no_P2 << std::endl;
+			
+			// Trocando nós de posição:
+			
+			S.Rotas.at(index_rota).at(index_D1) = no_P2;
+			
+			S.Rotas.at(index_rota).at(index_P2) = no_D1;
 			
 			
 			
 			
-			
+			break;
 		}
 		
 		
@@ -848,6 +902,8 @@ Sol Heuristic::apply(Sol &S){
 			std::cout << "Invalido" << std::endl;
 			
 	}
+	
+	// if S.isfeasible // se a mudança melhorou a função objetivo
 	
 	return S;
 	

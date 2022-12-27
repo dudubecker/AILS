@@ -3,8 +3,12 @@
 #include <Instance.hpp>
 #include <Sol.hpp>
 #include <Heuristic.hpp>
+#include <chrono>
+#include <thread>
 
 using namespace std;
+using namespace std::this_thread; 
+using namespace std::chrono;
 
 // Função para printar vetores: debug
 
@@ -46,12 +50,21 @@ int main(){
 	
 	// Shift.apply(S);
 	
-	Heuristic Or_opt('O', 2);
+	//Heuristic Or_opt('O', 2);
 	
-	Or_opt.apply(S);
+	//Or_opt.apply(S);
 	
+	Heuristic Two_Opt('W');
+	
+	Two_Opt.apply(S);
+		
 	S.print_sol();
+		
+
 	
 	cout << "\n FO: " << S.FO() << endl;
+		
+	
+
 	
 }
