@@ -657,6 +657,8 @@ Sol Heuristic::apply(Sol &S){
 			
 			// Inserindo os "k2" pedidos na rota R2, na melhor posição factível:
 			
+			// Obs -> inserir na melhor posição considerando todos os pedidos ou apenas a ordem deles na lista?
+			
 			for (auto &pedido: pedidosRemovidos_R2){
 				
 				S = melhor_insercao(S, pedido, index_R1);
@@ -674,6 +676,8 @@ Sol Heuristic::apply(Sol &S){
 			break;
 			
 		}
+		
+		// Estrutura de busca local: Shift
 		
 		case 'T':{
 			
@@ -740,6 +744,62 @@ Sol Heuristic::apply(Sol &S){
 				
 			}
 			
+			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
+			
+			//for (auto &pedido: S.L){
+				
+			//	S = melhor_insercao(S, pedido, index_R2);
+				
+			//}
+			
+			break;
+			
+		}
+		
+		// Estrutura de busca local: Or-opt
+		
+		case 'O':{
+			
+			// Para gerar números aleatórios
+			srand(time(NULL));
+			
+			// Quantidade "m" de rotas na solução:
+			int m = S.Rotas.size();
+			
+			// Escolhendo índice da rota que terá os nós removidos
+			double index_rota = rand()%(m);
+			
+			// Número de nós contidos na rota:
+			int n_nodes = S.Rotas.at(index_rota).size();
+			
+			// Removendo pedidos:
+			
+			// Removendo "or_opt" pedidos da rota
+			for (auto i {0}; i < or_opt; i++){
+				
+				// Inicializando pedido a ser removido:
+				double pedido {9999};
+				
+				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
+				while (pedido > S.inst.n){
+				
+					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
+					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					
+					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
+					
+				}
+				
+				S.remover_pedido(pedido, index_rota);
+				
+				// Atualizando variável com tamanho da rota, após remoção do pedido
+				n_nodes -= 2;
+				
+			}
+			
+			// Reinserindo pedidos:
+			
+			// Obs -> inserir na melhor posição considerando todos os pedidos ou apenas a ordem deles na lista?
 			
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
@@ -751,8 +811,38 @@ Sol Heuristic::apply(Sol &S){
 			
 			
 			break;
+		}
+		
+		// Estrutura de busca local: 2-opt
+		
+		case 'W':{
+			
+			// Para gerar números aleatórios
+			srand(time(NULL));
+			
+			// Quantidade "m" de rotas na solução:
+			int m = S.Rotas.size();
+			
+			// Escolhendo índice da rota que terá os nós removidos
+			double index_rota = rand()%(m);
+			
+			// Escolhendo pedidos 1 e 2, tal que D1 é servido anteriormente à P2
+			
+			// Escolhendo pedido D1
+			
+			// Achando posição do P1 correspondente
+			
+			// Escolhendo pedido P2, com ordinalidade necessariamente maior que D1
+			
+			// Achando posição D2 correspondente
+			
+			
+			
+			
 			
 		}
+		
+		
 		
 		default:
 			std::cout << "Invalido" << std::endl;

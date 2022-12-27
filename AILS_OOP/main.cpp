@@ -22,7 +22,7 @@ int main(){
 	
 	Instance inst;
 	
-	inst.read("BB30");
+	inst.read("YY30");
 	
 	// Inicializando a partir do objeto instância:
 	
@@ -36,14 +36,22 @@ int main(){
 	
 	S.print_sol();
 	
-	//Heuristic Swap('S',2,2);
+	cout << "\n FO: " << S.FO() << endl;
 	
-	//Swap.apply(S);
+	// Heuristic Swap('S',2,2);
 	
-	Heuristic Shift('T',4);
+	// Swap.apply(S);
 	
-	Shift.apply(S);
+	// Heuristic Shift('T',4);
+	
+	// Shift.apply(S);
+	
+	Heuristic Or_opt('O', 2);
+	
+	Or_opt.apply(S);
 	
 	S.print_sol();
+	
+	cout << "\n FO: " << S.FO() << endl;
 	
 }

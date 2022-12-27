@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=User
-Date                   :=26/12/2022
+Date                   :=27/12/2022
 CodeLitePath           :="C:/Program Files/CodeLite"
 LinkerName             :="C:/Program Files/mingw-w64/mingw64/bin/g++.exe"
 SharedObjectLinkerName :="C:/Program Files/mingw-w64/mingw64/bin/g++.exe" -shared -fPIC
@@ -62,7 +62,7 @@ AS       := "C:/Program Files/mingw-w64/mingw64/bin/as.exe"
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/Heuristic.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Heuristic.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) 
 
 
 
@@ -93,6 +93,12 @@ PreBuild:
 ##
 ## Objects
 ##
+$(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
+
 $(IntermediateDirectory)/Heuristic.cpp$(ObjectSuffix): Heuristic.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Heuristic.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Heuristic.cpp$(DependSuffix) -MM Heuristic.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/Heuristic.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Heuristic.cpp$(ObjectSuffix) $(IncludePath)
@@ -110,12 +116,6 @@ $(IntermediateDirectory)/Instance.cpp$(ObjectSuffix): Instance.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/Instance.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Instance.cpp$(PreprocessSuffix): Instance.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Instance.cpp$(PreprocessSuffix) Instance.cpp
-
-$(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

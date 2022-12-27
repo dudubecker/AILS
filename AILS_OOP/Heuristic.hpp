@@ -31,7 +31,6 @@ public:
 	// ... Demais parâmetros específicos de cada heurística
 	
 	// Swap: trocando "k1" pedidos de uma rota "r1" e por "k2" pedidos de uma rota "r2"
-	
 	int k1 {0};
 	
 	int k2 {0};
@@ -39,6 +38,8 @@ public:
 	// Shift: retirando-se "k" nós adjacentes de uma rota e inserindo-os em outra:
 	int k {0};
 	
+	// Or-opt: retirando-se "k" pedidos de uma rota e inserindo-os na melhor posição
+	int or_opt {0};
 	
 	// Heuristic();
 	
@@ -58,14 +59,20 @@ public:
 		
 	}
 	
-	// Inicialização da heurística de Shift
-	Heuristic(char heuristic_name, int k_value){
+	// Inicialização da heurística de Shift e Or-opt:
+	
+	// Funciona para ambos operadores, diferindo-se no switch-case!
+	
+	Heuristic(char heuristic_name, int value){
 		
 		name = heuristic_name;
 		
-		k = k_value;
+		k = value;
+		
+		or_opt = value;
 		
 	}
+	
 	
 	
 	~Heuristic();

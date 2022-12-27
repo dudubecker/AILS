@@ -16,7 +16,7 @@ double Sol::FO(){
 	// Calculando custos da solução: ainda segundo método convencional, não utilizando FO do artigo!
 	
 	// Custo de cada veículo da instância:
-	int custo_veiculo = 10000;
+	double custo_veiculo = 10000;
 	
 	// Custos totais
 	double custos_totais = 0;
