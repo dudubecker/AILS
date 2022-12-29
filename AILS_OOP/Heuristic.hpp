@@ -83,7 +83,6 @@ public:
 	// Método de aplicação da heurística: tem como entrada uma solução e como saída uma solução alterada (Rotas, L e A)
 	Sol apply(Sol &S);
 
-
 };
 
 #endif // _HEURISTIC_H_

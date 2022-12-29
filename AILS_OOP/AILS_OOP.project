@@ -93,6 +93,8 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="src">
+    <File Name="LocalSearchOperator.cpp"/>
+    <File Name="LocalSearchOperator.hpp"/>
     <File Name="Heuristic.cpp"/>
     <File Name="Heuristic.hpp"/>
     <File Name="Sol.cpp"/>
