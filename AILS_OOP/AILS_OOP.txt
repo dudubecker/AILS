@@ -1,1 +1,1 @@
-Debug/main.cpp.o Debug/Heuristic.cpp.o Debug/Sol.cpp.o Debug/Instance.cpp.o   
+Debug/main.cpp.o Debug/Instance.cpp.o Debug/LocalSearchOperator.cpp.o Debug/Sol.cpp.o   

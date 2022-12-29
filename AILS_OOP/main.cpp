@@ -2,7 +2,7 @@
 #include <vector>
 #include <Instance.hpp>
 #include <Sol.hpp>
-#include <Heuristic.hpp>
+#include <LocalSearchOperator.hpp>
 
 using namespace std;
 
@@ -30,7 +30,7 @@ int main(){
 	
 	// Heurística construtiva:
 	
-	Heuristic Constructive('C');
+	LocalSearchOperator Constructive('C');
 	
 	Constructive.apply(S);
 	
@@ -50,7 +50,7 @@ int main(){
 	
 	//Or_opt.apply(S);
 	
-	Heuristic Two_Opt('W');
+	LocalSearchOperator Two_Opt('W');
 	
 	Two_Opt.apply(S);
 		
@@ -59,6 +59,6 @@ int main(){
 	cout << "\n FO: " << S.FO() << endl;
 		
 	
-
+	
 	
 }

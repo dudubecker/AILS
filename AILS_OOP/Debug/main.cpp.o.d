@@ -1,5 +1,5 @@
 Debug/main.cpp.o: main.cpp Instance.hpp Sol.hpp Instance.hpp \
- Heuristic.hpp Sol.hpp
+ LocalSearchOperator.hpp Sol.hpp
 
 Instance.hpp:
 
@@ -7,6 +7,6 @@ Sol.hpp:
 
 Instance.hpp:
 
-Heuristic.hpp:
+LocalSearchOperator.hpp:
 
 Sol.hpp:
