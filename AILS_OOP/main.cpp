@@ -40,9 +40,9 @@ int main(){
 	
 	cout << "\n FO: " << S.FO() << endl;
 	
-	// LocalSearchOperator Swap('S',2,2);
+	LocalSearchOperator Swap('S',1,1);
 	
-	// Swap.apply(S);
+	Swap.apply(S);
 	
 	// LocalSearchOperator Shift('T',4);
 	
@@ -56,13 +56,15 @@ int main(){
 	
 	// Two_Opt.apply(S);
 	
-	Perturbation Random('R');
+	// Perturbation Random('R');
 	
-	Random.apply(S, 5);
+	// Random.apply(S, 2);
 	
 	S.print_sol();
 	
 	cout << "\n FO: " << S.FO() << endl;
+	
+	// cout << "\n Factibilidade: " << S.isFeasible() << endl;
 		
 	
 	

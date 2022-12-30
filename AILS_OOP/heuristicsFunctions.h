@@ -25,4 +25,10 @@ Sol melhor_insercao(Sol &S_in,double &pedido);
 // Melhor inserção considerando uma rota específica
 Sol melhor_insercao(Sol &S_in,double &pedido, int index_rota);
 
+// Avaliando factibilidade da inserção de um pedido (sem realizar a inserção!)
+bool isInsertionFeasible(Sol &S, double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery);
+
+// Avaliando factibilidade de uma rota (passando vetor e instância e não objeto solução!):
+bool isRouteFeasible(std::vector<double> &Rota, Instance &inst);
+
 #endif

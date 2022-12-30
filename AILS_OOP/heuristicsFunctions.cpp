@@ -342,6 +342,10 @@ Sol melhor_insercao(Sol &S_in,double &pedido){
 	// Índice da rota com o menor valor de inserção
 	int index_rota_min {};
 	
+	// std::cout << "\n\n";
+	
+	int contador {0};
+	
 	// Realizando inserções
 	for (auto index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
 		
@@ -352,6 +356,12 @@ Sol melhor_insercao(Sol &S_in,double &pedido){
 				// Testando apenas índices de inserção válidos: índice de delivery maior do que o de pickup (precedence) e diferente dele!
 				// A iteração começa em 1 e termina no tamanho da rota porque não se considera a primeira e última posição da rota, que são o depósito
 				if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
+					
+					//contador++;
+					
+					//std::cout << "Rota: " << index_rota << "\nPos. ins. no pickup: " << pos_insercao_no_pickup << "\nPos. ins. no delivery: " << pos_insercao_no_delivery << std::endl;
+					
+					//std::cout << "Contador: " << contador << std::endl;
 					
 					// Criando cópia do objeto, para testar inserção
 					Sol S_teste = S;
@@ -385,6 +395,8 @@ Sol melhor_insercao(Sol &S_in,double &pedido){
 			}		
 		}			
 	}
+	
+	// std::cout << "\n\n";
 	
 	if (num_rotas_factiveis > 0){
 		
@@ -436,12 +448,13 @@ Sol melhor_insercao(Sol &S_in,double &pedido, int index_rota){
 				if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
 					
 					// Criando cópia do objeto, para testar inserção
-					Sol S_teste = S;
+					// Sol S_teste = S;
 					
 					// Inserindo nós na rota, nas posições da iteração
-					S_teste.inserir_pedido(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
+					// S_teste.inserir_pedido(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
 					
-					if (S_teste.isFeasible(index_rota)){
+					// if (S_teste.isFeasible(index_rota)){
+					if (isInsertionFeasible(S, pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
 						
 						num_rotas_factiveis += 1;
 						
@@ -478,6 +491,91 @@ Sol melhor_insercao(Sol &S_in,double &pedido, int index_rota){
 	
 }
 
-// Fim das funções utilizadas ao longo da implementação das heurísticas
+// Avaliando factibilidade da inserção de um pedido (sem realizar a inserção!)
+bool isInsertionFeasible(Sol &S, double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery){
+	
+	// Variável booleana, que controla a factibilidade
+	bool factivel = true;
+	
+	// Índice do nó de pickup correspondente ao request
+	int no_pickup {pedido};
+	
+	// Índice do nó de delivery correspondente ao request
+	int no_delivery {pedido + S.inst.n};
+	
+	// Rota que terá inserção testada:
+	std::vector<double> Rota = S.Rotas.at(index_rota);
+	
+	// Realizando inserção:
+	
+	Rota.insert(Rota.begin() + pos_no_pickup, no_pickup);
+	Rota.insert(Rota.begin() + pos_no_delivery, no_delivery);
+	
+	// Checando factibilidade:
+	if (!isRouteFeasible(Rota, S.inst)){
+		
+		factivel = false;
+		
+	}
+	
+	return factivel;
+	
+}
+
+bool isRouteFeasible(std::vector<double> &Rota, Instance &inst){
+	
+	// *** Checando factibilidade da rota ***
+	// *OBS: não é necessário testar pairing e precedence, porque os pedidos são inseridos em pares nas rotas e as posições de inserção já asseguram precedência
+	
+	// Variável booleana, que controla a factibilidade
+	bool factivel = true;
+	
+	
+	// Capacidade atual do veículo na rota (inicia como 0)
+	double cap_atual {0};
+	
+	// Tempo atual da rota (inicia como 0)
+	double t_atual {0};
+	
+	for (unsigned index_no {1}; index_no < Rota.size(); index_no++){
+	
+		// Variável que guarda o nó atual considerado na checagem de factibilidade
+		int no_atual {Rota.at(index_no - 1)};
+		
+		// Variável que guarda o nó seguinte considerado na checagem de factibilidade
+		int no_seguinte {Rota.at(index_no)};
+		
+		// Checando se ir do no atual para o nó seguinte irá violar as restrições de capacidade e time window
+		if ((cap_atual + inst.q.at(no_seguinte) > inst.Cap) || (inst.l.at(no_seguinte) < t_atual + inst.t.at(no_atual).at(no_seguinte))){
+			
+			// Atribuindo valor falso para a variável de factibilidade e quebrando o laço for
+			factivel = false;
+			break;
+			
+		// Caso seja possível, os valores são atualizados
+		} else {
+			// Atualizando valores
+			
+			// Capacidade
+			cap_atual += inst.q.at(no_seguinte);
+			
+			// Tempo
+			// Caso haja adiantamento (tempo de chegada menor que a janela de tempo de abertura)
+			if (t_atual + inst.t.at(no_atual).at(no_seguinte) < inst.e.at(no_seguinte)){
+				t_atual = inst.e.at(no_seguinte);
+				
+			} else {
+				t_atual += inst.t.at(no_atual).at(no_seguinte);
+				
+			}
+		}
+	}
+	
+	return factivel;
+	
+}
+
+
+// Fim das funções utilizadas ao longo da implementação dos operadores/perturbações
 
 

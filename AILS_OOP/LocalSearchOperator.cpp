@@ -89,7 +89,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 		case 'S':{
 			
 			// Para gerar números aleatórios (índices das rotas e pedidos escolhidos)
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
@@ -196,11 +196,11 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Teste: inserindo em quaisquer posições os pedidos após tentar trocá-los:
 			
-			//for (auto &pedido: S.L){
+			for (auto &pedido: S.L){
 				
-			//	S = melhor_insercao(S, pedido);
+				S = melhor_insercao(S, pedido);
 				
-			//}
+			}
 			
 			break;
 			
