@@ -52,10 +52,14 @@ int main(){
 	
 	// Or_opt.apply(S);
 	
-	LocalSearchOperator Two_Opt('W');
+	// LocalSearchOperator Two_Opt('W');
 	
-	Two_Opt.apply(S);
-		
+	// Two_Opt.apply(S);
+	
+	Perturbation Random('R');
+	
+	Random.apply(S, 5);
+	
 	S.print_sol();
 	
 	cout << "\n FO: " << S.FO() << endl;

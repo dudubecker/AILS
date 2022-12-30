@@ -30,7 +30,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			std::cout << "Solucao apos heuristica construtiva" << std::endl;
 			
-			/* Criando variáveis com valores atualizados a cada inserção */
+			// Criando variáveis com valores atualizados a cada inserção
 			// Inserindo no conjunto L os pedidos não atendidos
 			for(double value = 1; value < S.inst.n + 1; value++){
 				
