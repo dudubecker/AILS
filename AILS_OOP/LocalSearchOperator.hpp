@@ -25,7 +25,6 @@ public:
 	// Tempo computacional empregado na heurística:
 	// double processing_time {};
 	
-	
 	// Número total de iterações pelas quais a heurística passou
 	// int n_it_total {0};
 	

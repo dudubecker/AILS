@@ -93,6 +93,10 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="src">
+    <File Name="heuristicsFunctions.cpp"/>
+    <File Name="heuristicsFunctions.h"/>
+    <File Name="Perturbation.cpp"/>
+    <File Name="Perturbation.hpp"/>
     <File Name="LocalSearchOperator.cpp"/>
     <File Name="LocalSearchOperator.hpp"/>
     <File Name="Sol.cpp"/>

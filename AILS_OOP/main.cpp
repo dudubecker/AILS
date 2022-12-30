@@ -3,6 +3,8 @@
 #include <Instance.hpp>
 #include <Sol.hpp>
 #include <LocalSearchOperator.hpp>
+#include <heuristicsFunctions.h>
+#include <Perturbation.hpp>
 
 using namespace std;
 
@@ -38,17 +40,17 @@ int main(){
 	
 	cout << "\n FO: " << S.FO() << endl;
 	
-	// Heuristic Swap('S',2,2);
+	// LocalSearchOperator Swap('S',2,2);
 	
 	// Swap.apply(S);
 	
-	// Heuristic Shift('T',4);
+	// LocalSearchOperator Shift('T',4);
 	
 	// Shift.apply(S);
 	
-	//Heuristic Or_opt('O', 2);
+	// LocalSearchOperator Or_opt('O', 2);
 	
-	//Or_opt.apply(S);
+	// Or_opt.apply(S);
 	
 	LocalSearchOperator Two_Opt('W');
 	
