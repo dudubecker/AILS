@@ -1,5 +1,6 @@
 #include "Sol.hpp"
 #include "Instance.hpp"
+ 
 
 Sol::Sol()
 {
@@ -16,10 +17,10 @@ double Sol::FO(){
 	// Calculando custos da solução: ainda segundo método convencional, não utilizando FO do artigo!
 	
 	// Custo de cada veículo da instância:
-	double custo_veiculo = 10000;
+	double custo_veiculo = 10000.00;
 	
 	// Custos totais
-	double custos_totais = 0;
+	double custos_totais = 0.00;
 	
 	for (auto &rota: Rotas){
 		
@@ -27,7 +28,7 @@ double Sol::FO(){
 		
 		for (unsigned index_no {0}; index_no < rota.size() - 1; index_no++){
 			
-			custos_totais += inst.t[rota[index_no]][rota[index_no + 1]];
+			custos_totais += (double) inst.t[rota[index_no]][rota[index_no + 1]];
 			
 		}
 	}

@@ -5,6 +5,7 @@
 #include <LocalSearchOperator.hpp>
 #include <heuristicsFunctions.h>
 #include <Perturbation.hpp>
+#include <iomanip>
 
 using namespace std;
 
@@ -38,7 +39,7 @@ int main(){
 	
 	S.print_sol();
 	
-	cout << "\n FO: " << S.FO() << endl;
+	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
 	// LocalSearchOperator Swap('S',1,1);
 	
@@ -56,13 +57,17 @@ int main(){
 	
 	// Two_Opt.apply(S);
 	
-	Perturbation Random('R');
+	// Perturbation Random('R');
 	
-	Random.apply(S, 2);
+	// Random.apply(S, 6);
+	
+	Perturbation Worst('W');
+	
+	Worst.apply(S, 4);
 	
 	S.print_sol();
 	
-	cout << "\n FO: " << S.FO() << endl;
+	cout << "\n FO: "  << S.FO() << endl;
 	
 	// cout << "\n Factibilidade: " << S.isFeasible() << endl;
 		
