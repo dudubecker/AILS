@@ -46,91 +46,26 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			
 			S.print_sol();
 			
-			// Inserindo pedidos com método de primeira inserção factível aleatória
+			// Inserindo pedidos com método de primeira inserção factível aleatória (sem critérios para a ordem dos pedidos)
 			
-			double pedido = S.L.at(0);
+			// Pedidos não inseridos na solução (referenciar diretamente no for loop deu um bug)
 			
-			// Criando vetor 2D para armazenar todas as combinações possíveis (rota, pos_insercao_no_pickup, pos_insercao_no_delivery)
-			std::vector<std::vector<int>> pos_insercoes {};
+			std::vector<double> pedidos_nao_inseridos = S.L;
 			
-			for (auto index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
+			for (auto pedido: pedidos_nao_inseridos){
 				
-				for (auto pos_insercao_no_pickup {1}; pos_insercao_no_pickup < S.Rotas[index_rota].size() + 1; pos_insercao_no_pickup++){
-					
-					for (auto pos_insercao_no_delivery {1}; pos_insercao_no_delivery < S.Rotas[index_rota].size() + 1; pos_insercao_no_delivery++){
-						
-						// Testando apenas índices de inserção válidos: índice de delivery maior do que o de pickup (precedence) e diferente dele!
-						// A iteração começa em 1 e termina no tamanho da rota porque não se considera a primeira e última posição da rota, que são o depósito
-						// if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
-						if (pos_insercao_no_pickup < pos_insercao_no_delivery){
-							
-							pos_insercoes.push_back({index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery});
-							
-						}
-					}
-				}
-			}
-			
-			// Printando vetor:
-			
-			//for (auto vetor: pos_insercoes){
+				// std::cout << "\nPedido: " << pedido << std::endl;
 				
-			//	std::cout << "\n";
-				
-			//	for (auto i: vetor){
-					
-			//		std::cout << i << " ";
-					
-			//	}
-			//}
-			
-			// Método para "sortear" uma combinação aleatória e assegurar que todas foram testadas:
-			
-			// Número de combinações disponíveis para teste, atualizado dinamicamente
-			int n_combinacoes = pos_insercoes.size();
-			
-			// Vetor com índices de combinações
-			std::vector<int> index_combinacoes(n_combinacoes);
-			std::iota(index_combinacoes.begin(), index_combinacoes.end(), 0);
-			
-			// Aleatorizando vetor com índices de combinações
-			std::random_shuffle(index_combinacoes.begin(), index_combinacoes.end());
-			
-			int contador {0};
-			
-			while (n_combinacoes > 0){
-				
-				// Escolhendo objeto correspondente ao primeiro índice aleatório
-				std::vector<int> combinacao = pos_insercoes.at(index_combinacoes.at(0));
-				
-				// Removendo índice do vetor de índices de combinações
-				index_combinacoes.erase(index_combinacoes.begin());
-				
-				std::cout << "Testando posicao numero: " << contador << std::endl;
-				contador++;
-				
-				// Avaliando factibilidade da inserção
-				if (isInsertionFeasible(S, pedido, combinacao.at(0), combinacao.at(1), combinacao.at(2))){
-					
-					S.inserir_pedido(pedido, combinacao.at(0), combinacao.at(1), combinacao.at(2));
-					
-					break;
-					
-				}
-				
-				// Se a inserção for factível, o loop se interrompe
-				
-				// Atualizando valor do número de combinações disponíveis para serem testadas
-				n_combinacoes -= 1;
+				S = primeira_insercao_factivel(S, pedido);
 				
 			}
 			
-			std::cout << "Solucao apos insercao" << std::endl;
+			std::cout << "Solucao apos insercoes" << std::endl;
 			
 			S.print_sol();
+			
 			
 			// Fim da heurística random removal
 			break;

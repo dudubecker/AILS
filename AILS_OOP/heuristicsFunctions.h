@@ -31,4 +31,10 @@ bool isInsertionFeasible(Sol &S, double &pedido, int index_rota, int &pos_no_pic
 // Avaliando factibilidade de uma rota (passando vetor e instância e não objeto solução!):
 bool isRouteFeasible(std::vector<double> &Rota, Instance &inst);
 
+// Inserindo pedido em solução na primeira posição factível encontrada
+// void ou Sol?
+
+Sol primeira_insercao_factivel(Sol &S,double &pedido);
+
+
 #endif
