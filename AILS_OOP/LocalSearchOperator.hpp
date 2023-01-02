@@ -41,6 +41,14 @@ public:
 	// Or-opt: retirando-se "k" pedidos de uma rota e inserindo-os na melhor posição
 	int or_opt {0};
 	
+	// Shaw's Removal: parâmetros da própria heurística e quantidade de pedidos analisados
+	
+	int k_shaw {0};
+	
+	double phi {};
+	double chi {};
+	double psi {};
+	
 	// LocalSearchOperator();
 	
 	// Inicialização padrão, apenas com o character
@@ -70,6 +78,20 @@ public:
 		k = value;
 		
 		or_opt = value;
+		
+	}
+	
+	// Inicialização para operador Shaw's, com diferentes parâmetros
+	
+	LocalSearchOperator(char perturbation_name, int k_shaw_value,double phi_value, double chi_value, double psi_value){
+		
+		name = perturbation_name;
+		
+		phi = phi_value;
+		chi = chi_value;
+		psi = psi_value;
+		
+		k_shaw = k_shaw_value;
 		
 	}
 	

@@ -425,6 +425,338 @@ Sol LocalSearchOperator::apply(Sol &S){
 			break;
 		}
 		
+		// Estrutura de busca local: Shaw's
+		
+		case 'H':{
+			
+			srand(time(NULL));
+			
+			std::cout << "Solucao apos shaws removal" << std::endl;
+			
+			// Parâmetro "delta" para controle da aleatoriedade 
+			const int delta {6};
+			
+			// Obtendo tempos de visita (T_i) de cada nó "i" na solução S
+			
+			std::vector <double> T (2*(S.inst.n) + 2, 0);
+			
+			// Iterando para cada rota na solução 
+			for (auto &rota: S.Rotas){
+				
+				// Inicializando tempo da rota
+				int tempo_rota {0};
+				
+				// Iterando para cada nó na rota 
+				for(unsigned index_no {0}; index_no < rota.size() - 1; index_no++){
+					
+					// Nó atual
+					int no_atual = rota.at(index_no);
+					
+					// Nó seguinte
+					int no_seguinte = rota.at(index_no+1);
+					
+					// Atualizando valor de tempo de visita no vetor T
+					T[no_atual] = tempo_rota;
+					
+					// Incrementando tempo da rota
+					tempo_rota += S.inst.t.at(no_atual).at(no_seguinte);
+					
+				}
+			}
+			
+			// Tempos de visita (T):
+			// Vetor com tempos de visita normalizados
+			std::vector <double> T_norm (2*(S.inst.n) + 2, 0);
+			
+			// Valor mínimo para tempos de visita
+			double min_T = *min_element(T.begin(), T.end());
+			// Valor máximo para tempos de visita
+			double max_T = *max_element(T.begin(), T.end());
+			
+			// Normalização de T
+			
+			for (int i {0}; i < 2*(S.inst.n) + 2; i++){
+				
+				// Normalizando valores de tempos de visita
+				
+				T_norm[i] = (T[i] - min_T)/(max_T - min_T);
+				
+			}
+			
+			// Obtendo grau de semelhança R entre pedidos da instância
+			// Pontos importantes: entre nós iguais, esse grau de semelhança será igual a 0! É necessário tratar isso!
+			// Além disso, R não estará definido para o depósito central, já que esses nós não poderão ser retirados!
+			
+			// Vetor com graus de semelhança
+			std::vector<std::vector<double>> R(S.inst.n + 1, std::vector<double> (S.inst.n + 1, 9999));
+			
+			for (unsigned i {1}; i < S.inst.n + 1; i++){
+				for (unsigned j {1}; j < S.inst.n + 1; j++){
+					
+					 // Calculando valor de R_ij
+					
+					// Caso o pedido não esteja contido na solução, seu grau de proximidade com qualquer outro pedido mantem-se em 9999
+					if ((count(S.L.begin(), S.L.end(), i)) || (count(S.L.begin(), S.L.end(), j))){
+						;
+					}else{
+						R[i][j] = phi*(S.inst.t_norm[i][j] + S.inst.t_norm[i+S.inst.n][j+S.inst.n]) + chi*(abs(T_norm[i] - T_norm[j]) + abs(T_norm[i+S.inst.n] - T_norm[j+S.inst.n])) + psi*(abs(S.inst.q_norm[i] - S.inst.q_norm[j]));
+					}
+					
+				}
+			}
+			
+			
+			// Vetor com pedidos disponíveis para remoção
+			std::vector<double> pedidos = S.A;
+			
+			// Criando vetor D com pedidos removidos, inicializado pelo primeiro pedido escolhido
+			std::vector <double> D {};
+			
+			if (S.L.size() == 0){
+				
+				double r = S.A.at(rand()%((S.A).size()));
+				D.push_back(r);
+				
+				// Removendo pedido da lista de pedidos disponíveis para remoção
+				pedidos.erase(std::remove_if(pedidos.begin(), pedidos.end(), [&r](double value) -> bool { return value == r; }), pedidos.end());
+				
+				
+			} else {
+				
+				double r = S.L.at(rand()%((S.L).size()));
+				D.push_back(r);
+			}
+			
+			
+			// Variável com quantidade de pedidos removidos
+			int n_pedidos_removidos {0};
+			
+			
+			// *obs: k_shaws - 1 porque o primeiro pedido de referência já foi removido!
+			
+			while (n_pedidos_removidos < k_shaw - 1){
+				
+				// Pedido r em "D" a ser levado em conta:
+				double r = D.at(rand()%D.size());
+				
+				// Criando objeto com graus de semelhança para os pedidos em A
+				std::vector<double> R_r {};
+				
+				for (auto &pedido: pedidos){
+					
+					R_r.push_back(R[r][pedido]);
+					
+				}
+					
+				// Criando objeto com graus de semelhança ordenados para os pedidos em A
+				std::vector<double> R_r_sorted (R_r);
+				sort(R_r_sorted.begin(), R_r_sorted.end());
+				
+				// Vetor "pedidos_sorted", com ordenação dos pedidos de acordo com custos de remoção
+				std::vector<double> pedidos_sorted {};
+				
+				// Iterando no vetor de graus de semelhança ordenados, buscando índice correspondente no vetor de graus não ordenados e trazendo pedido correspondente
+				for (auto &R: R_r_sorted){
+				
+					// Índice no vetor não ordenado
+					
+					// Obtendo posição do valor da lista de semelhanças ordenada na lista de semelhanças não-ordenada
+					auto index_R = std::find(R_r.begin(), R_r.end(), R);
+					
+					int index_pedido = std::distance(R_r.begin(), index_R);
+					
+					// Guardando pedido correspondente na lista ordenada
+					
+					pedidos_sorted.push_back(pedidos.at(index_pedido));
+					
+				
+				} 
+				
+				// Retirando pedido:
+				
+				double p = (double) rand()/RAND_MAX;
+				
+				// Posição na lista ordenada de pedidos do pedido a ser retirado da solução
+				double pos_retirada = round(pow(p, delta)*((pedidos_sorted).size()-1));
+				
+				// Pedido retirado
+				double pedido_retirado = pedidos_sorted[pos_retirada];
+				
+				D.push_back(pedido_retirado);
+				
+				// Removendo pedido da lista de pedidos disponíveis para remoção
+				pedidos.erase(std::remove_if(pedidos.begin(), pedidos.end(), [&pedido_retirado](double value) -> bool { return value == pedido_retirado; }), pedidos.end());
+				
+				n_pedidos_removidos += 1;
+			}
+			
+			// Retirando pedidos em D do objeto de solução
+			
+			// Caso o algoritmo não tenha sido inicializado com um pedido em L:
+			
+			//if (S.L.size() == 0){
+			
+			//	for (auto &pedido: D){
+					
+			//		S.remover_pedido(pedido);
+					
+			//	}
+			
+			//} else {
+				
+				// Inicia-se por 1, pois o pedido de índice 0 é o pedido que já está em L!
+				
+			//	for (int index {1}; index < D.size() ; index++){
+					
+			//		S.remover_pedido(D.at(index));
+					
+			//	}
+				
+			//}
+			
+			S.print_sol();
+			
+			// Inserindo pedidos
+			
+			// Cada pedido tentará ser inserido em cada uma das posições 
+			
+			// Buscando rota, posição de pickup e posição de delivery de cada pedido na solução
+			
+			// Vetor para guardar informações de cada pedido
+			std::vector<std::vector<double>> posicoes_pedidos {};
+			
+			for (auto pedido: D){
+				
+				// Índice do nó de pickup correspondente ao request
+				int no_pickup {pedido};
+				
+				// Índice do nó de delivery correspondente ao request
+				int no_delivery {pedido + S.inst.n};
+				
+				// "Procurando" pedido (no_pickup) na solução:
+				
+				for (auto index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
+					
+					// Caso o nó esteja contido na rota
+					if (count(S.Rotas.at(index_rota).begin(), S.Rotas.at(index_rota).end(), no_pickup)){
+						
+						// Índice (posição) do nó de pickup na rota
+						double pos_no_pickup = std::find(S.Rotas.at(index_rota).begin(),S.Rotas.at(index_rota).end(), no_pickup) - S.Rotas.at(index_rota).begin();
+						
+						// Índice (posição) do nó de delivery na rota
+						double pos_no_delivery = std::find(S.Rotas.at(index_rota).begin(),S.Rotas.at(index_rota).end(), no_delivery) - S.Rotas.at(index_rota).begin();
+						
+						posicoes_pedidos.push_back({index_rota, pos_no_pickup, pos_no_delivery});
+						
+						break;
+						
+					}
+				}
+				
+			}
+			
+			//for (auto i {0}; i < k_shaw; i++){
+				
+			//	std::cout << "\nPedido: " << D.at(i) << std::endl;
+				
+			//	std::cout << "\n index_rota: " << posicoes_pedidos.at(i).at(0) << std::endl;
+				
+			//	std::cout << "\n pos_no_pickup: " << posicoes_pedidos.at(i).at(1) << std::endl;
+				
+			//	std::cout << "\n pos_no_delivery: " << posicoes_pedidos.at(i).at(2) << std::endl;
+				
+			//}
+			
+			// Testando valor de cada posição de troca:
+			
+			// Dados do pedido "i" cuja troca resulta no custo mínimo
+			
+			std::vector<double> dados_pedido_i_min = {};
+			
+			// Dados do pedido "j" cuja troca resulta no custo mínimo
+			std::vector<double> dados_pedido_j_min = {};
+			
+			// Delta mínimo de função objetivo encontrado
+			double delta_min {0};
+			
+			// Quantidade de trocas factíveis entre pedidos encontradas
+			// int trocas_factiveis {0};
+			
+			// Realizando troca entre as posições dos nós do pedido "i" com o pedido "j"
+			
+			for (int index_pedido_i {0}; index_pedido_i < k_shaw; index_pedido_i ++){
+				
+				for (int index_pedido_j {0}; index_pedido_j < k_shaw; index_pedido_j ++){
+					
+					// Para testar todas as combinações possíveis:
+					if (index_pedido_j > index_pedido_i){
+						
+						// Rota, posição de pickup e delivery para cada pedido:
+						
+						std::vector<double> dados_pedido_i = posicoes_pedidos.at(index_pedido_i);
+						
+						std::vector<double> dados_pedido_j = posicoes_pedidos.at(index_pedido_j);
+						
+						// Criando uma cópia do objeto solução
+						S_teste = S;
+						
+						// Trocando nós:
+						
+						// *obs: possivelmente transformar em um método/função "trocar pedidos" possa deixar o código mais legível!
+						
+						S_teste.Rotas.at(dados_pedido_i.at(0)).at(dados_pedido_i.at(1)) = dados_pedido_j.at(1);
+						S_teste.Rotas.at(dados_pedido_i.at(0)).at(dados_pedido_i.at(2)) = dados_pedido_j.at(2);
+						
+						S_teste.Rotas.at(dados_pedido_j.at(0)).at(dados_pedido_j.at(1)) = dados_pedido_i.at(1);
+						S_teste.Rotas.at(dados_pedido_j.at(0)).at(dados_pedido_j.at(2)) = dados_pedido_i.at(2);
+						
+						// Se a troca for factível
+						if (S_teste.isFeasible()){
+							
+							// trocas_factiveis += 1;
+							
+							// Calculando variação na função objetivo (uma vez que a troca afeta possivelmente mais de uma rota)
+							double delta = S_teste.FO() - S.FO();
+							
+							// Caso a troca tenha resultado em uma melhoria na função objetivo, os dados da troca são guardados
+							if (delta < delta_min){
+								
+								dados_pedido_i_min = dados_pedido_i;
+								dados_pedido_j_min = dados_pedido_j;
+								
+								delta_min = delta;
+								
+							}
+							
+							
+							
+						}
+						
+					}
+					
+				}
+					
+			}
+			
+			// Caso tenha sido encontrada alguma troca factível com decremento na função objetivo:
+			
+			if (dados_pedido_i_min.size() > 0){
+				
+				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(1)) = dados_pedido_j_min.at(1);
+				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(2)) = dados_pedido_j_min.at(2);
+				
+				S.Rotas.at(dados_pedido_j_min.at(0)).at(dados_pedido_j_min.at(1)) = dados_pedido_i_min.at(1);
+				S.Rotas.at(dados_pedido_j_min.at(0)).at(dados_pedido_j_min.at(2)) = dados_pedido_i_min.at(2);
+				
+			}
+			
+		}
+			
+			// Fim da heurística Shaw's removal
+			
+			
+			break;
+	}
 		
 		
 		default:

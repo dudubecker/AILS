@@ -29,9 +29,9 @@ public:
 	// ... Demais parâmetros específicos de cada operador
 	
 	// Shaw's Removal:
-	double phi {};
-	double chi {};
-	double psi {};
+	// double phi {};
+	// double chi {};
+	// double psi {};
 	
 	//Perturbation();
 	
@@ -43,15 +43,15 @@ public:
 	}
 	
 	// Inicialização para Shaw's, com diferentes parâmetros
-	Perturbation(char perturbation_name, double phi_value, double chi_value, double psi_value){
+	//Perturbation(char perturbation_name, double phi_value, double chi_value, double psi_value){
 		
-		name = perturbation_name;
+	//	name = perturbation_name;
 		
-		phi = phi_value;
-		chi = chi_value;
-		psi = psi_value;
+	//	phi = phi_value;
+	//	chi = chi_value;
+	//	psi = psi_value;
 		
-	}
+	//}
 	
 	~Perturbation();
 	

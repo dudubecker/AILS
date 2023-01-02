@@ -65,9 +65,9 @@ int main(){
 	
 	// Worst.apply(S, 4);
 	
-	Perturbation Shaw('S', 0.3,0.4,0.3);
+	LocalSearchOperator Shaw('H', 3,0.3,0.4,0.3);
 	
-	Shaw.apply(S, 5);
+	Shaw.apply(S);
 	
 	S.print_sol();
 	

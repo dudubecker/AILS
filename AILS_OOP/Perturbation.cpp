@@ -189,6 +189,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			break;
 		}
 		
+		/*
 		// Shaw's removal + Primeira Inserção Factível Aleatória
 		case 'S':{
 			
@@ -357,31 +358,56 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			// Caso o algoritmo não tenha sido inicializado com um pedido em L:
 			
-			if (S.L.size() == 0){
+			//if (S.L.size() == 0){
 			
-				for (auto &pedido: D){
+			//	for (auto &pedido: D){
 					
-					S.remover_pedido(pedido);
+			//		S.remover_pedido(pedido);
 					
-				}
+			//	}
 			
-			} else {
+			//} else {
 				
 				// Inicia-se por 1, pois o pedido de índice 0 é o pedido que já está em L!
 				
-				for (int index {1}; index < D.size() ; index++){
+			//	for (int index {1}; index < D.size() ; index++){
 					
-					S.remover_pedido(D.at(index));
+			//		S.remover_pedido(D.at(index));
 					
-				}
+			//	}
 				
-			}
+			//}
 			
 			S.print_sol();
 			
+			// Inserindo pedidos
+			
+			// Pedidos não inseridos na solução
+			
+			
+			
+			std::vector<double> pedidos_nao_inseridos = S.L;
+			
+			// Aleatorizando:
+			
+			std::random_shuffle(pedidos_nao_inseridos.begin(), pedidos_nao_inseridos.end());
+			
+			// Cada pedido tentará ser inserido em cada uma das posições 
+			
+			for (auto pedido: pedidos_nao_inseridos){
+				
+				
+				
+			}
+			
+			
+			
 			// Fim da heurística Shaw's removal
 			break;
+		
 		}
+		*/
+		
 		
 		default:
 		std::cout << "Invalido" << std::endl;
