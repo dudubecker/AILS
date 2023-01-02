@@ -61,9 +61,13 @@ int main(){
 	
 	// Random.apply(S, 6);
 	
-	Perturbation Worst('W');
+	// Perturbation Worst('W');
 	
-	Worst.apply(S, 4);
+	// Worst.apply(S, 4);
+	
+	Perturbation Shaw('S', 0.3,0.4,0.3);
+	
+	Shaw.apply(S, 5);
 	
 	S.print_sol();
 	

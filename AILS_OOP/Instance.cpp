@@ -97,6 +97,12 @@ void Instance::read(std::string file_name){
 	// Atribuindo ao vetor de tempos de viagem t_ij valores iguais a 0:
 	t =  std::vector<std::vector<double>> (2*n + 2, std::vector<double> (2*n + 2, 0));
 	
+	// Atribuindo ao vetor de tempos de viagem t_ij normalizados valores iguais a 0:
+	t_norm = t;
+	
+	// Atribuindo ao vetor de demandas normalizadas valores iguais a 0:
+	q_norm = std::vector<double> (2*n + 2, 0);
+	
 	// Valor mínimo para tempos de viagem
 	double min_t = 99999;
 	// Valor máximo para tempos de viagem
@@ -125,5 +131,33 @@ void Instance::read(std::string file_name){
 		
 		
 	}
+	
+	// Dados normalizados para Shaw's removal: demandas (q) e tempos de viagem (t)
+	
+	// Vetor com demandas normalizadas
+	std::vector <double> q_norm (2*n + 2, 0);
+	
+	// Valor mínimo para demanda
+	double min_q = *min_element(q.begin(), q.end());
+	// Valor máximo para demanda
+	double max_q = *max_element(q.begin(), q.end());
+	
+	// Fazendo uma iteração geral para normalização
+	
+	for (int i {0}; i < 2*n + 2; i++){
+		
+		// Normalizando valores de demanda
+		
+		q_norm[i] = (q[i] - min_q)/(max_q - min_q);
+		
+		for (int j {0}; j < 2*n + 2; j++){
+			
+			// Normalizando valores de tempos de viagem
+			
+			t_norm[i][j] = (t[i][j] - min_t)/(max_t - min_t);
+		}
+	}
+	
+	
 	
 }

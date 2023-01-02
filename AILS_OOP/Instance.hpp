@@ -39,6 +39,12 @@ class Instance
 	
 	std::vector<std::vector<double>> t {};
 	
+	// Dados normalizados para Shaw's removal: demandas (q) e tempos de viagem (t)
+	
+	std::vector <double> q_norm {};
+	
+	std::vector<std::vector<double>> t_norm {};
+	
 	// Constructor/Destructor
 	Instance();
 	
