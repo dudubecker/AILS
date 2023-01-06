@@ -88,8 +88,10 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'S':{
 			
+			// std::cout << "Solucao apos heuristica Swap" << std::endl;
+			
 			// Para gerar números aleatórios (índices das rotas e pedidos escolhidos)
-			// srand(time(NULL));
+			srand(time(NULL));
 			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
@@ -112,7 +114,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Vetor com pedidos retirados da rota R2:
 			std::vector<double> pedidosRemovidos_R2 {};
 			
-			std::cout << "\nindex_R1: " << index_R1 << "\nindex_R2: " << index_R2 << std::endl;
+			// std::cout << "\nindex_R1: " << index_R1 << "\nindex_R2: " << index_R2 << std::endl;
 			
 			// Removendo pedidos:
 			
@@ -135,7 +137,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 					
 				}
 				
-				std::cout << "\nPedido escolhido: " << pedido << std::endl;
+				// std::cout << "\nPedido escolhido: " << pedido << std::endl;
 				
 				// Removendo pedido de R1:
 				
@@ -163,7 +165,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 					
 				}
 				
-				std::cout << "\nPedido escolhido: " << pedido << std::endl;
+				// std::cout << "\nPedido escolhido: " << pedido << std::endl;
 				
 				// Removendo pedido de R2:
 				
@@ -173,9 +175,9 @@ Sol LocalSearchOperator::apply(Sol &S){
 			}
 			
 			
-			std::cout << "\nSolucao apos remocoes: \n" << std::endl;
+			// std::cout << "\nSolucao apos remocoes: \n" << std::endl;
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
 			for (auto &pedido: pedidosRemovidos_R1){
@@ -240,17 +242,25 @@ Sol LocalSearchOperator::apply(Sol &S){
 			int n_nodes = S.Rotas.at(index_R1).size();
 			
 			// Escolhendo índice do nó inicial para remoção (a partir do índice 1)
-			int index_no_inicial = 1 + rand()%(n_nodes - 1);
+			// int index_no_inicial = 1 + rand()%(n_nodes - 1); // -> Problema: se selecionasse um nó de índice muito grande (perto do tamanho da rota), o número de pedidos removidos não é suficientemente grande!
+			
+			int index_no_inicial = 1 + rand()%(n_nodes - 3);
 			
 			// Escolhendo índice do nó final para remoção: mínimo entre o último nó visitado e "no_inicial + k" (não considerando o depósito central) 
 			int index_no_final = std::min(n_nodes - 2, index_no_inicial + k);
 			
 			// Contabilizando todos os pedidos contidos na seção de "index_no_inicial" a "index_no_final":
 			
-			// Obtendo seção:
-			std::vector<double> k_nodes = {S.Rotas.at(index_R1).begin() + index_no_inicial, S.Rotas.at(index_R1).begin() + index_no_final};
+			std::vector<double> k_nodes = {};
 			
-			std::cout << "\n";
+			for (int index {index_no_inicial}; index < index_no_final; index++){
+				
+				k_nodes.push_back(S.Rotas.at(index_R1).at(index));
+				
+			}
+			
+			
+			std::cout << "\nSubsecao escolhida: ";
 			
 			for (auto &node: k_nodes){
 				
@@ -265,7 +275,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
 				if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
 					
-					std::cout << node << std::endl;
+					std::cout << "Pedido removido: " << node << std::endl;
 					
 					S.remover_pedido(node, index_R1);
 					
@@ -275,11 +285,19 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
-			//for (auto &pedido: S.L){
+			for (auto &pedido: S.L){
 				
-			//	S = melhor_insercao(S, pedido, index_R2);
+				S = melhor_insercao(S, pedido, index_R2);
 				
-			//}
+			}
+			
+			// Caso não tenha sido possível realizar a inserção
+			
+			for (auto &pedido: S.L){
+				
+				S = melhor_insercao(S, pedido);
+				
+			}
 			
 			break;
 			
@@ -313,7 +331,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				while (pedido > S.inst.n){
 				
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
 					
@@ -332,11 +350,19 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
-			//for (auto &pedido: S.L){
+			for (auto &pedido: S.L){
 				
-			//	S = melhor_insercao(S, pedido, index_R2);
+				S = melhor_insercao(S, pedido, index_rota);
 				
-			//}
+			}
+			
+			// Caso não tenha sido possível realizar a inserção
+			
+			for (auto &pedido: S.L){
+				
+				S = melhor_insercao(S, pedido);
+				
+			}
 			
 			
 			break;
@@ -420,8 +446,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 			S.Rotas.at(index_rota).at(index_P2) = no_D1;
 			
 			
-			
-			
 			break;
 		}
 		
@@ -434,7 +458,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			std::cout << "Solucao apos shaws removal" << std::endl;
 			
 			// Parâmetro "delta" para controle da aleatoriedade 
-			const int delta {6};
+			const int delta {2};
 			
 			// Obtendo tempos de visita (T_i) de cada nó "i" na solução S
 			
@@ -532,7 +556,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			int n_pedidos_removidos {0};
 			
 			
-			// *obs: k_shaws - 1 porque o primeiro pedido de referência já foi removido!
+			// *obs: k_shaws - 1 porque o primeiro pedido de referência já foi removido ou está em L!
 			
 			while (n_pedidos_removidos < k_shaw - 1){
 				
@@ -596,11 +620,22 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			//if (S.L.size() == 0){
 			
-			//	for (auto &pedido: D){
+			for (auto &pedido: D){
+				
+				if (!count(S.L.begin(), S.L.end(), pedido)){
 					
-			//		S.remover_pedido(pedido);
+					S.remover_pedido(pedido);
 					
-			//	}
+				}
+				
+			}
+			
+			for (auto &pedido: S.L){
+				
+				S = melhor_insercao(S, pedido);
+				
+			}
+			
 			
 			//} else {
 				
@@ -614,13 +649,15 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			//}
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			// Inserindo pedidos
 			
 			// Cada pedido tentará ser inserido em cada uma das posições 
 			
 			// Buscando rota, posição de pickup e posição de delivery de cada pedido na solução
+			
+			/*
 			
 			// Vetor para guardar informações de cada pedido
 			std::vector<std::vector<double>> posicoes_pedidos {};
@@ -670,6 +707,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Testando valor de cada posição de troca:
 			
 			// Dados do pedido "i" cuja troca resulta no custo mínimo
+			
+			/*
 			
 			std::vector<double> dados_pedido_i_min = {};
 			
@@ -740,7 +779,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Caso tenha sido encontrada alguma troca factível com decremento na função objetivo:
 			
-			if (dados_pedido_i_min.size() > 0){
+			
+			// if (dados_pedido_i_min.size() > 0){
 				
 				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(1)) = dados_pedido_j_min.at(1);
 				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(2)) = dados_pedido_j_min.at(2);
@@ -750,14 +790,29 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			}
 			
-		}
+			
+			// Trocando nó de pickup do pedido "i" pelo nó de pickup do pedido "j"
+			S.Rotas.at( posicoes_pedidos.at(0).at(0) ).at( posicoes_pedidos.at(0).at(1) ) =  D.at(1);//posicoes_pedidos.at(1).at(1);
+			
+			// Trocando nó de delivery do pedido "i" pelo nó de delivery do pedido "j"
+			S.Rotas.at( posicoes_pedidos.at(0).at(0) ).at( posicoes_pedidos.at(0).at(2) ) =  D.at(1) + S.inst.n;//posicoes_pedidos.at(1).at(2);
+			
+			// Trocando nó de pickup do pedido "j" pelo nó de pickup do pedido "i"
+			S.Rotas.at( posicoes_pedidos.at(1).at(0) ).at( posicoes_pedidos.at(1).at(1) ) =  D.at(0) ;//posicoes_pedidos.at(0).at(1);
+			
+			// Trocando nó de delivery do pedido "j" pelo nó de delivery do pedido "i"
+			S.Rotas.at( posicoes_pedidos.at(1).at(0) ).at( posicoes_pedidos.at(1).at(2) ) =  D.at(0) + S.inst.n;//posicoes_pedidos.at(0).at(2);
+			*/
 			
 			// Fim da heurística Shaw's removal
 			
 			
 			break;
-	}
-		
+			
+		}
+			
+			
+	//}
 		
 		default:
 			std::cout << "Invalido" << std::endl;
@@ -765,6 +820,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 	}
 	
 	// if S.isfeasible // se a mudança melhorou a função objetivo
+	// melhor insercao dos pedidos em L?
 	
 	return S;
 	

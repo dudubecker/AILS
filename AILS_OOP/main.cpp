@@ -6,12 +6,15 @@
 #include <heuristicsFunctions.h>
 #include <Perturbation.hpp>
 #include <iomanip>
+#include <iterator>
+#include <algorithm>
+#include <thread>
 
 using namespace std;
 
 // Função para printar vetores: debug
 
-void print(std::vector<double> const &input)
+void print(std::vector<int> const &input)
 {
     for (auto const &i: input) {
         cout << i << " ";
@@ -25,7 +28,7 @@ int main(){
 	
 	Instance inst;
 	
-	inst.read("YY30");
+	inst.read("BB30");
 	
 	// Inicializando a partir do objeto instância:
 	
@@ -41,19 +44,21 @@ int main(){
 	
 	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
+	Sol S_cons = S;
+	
 	// LocalSearchOperator Swap('S',1,1);
 	
 	// Swap.apply(S);
 	
-	// LocalSearchOperator Shift('T',4);
+	// LocalSearchOperator Shift('T',6);
 	
 	// Shift.apply(S);
 	
-	// LocalSearchOperator Or_opt('O', 2);
+	LocalSearchOperator Or_opt('O', 2);
 	
 	// Or_opt.apply(S);
 	
-	// LocalSearchOperator Two_Opt('W');
+	LocalSearchOperator Two_Opt('W');
 	
 	// Two_Opt.apply(S);
 	
@@ -65,17 +70,62 @@ int main(){
 	
 	// Worst.apply(S, 4);
 	
-	LocalSearchOperator Shaw('H', 3,0.3,0.4,0.3);
+	LocalSearchOperator Shaw('H', 2,0.3,0.4,0.3);
 	
-	Shaw.apply(S);
+	// Sol BKS = S_cons;
 	
-	S.print_sol();
-	
-	cout << "\n FO: "  << S.FO() << endl;
-	
-	// cout << "\n Factibilidade: " << S.isFeasible() << endl;
+	for (int k {0}; k < 100; k++){
 		
-	
+		//if (k%2 == 0){
+			
+			Perturbation Random('R');
+		
+			Random.apply(S, 8);
+			
+		//}else{
+			
+			Perturbation Worst('W');
+			
+			Worst.apply(S, 8);
+			
+		//}
+		
+		
+		// LocalSearchOperator Shaw('H', 2,0.3,0.4,0.3);
+		
+		Shaw.apply(S);
+		
+		
+		// LocalSearchOperator Or_opt('O', 4);
+		
+		// Or_opt.apply(S);
+		
+		// Shift.apply(S);
+		
+		// Two_Opt.apply(S);
+		
+		S.print_sol();
+		
+		cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+		
+		cout << "\n Factibilidade: " << S.isFeasible()  << endl;
+		
+		// std::this_thread::sleep_for(std::chrono::milliseconds(300));
+		
+		
+		//if ((S.L.size() == 0) && (S.isFeasible())){
+			
+		//	S.print_sol();
+			
+		//	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+			
+		//}
+		
+		std::cout << "\n\nIteracao: " << k << std::endl;
+		
+		// S = S_cons;
+		
+	}
 	
 	
 }

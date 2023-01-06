@@ -29,7 +29,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 		// Random removal + Primeira Inserção Factível Aleatória
 		case 'R':{
 			
-			std::cout << "Solucao apos random removal" << std::endl;
+			// std::cout << "Solucao apos random removal" << std::endl;
 			
 			srand(time(NULL));
 			
@@ -47,7 +47,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			// Inserindo pedidos com método de primeira inserção factível aleatória (sem critérios para a ordem dos pedidos)
 			
@@ -65,9 +65,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			std::cout << "Solucao apos insercoes" << std::endl;
+			// std::cout << "Solucao apos insercoes" << std::endl;
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			
 			// Fim da heurística random removal
@@ -78,7 +78,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 		// Worst removal + Primeira Inserção Factível Aleatória
 		case 'W':{
 			
-			std::cout << "Solucao apos worst removal" << std::endl;
+			// std::cout << "Solucao apos worst removal" << std::endl;
 			
 			srand(time(NULL));
 			
@@ -162,11 +162,11 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			
 			// Inserindo pedidos com método de primeira inserção factível aleatória (sem critérios para a ordem dos pedidos)
-		
+			
 			// Pedidos não inseridos na solução (referenciar diretamente no for loop deu um bug)
 			
 			std::vector<double> pedidos_nao_inseridos = S.L;
@@ -181,9 +181,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			std::cout << "Solucao apos insercoes" << std::endl;
+			// std::cout << "Solucao apos insercoes" << std::endl;
 			
-			S.print_sol();
+			// S.print_sol();
 			
 			// Fim da heurística worst removal
 			break;
