@@ -11,27 +11,14 @@ public:
 	// Nome do método de perturbação: 
 	char name {};
 	
-	// Score da heurística, atualizado dinamicamente no algoritmo
-	// double score {0};
+	// Número de nós a serem removidos e reinseridos pela perturbação
+	double w {};
 	
-	// Peso (probabilidade de escolha) da heurística, atualizado dinamicamente no algoritmo
-	// double weight {0};
+	// Quantidade de iterações pelas quais o método de perturbação passou (até o valor Gamma)
+	double it {};
 	
-	// Número de iterações pelas quais a heurística passou
-	// int n_it {0};
-	
-	// Tempo computacional empregado na heurística:
-	// double processing_time {};
-	
-	// Número total de iterações pelas quais a heurística passou
-	// int n_it_total {0};
-	
-	// ... Demais parâmetros específicos de cada operador
-	
-	// Shaw's Removal:
-	// double phi {};
-	// double chi {};
-	// double psi {};
+	// Distância média entre as soluções obtidas pela perturbação e a solução de referência s_r
+	double avgDist {};
 	
 	//Perturbation();
 	
@@ -41,17 +28,6 @@ public:
 		name = perturbation_name;
 		
 	}
-	
-	// Inicialização para Shaw's, com diferentes parâmetros
-	//Perturbation(char perturbation_name, double phi_value, double chi_value, double psi_value){
-		
-	//	name = perturbation_name;
-		
-	//	phi = phi_value;
-	//	chi = chi_value;
-	//	psi = psi_value;
-		
-	//}
 	
 	~Perturbation();
 	

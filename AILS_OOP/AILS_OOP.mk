@@ -62,7 +62,7 @@ AS       := "C:/Program Files/mingw-w64/mingw64/bin/as.exe"
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix) $(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) $(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix) $(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) 
 
 
 
@@ -93,6 +93,12 @@ PreBuild:
 ##
 ## Objects
 ##
+$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix): AILS.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/AILS.cpp$(DependSuffix) -MM AILS.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/AILS.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/AILS.cpp$(PreprocessSuffix): AILS.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/AILS.cpp$(PreprocessSuffix) AILS.cpp
+
 $(IntermediateDirectory)/Instance.cpp$(ObjectSuffix): Instance.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Instance.cpp$(DependSuffix) -MM Instance.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/Instance.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IncludePath)

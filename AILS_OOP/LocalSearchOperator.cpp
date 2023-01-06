@@ -455,7 +455,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			srand(time(NULL));
 			
-			std::cout << "Solucao apos shaws removal" << std::endl;
+			// std::cout << "Solucao apos shaws removal" << std::endl;
 			
 			// Parâmetro "delta" para controle da aleatoriedade 
 			const int delta {2};
@@ -615,10 +615,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 			}
 			
 			// Retirando pedidos em D do objeto de solução
-			
-			// Caso o algoritmo não tenha sido inicializado com um pedido em L:
-			
-			//if (S.L.size() == 0){
 			
 			for (auto &pedido: D){
 				
@@ -819,8 +815,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 	}
 	
-	// if S.isfeasible // se a mudança melhorou a função objetivo
-	// melhor insercao dos pedidos em L?
+	// Dúvida pertinente: if S.isfeasible // se a mudança melhorou a função objetivo ?
 	
 	return S;
 	

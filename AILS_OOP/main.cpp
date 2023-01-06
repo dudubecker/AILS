@@ -30,6 +30,7 @@ int main(){
 	
 	inst.read("BB30");
 	
+	
 	// Inicializando a partir do objeto instância:
 	
 	Sol S(inst);
@@ -74,26 +75,40 @@ int main(){
 	
 	// Sol BKS = S_cons;
 	
-	for (int k {0}; k < 100; k++){
+	double min_FO = S.FO();
+	
+	for (int k {0}; k < 1000; k++){
 		
 		//if (k%2 == 0){
 			
 			Perturbation Random('R');
 		
-			Random.apply(S, 8);
+			Random.apply(S, 2);
 			
 		//}else{
 			
 			Perturbation Worst('W');
 			
-			Worst.apply(S, 8);
+			Worst.apply(S, 6);
 			
 		//}
 		
 		
 		// LocalSearchOperator Shaw('H', 2,0.3,0.4,0.3);
 		
-		Shaw.apply(S);
+		for (int j {0}; j < 10; j++){
+			
+			Shaw.apply(S);
+			
+			Or_opt.apply(S);
+			
+		}
+		
+		if ((S.FO() < min_FO) && (S.L.size() == 0)){
+			
+			min_FO = S.FO();
+			
+		}
 		
 		
 		// LocalSearchOperator Or_opt('O', 4);
@@ -108,7 +123,7 @@ int main(){
 		
 		cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 		
-		cout << "\n Factibilidade: " << S.isFeasible()  << endl;
+		// cout << "\n Factibilidade: " << S.isFeasible()  << endl;
 		
 		// std::this_thread::sleep_for(std::chrono::milliseconds(300));
 		
@@ -127,5 +142,7 @@ int main(){
 		
 	}
 	
+	
+	cout << "Menor funcao objetivo encontrada: " << std::setprecision(7) << min_FO << endl;
 	
 }
