@@ -23,6 +23,20 @@ LocalSearchOperator::~LocalSearchOperator()
 
 Sol LocalSearchOperator::apply(Sol &S){
 	
+	// Contabilizando características da solução fornecida
+	
+	// Solução:
+	// Sol S_ins = S;
+	
+	
+	// FO:
+	// double FO_S = S.FO();
+	
+	// Número de pedidos não atendidos:
+	
+	// Factibilidade:
+	
+	
 	switch (name){
 		
 		// Heurística construtiva
@@ -260,22 +274,22 @@ Sol LocalSearchOperator::apply(Sol &S){
 			}
 			
 			
-			std::cout << "\nSubsecao escolhida: ";
+			// std::cout << "\nSubsecao escolhida: ";
 			
-			for (auto &node: k_nodes){
+			// for (auto &node: k_nodes){
 				
-				std::cout << node << " ";
+			// 	std::cout << node << " ";
 				
-			}
+			// }
 			
-			std::cout << "\n";
+			// std::cout << "\n";
 			
 			for (auto &node: k_nodes){
 				
 				// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
 				if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
 					
-					std::cout << "Pedido removido: " << node << std::endl;
+					// std::cout << "Pedido removido: " << node << std::endl;
 					
 					S.remover_pedido(node, index_R1);
 					
@@ -384,7 +398,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Número de nós contidos na rota:
 			int n_nodes = S.Rotas.at(index_rota).size();
 			
-			std::cout << "\nRota: " << index_rota << std::endl;
+			// std::cout << "\nRota: " << index_rota << std::endl;
 			
 			// Escolhendo pedidos 1 e 2, tal que D1 é servido anteriormente à P2
 			
@@ -413,7 +427,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// O pedido deve ser de delivery!
 			while (no_D1 <= S.inst.n){
 				
-				std::cout << "\nPrimeiro while" << std::endl;
+				// std::cout << "\nPrimeiro while" << std::endl;
 				
 				index_D1 = 1 + rand()%(index_ultimo_no_pickup - 1);
 				
@@ -429,7 +443,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// O pedido deve ser de pickup!
 			while (no_P2 > S.inst.n){
 				
-				std::cout << "\nSegundo while" << std::endl;
+				// std::cout << "\nSegundo while" << std::endl;
 				
 				index_P2 = index_D1 + rand()%(n_nodes - index_D1 - 2);
 				
@@ -437,7 +451,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			}
 			
-			std::cout << "D1: " << no_D1 << "\nP2: " << no_P2 << std::endl;
+			// std::cout << "D1: " << no_D1 << "\nP2: " << no_P2 << std::endl;
 			
 			// Trocando nós de posição:
 			
@@ -818,6 +832,29 @@ Sol LocalSearchOperator::apply(Sol &S){
 	// Dúvida pertinente: if S.isfeasible // se a mudança melhorou a função objetivo ?
 	
 	return S;
+	
+	// Caso a aplicação do operador tenha resultado uma função objetivo menor:
+	
+	/*
+	
+	if (name == 'C'){
+		
+		return S;
+		
+	}
+	
+	if (S.FO() < FO_S){ // && S.isfeasible && S.L.size() < L_S
+		
+		std::cout << "Solucao melhorada: de " << FO_S << " para " << S.FO() << std::endl;
+		
+		return S;
+	} else {
+		
+		std::cout << "Solucao piorada! De " << FO_S << " para " << S.FO() << std::endl;
+		return S_ins;
+	}
+	
+	*/
 	
 	
 }

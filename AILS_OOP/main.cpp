@@ -3,6 +3,7 @@
 #include <Instance.hpp>
 #include <Sol.hpp>
 #include <LocalSearchOperator.hpp>
+#include <AILS.hpp>
 #include <heuristicsFunctions.h>
 #include <Perturbation.hpp>
 #include <iomanip>
@@ -28,8 +29,7 @@ int main(){
 	
 	Instance inst;
 	
-	inst.read("BB30");
-	
+	inst.read("AA75");
 	
 	// Inicializando a partir do objeto instância:
 	
@@ -41,39 +41,61 @@ int main(){
 	
 	Constructive.apply(S);
 	
+	Sol S_cons = S;
+	
 	S.print_sol();
 	
 	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
-	Sol S_cons = S;
+	// Testando Random Variable Neighborhood Ordering:
 	
-	// LocalSearchOperator Swap('S',1,1);
+	LocalSearchOperator Or_opt_1('O', 2);
 	
-	// Swap.apply(S);
-	
-	// LocalSearchOperator Shift('T',6);
-	
-	// Shift.apply(S);
-	
-	LocalSearchOperator Or_opt('O', 2);
-	
-	// Or_opt.apply(S);
+	LocalSearchOperator Or_opt_2('O', 3);
 	
 	LocalSearchOperator Two_Opt('W');
 	
-	// Two_Opt.apply(S);
+	LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
 	
-	// Perturbation Random('R');
+	LocalSearchOperator Shift('T', 8);
 	
-	// Random.apply(S, 6);
+	LocalSearchOperator Swap_1_1('S', 1,1);
 	
-	// Perturbation Worst('W');
+	LocalSearchOperator Swap_2_1('S', 2,1);
 	
-	// Worst.apply(S, 4);
+	LocalSearchOperator Swap_2_2('S', 2,2);
 	
-	LocalSearchOperator Shaw('H', 2,0.3,0.4,0.3);
+	AILS AILSObject;
 	
-	// Sol BKS = S_cons;
+	AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Shift, Swap_1_1, Swap_2_1, Swap_2_2, Two_Opt};
+	
+	cout << "\nRealizando perturbacoes: " << endl;
+	
+	Perturbation Random('R');
+	
+	Random.apply(S, 4);
+	
+	Perturbation Worst('W');
+	
+	Worst.apply(S, 8);
+	
+	S.print_sol();
+	
+	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+	
+	S = AILSObject.LocalSearch(S);
+	
+
+	
+	
+	
+	cout << "\n Solucao Final: " << endl;
+	
+	S.print_sol();
+	
+	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+	
+	/*
 	
 	double min_FO = S.FO();
 	
@@ -144,5 +166,7 @@ int main(){
 	
 	
 	cout << "Menor funcao objetivo encontrada: " << std::setprecision(7) << min_FO << endl;
+	*/
+	
 	
 }
