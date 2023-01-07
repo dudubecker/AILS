@@ -9,6 +9,7 @@ AILS::~AILS()
 }
 
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
+
 Sol AILS::LocalSearch(Sol &S){
 	
 	// Criando cópia da solução, para controle das melhorias
@@ -85,4 +86,88 @@ Sol AILS::LocalSearch(Sol &S){
 	
 	return S_r;
 	
+}
+
+// Método para determinação da distância simétrica entre duas soluções
+int AILS::symmetricDistance(Sol &S, Sol &S_r){
+	
+	// Variável para armazenar o número de arcos incomuns entre as soluções (distância simétrica)
+	int distance {};
+	
+	// Matriz de 1 e 0 para arcos da solução S
+	std::vector<std::vector<int>> E_S (2*S.inst.n + 2, std::vector<int> (2*S.inst.n + 2, 0));
+	
+	// Matriz de 1 e 0 para arcos da solução S_r
+	std::vector<std::vector<int>> E_S_r = E_S;
+	
+	// Contabilizando arcos da solução S
+	
+	// std::cout << "\nArcos: ";
+	
+	for (auto Rota: S.Rotas){
+		
+		for (int index_no {0}; index_no < Rota.size() - 1; index_no++){
+			
+			E_S.at(Rota.at(index_no)).at(Rota.at(index_no + 1)) = 1;
+			
+			// std::cout << Rota.at(index_no) << " " << Rota.at(index_no + 1)<< " | ";
+			
+		}
+		
+		// std::cout << "\n";
+		
+	}
+	
+	// Contabilizando arcos da solução S_r
+	
+	for (auto Rota: S_r.Rotas){
+		
+		for (int index_no {0}; index_no < Rota.size() - 1; index_no++){
+			
+			E_S_r.at(Rota.at(index_no)).at(Rota.at(index_no + 1)) = 1;
+			
+			// std::cout << Rota.at(index_no) << " " << Rota.at(index_no + 1)<< " | ";
+			
+		}
+		
+		// std::cout << "\n";
+		
+	}
+	
+	// Printando matriz:
+	// std::cout << "\nMatriz: \n";
+	
+	// for (int i {0}; i < 2*S.inst.n + 2 ; i++){
+		
+	// 	for (int j {0}; j < 2*S.inst.n + 2 ; j++){
+		
+	// 		std::cout << E_S.at(i).at(j) << " ";
+	// 	}
+		
+	// 	std::cout << "\n";
+	// }
+	
+	// Contabilizando arcos incomuns entre as soluções:
+	
+	for (int i {0}; i < 2*S.inst.n + 2 ; i++){
+		
+		for (int j {0}; j < 2*S.inst.n + 2 ; j++){
+			
+			// Caso o número em "i, j" nas matrizes seja diferente:
+			if ( E_S.at(i).at(j) !=  E_S_r.at(i).at(j)){
+				
+				std::cout << i << " " << j << " | ";
+				
+				distance += 1;
+				
+			}
+			
+		}
+		
+	}
+	
+	
+	std::cout << "\nDistancia: " << distance << std::endl;
+	
+	return distance;
 }

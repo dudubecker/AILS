@@ -62,7 +62,8 @@ public:
 	// Método para busca local (baseado em Random Variable Neighborhood Ordering)
 	Sol LocalSearch(Sol &S);
 	
-	
+	// Método para determinação da distância simétrica entre duas soluções, utilizado no controle da perturbação
+	int symmetricDistance(Sol &S, Sol &S_r);
 
 };
 

@@ -29,7 +29,7 @@ int main(){
 	
 	Instance inst;
 	
-	inst.read("AA75");
+	inst.read("BB30");
 	
 	// Inicializando a partir do objeto instância:
 	
@@ -69,15 +69,17 @@ int main(){
 	
 	AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Shift, Swap_1_1, Swap_2_1, Swap_2_2, Two_Opt};
 	
+	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Two_Opt};
+	
 	cout << "\nRealizando perturbacoes: " << endl;
 	
 	Perturbation Random('R');
 	
-	Random.apply(S, 4);
+	Random.apply(S, 2);
 	
 	Perturbation Worst('W');
 	
-	Worst.apply(S, 8);
+	Worst.apply(S, 3);
 	
 	S.print_sol();
 	
@@ -85,88 +87,24 @@ int main(){
 	
 	S = AILSObject.LocalSearch(S);
 	
-
-	
-	
-	
 	cout << "\n Solucao Final: " << endl;
 	
 	S.print_sol();
 	
 	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
-	/*
+	cout << "\n\n\n\n\n";
 	
-	double min_FO = S.FO();
+	cout <<"Solucao S: \n";
 	
-	for (int k {0}; k < 1000; k++){
-		
-		//if (k%2 == 0){
-			
-			Perturbation Random('R');
-		
-			Random.apply(S, 2);
-			
-		//}else{
-			
-			Perturbation Worst('W');
-			
-			Worst.apply(S, 6);
-			
-		//}
-		
-		
-		// LocalSearchOperator Shaw('H', 2,0.3,0.4,0.3);
-		
-		for (int j {0}; j < 10; j++){
-			
-			Shaw.apply(S);
-			
-			Or_opt.apply(S);
-			
-		}
-		
-		if ((S.FO() < min_FO) && (S.L.size() == 0)){
-			
-			min_FO = S.FO();
-			
-		}
-		
-		
-		// LocalSearchOperator Or_opt('O', 4);
-		
-		// Or_opt.apply(S);
-		
-		// Shift.apply(S);
-		
-		// Two_Opt.apply(S);
-		
-		S.print_sol();
-		
-		cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
-		
-		// cout << "\n Factibilidade: " << S.isFeasible()  << endl;
-		
-		// std::this_thread::sleep_for(std::chrono::milliseconds(300));
-		
-		
-		//if ((S.L.size() == 0) && (S.isFeasible())){
-			
-		//	S.print_sol();
-			
-		//	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
-			
-		//}
-		
-		std::cout << "\n\nIteracao: " << k << std::endl;
-		
-		// S = S_cons;
-		
-	}
+	S.print_sol();
+	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
+	cout <<"Solucao S_cons: \n";
+	S_cons.print_sol();
+	cout << "\n FO: " << std::setprecision(7) << S_cons.FO() << endl;
 	
-	cout << "Menor funcao objetivo encontrada: " << std::setprecision(7) << min_FO << endl;
-	*/
+	AILSObject.symmetricDistance(S, S_cons);
 	
 	
 }
