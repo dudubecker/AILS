@@ -1,4 +1,12 @@
 #include "AILS.hpp"
+#include "LocalSearchOperator.hpp"
+#include "Sol.hpp"
+#include "Instance.hpp"
+#include "heuristicsFunctions.h"
+#include <ctime>
+#include <algorithm>
+#include <stdio.h>
+#include <chrono>
 
 AILS::AILS()
 {
@@ -156,7 +164,7 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 			// Caso o número em "i, j" nas matrizes seja diferente:
 			if ( E_S.at(i).at(j) !=  E_S_r.at(i).at(j)){
 				
-				std::cout << i << " " << j << " | ";
+				// std::cout << i << " " << j << " | ";
 				
 				distance += 1;
 				
@@ -166,8 +174,43 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 		
 	}
 	
-	
-	std::cout << "\nDistancia: " << distance << std::endl;
+	// std::cout << "\nDistancia: " << distance << std::endl;
 	
 	return distance;
+}
+
+void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationProcedure){
+	
+	// Contabilizando distância entre soluções:
+	int distance = symmetricDistance(S, S_r);
+	
+	// Incrementando número de iterações da perturbação
+	perturbationProcedure.it += 1;
+	
+	// Alterando valor de distância média encontrada pela perturbação
+	perturbationProcedure.avgDist = ((perturbationProcedure.avgDist)*(perturbationProcedure.it - 1)+(distance))/(perturbationProcedure.it);
+	
+	if (perturbationProcedure.it == Gamma){
+		
+		perturbationProcedure.w = std::round((perturbationProcedure.w*d_b)/(perturbationProcedure.avgDist));
+		
+		// perturbationProcedure = std::min(S.inst.n, std::max_element(1, perturbationProcedure.w));
+		
+		if (perturbationProcedure.w < 1){
+			
+			perturbationProcedure.w = 1;
+			
+		} else if (perturbationProcedure.w > S.inst.n){
+			
+			perturbationProcedure.w = S.inst.n;
+			
+		}
+		
+		perturbationProcedure.it = 0;
+		
+		perturbationProcedure.avgDist = 0;
+	}
+	
+	
+	
 }

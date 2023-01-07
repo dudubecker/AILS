@@ -31,10 +31,10 @@ public:
 	// Parâmetros para controle do grau de perturbação:
 	
 	// Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-	double Gamma {};
+	double Gamma {2};
 	
 	// d_b: Distância de referência ("ideal") entre soluções. A distância de uma solução para outra é o número de arcos diferentes entre elas
-	double d_b {};
+	double d_b {24};
 	
 	// Parâmetros para o critério de aceitação:
 	
@@ -64,6 +64,10 @@ public:
 	
 	// Método para determinação da distância simétrica entre duas soluções, utilizado no controle da perturbação
 	int symmetricDistance(Sol &S, Sol &S_r);
+	
+	// Método para atualização dos graus de perturbação
+	void updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationProcedure);
+	
 
 };
 
