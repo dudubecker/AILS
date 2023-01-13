@@ -10,6 +10,7 @@
 #include <iterator>
 #include <algorithm>
 #include <thread>
+#include <random>
 
 using namespace std;
 
@@ -25,11 +26,19 @@ void print(std::vector<int> const &input)
 	
 }
 
+
 int main(){
 	
+	//double random_number = {};
+	//random_number = ((double) rand() / (RAND_MAX));
+	
+	
+	
+	
+	/*
 	Instance inst;
 	
-	inst.read("BB30");
+	inst.read("DD65");
 	
 	// Inicializando a partir do objeto instância:
 	
@@ -37,13 +46,20 @@ int main(){
 	
 	// Heurística construtiva:
 	
+	
 	LocalSearchOperator Constructive('C');
 	
 	Constructive.apply(S);
 	
+	AILS AILSObject;
+	
+	AILSObject.acceptationCriterion(S);
+	
+	
 	Sol S_cons = S;
 	
 	S.print_sol();
+	
 	
 	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
 	
@@ -73,9 +89,9 @@ int main(){
 	
 	cout << "\nRealizando perturbacoes: " << endl;
 	
-	Perturbation Random('R');
+	// Perturbation Random('R');
 	
-	Random.apply(S, 2);
+	// Random.apply(S, 2);
 	
 	Perturbation Worst('W');
 	
@@ -104,7 +120,6 @@ int main(){
 	S_cons.print_sol();
 	cout << "\n FO: " << std::setprecision(7) << S_cons.FO() << endl;
 	
-	AILSObject.symmetricDistance(S, S_cons);
-	
-	
+	// AILSObject.symmetricDistance(S, S_cons);
+	*/
 }

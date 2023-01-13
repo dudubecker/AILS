@@ -16,6 +16,12 @@ AILS::~AILS()
 {
 }
 
+// 
+Sol AILS::PerturbationProcedure(Sol &S){
+	
+}
+
+
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 
 Sol AILS::LocalSearch(Sol &S){
@@ -212,5 +218,97 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationP
 	}
 	
 	
+	
+}
+
+// Método para o critério de aceitação 
+bool AILS::acceptationCriterion(Sol &S){
+	
+	// Para gerar números aleatórios
+	srand(time(NULL));
+	
+	// Valor da função objetivo correspondente à solução f(S):
+	double f_S = S.FO();
+	
+	// Variável para retornar resultado do critério de aceitação
+	bool Accept = false;
+	
+	// Atualizando o valor de f_UP e f_UND
+	
+	// Caso o número de iterações não tenha chegado a "Gamma":
+	if (it <= Gamma){
+		
+		f_UP = ((f_UP)*(it - 1) + (f_S) )/(it);
+		f_UND = S_p.FO();
+		
+		
+	// Caso o algoritmo já tenha executado mais do que "Gamma" iterações:
+	}else{
+		
+		f_UP = f_UP*(1 - 1/Gamma) + f_S/Gamma;
+		
+	}
+	
+	// Atualizando valor de eta
+	
+	// O valor de eta é atualizado se o número de soluções aceitas atinge o valor Gamma
+	if (qtdSolucoesAceitas == Gamma){
+		
+		eta = (kappa*eta)/(qtdSolucoesAceitas/qtdSolucoesTotais);
+		
+		// Caso eta resulte um valor muito pequeno
+		if (eta < 0.001){
+			
+			eta = 0.001;
+			
+		}
+		
+		// Zerando valores com quantidades de soluções totais e aceitas
+		qtdSolucoesAceitas = 0;
+		qtdSolucoesTotais = 0;
+		
+	}
+	
+	// Atualizando valor de b_UP
+	
+	b_UP = f_UND + eta*(f_UP - f_UND);
+	
+	// Se a solução atual for menor do que o limite calculado, haverá uma chance de "kappa" de ela ser escolhida
+	
+	if (f_S < b_UP){
+		
+		// Valor aleatório "n" entre 0 e 1
+		
+		double n = (double) rand()/(RAND_MAX);
+		
+		// Caso o número aleatório seja menor do que kappa (kappa*100% chance)
+		if (n < kappa){
+			
+			// Solução aceita!
+			Accept = true;
+			
+			qtdSolucoesAceitas += 1;
+			
+		}
+		
+		// Independentemente da solução ter sido aceita, com kappa*100% de chance, computa-se a quantidade de soluções menores do que b_UP
+		qtdSolucoesTotais += 1;
+		
+	}
+	
+	return Accept;
+	
+	
+}
+
+void AILS::executeAILS(int max_it){
+	
+	// Variável para o número de iterações:
+	int n_it {};
+	
+	while (n_it < max_it){
+		
+		
+	}
 	
 }

@@ -31,7 +31,7 @@ public:
 	// Parâmetros para controle do grau de perturbação:
 	
 	// Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-	double Gamma {2};
+	double Gamma {};
 	
 	// d_b: Distância de referência ("ideal") entre soluções. A distância de uma solução para outra é o número de arcos diferentes entre elas
 	double d_b {24};
@@ -49,15 +49,29 @@ public:
 	
 	double eta {};
 	
-	double kappa {};
+	// Porcentagem de soluções aceitas
+	double kappa {0.35};
+	
+	// Atributos para determinação do valor de k_r (porcentagem de soluções menores do que b_up que foram, de fato, aceitas)
+	
+	// Quantidade de soluções menores do que b_up
+	double qtdSolucoesTotais {};
+	
+	// Quantidade de soluções menores do que b_up que foram aceitas
+	double qtdSolucoesAceitas {};
 	
 	
-
-
+	
+	
+	
 	AILS();
 	~AILS();
 	
 	// Métodos
+	
+	// Método para aplicação das perturbações
+	Sol PerturbationProcedure(Sol &S);
+	
 	
 	// Método para busca local (baseado em Random Variable Neighborhood Ordering)
 	Sol LocalSearch(Sol &S);
@@ -68,6 +82,11 @@ public:
 	// Método para atualização dos graus de perturbação
 	void updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationProcedure);
 	
+	// Método para o critério de aceitação 
+	bool acceptationCriterion(Sol &S);
+	
+	// Método para execução do algoritmo em si:
+	void executeAILS(int max_it);
 
 };
 
