@@ -16,12 +16,6 @@ AILS::~AILS()
 {
 }
 
-// 
-Sol AILS::PerturbationProcedure(Sol &S){
-	
-}
-
-
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 
 Sol AILS::LocalSearch(Sol &S){
@@ -185,36 +179,36 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 	return distance;
 }
 
-void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationProcedure){
+void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureIndex){ //Perturbation perturbationProcedure){
 	
 	// Contabilizando distância entre soluções:
 	int distance = symmetricDistance(S, S_r);
 	
 	// Incrementando número de iterações da perturbação
-	perturbationProcedure.it += 1;
+	PerturbationProcedures.at(perturbationProcedureIndex).it += 1;
 	
 	// Alterando valor de distância média encontrada pela perturbação
-	perturbationProcedure.avgDist = ((perturbationProcedure.avgDist)*(perturbationProcedure.it - 1)+(distance))/(perturbationProcedure.it);
+	PerturbationProcedures.at(perturbationProcedureIndex).avgDist = ((PerturbationProcedures.at(perturbationProcedureIndex).avgDist)*(PerturbationProcedures.at(perturbationProcedureIndex).it - 1)+(distance))/(PerturbationProcedures.at(perturbationProcedureIndex).it);
 	
-	if (perturbationProcedure.it == Gamma){
+	if (PerturbationProcedures.at(perturbationProcedureIndex).it == Gamma){
 		
-		perturbationProcedure.w = std::round((perturbationProcedure.w*d_b)/(perturbationProcedure.avgDist));
+		PerturbationProcedures.at(perturbationProcedureIndex).w = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
 		
 		// perturbationProcedure = std::min(S.inst.n, std::max_element(1, perturbationProcedure.w));
 		
-		if (perturbationProcedure.w < 1){
+		if (PerturbationProcedures.at(perturbationProcedureIndex).w < 1){
 			
-			perturbationProcedure.w = 1;
+			PerturbationProcedures.at(perturbationProcedureIndex).w = 1;
 			
-		} else if (perturbationProcedure.w > S.inst.n){
+		} else if (PerturbationProcedures.at(perturbationProcedureIndex).w > S.inst.n){
 			
-			perturbationProcedure.w = S.inst.n;
+			PerturbationProcedures.at(perturbationProcedureIndex).w = S.inst.n;
 			
 		}
 		
-		perturbationProcedure.it = 0;
+		PerturbationProcedures.at(perturbationProcedureIndex).it = 0;
 		
-		perturbationProcedure.avgDist = 0;
+		PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 0;
 	}
 	
 	
@@ -308,6 +302,42 @@ void AILS::executeAILS(int max_it){
 	
 	while (n_it < max_it){
 		
+		
+		// Escolhendo um método de perturbação aleatório
+		
+		int perturbationProcedureIndex = rand()%(PerturbationProcedures.size());
+		
+		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
+		
+		// Aplicando método de perturbação
+		
+		Sol S = perturbationProcedure.apply(S_r, perturbationProcedure.w);
+		
+		// Aplicando buscas locais
+		
+		S = LocalSearch(S);
+		
+		// só "LocalSearch(S)" funcionaria?
+		
+		// Atualizando grau de perturbação
+		updatePerturbationDegree(S, S_r, perturbationProcedureIndex);
+		
+		// Aplicando critério de aceitação
+		if (acceptationCriterion(S)){
+			
+			S_r = S;
+			
+		}
+		
+		// Atualizando melhor solução encontrada
+		
+		if (S.FO() < S_p.FO()){
+			
+			S_p = S;
+			
+		}
+		
+		n_it += 1;
 		
 	}
 	

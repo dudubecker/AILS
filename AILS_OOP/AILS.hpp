@@ -69,10 +69,6 @@ public:
 	
 	// Métodos
 	
-	// Método para aplicação das perturbações
-	Sol PerturbationProcedure(Sol &S);
-	
-	
 	// Método para busca local (baseado em Random Variable Neighborhood Ordering)
 	Sol LocalSearch(Sol &S);
 	
