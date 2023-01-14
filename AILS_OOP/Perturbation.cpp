@@ -189,23 +189,82 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			break;
 		}
 		
-			// Concentric removal + Primeira Inserção Factível Aleatória
+		// Concentric removal + Primeira Inserção Factível Aleatória
 		case 'C':{
+			
+			srand(time(NULL));
 			
 			// std::cout << "Solucao apos concentric removal" << std::endl;
 			
 			// Escolhendo um pedido aleatório
 			double pedido_aleatorio = S.A.at(rand()%S.A.size());
 			
+			// Removendo pedido aleatório
+			S.remover_pedido(pedido_aleatorio);
 			
-			// Nomeando "w - 1" pedidos mais próximos do pedido escolhido
+			// Considerando "w - 1" pedidos mais próximos do pedido escolhido (que estão na solução!)
 			
+			// Vetor com distâncias ordenadas entre o pedido aleatório e os demais
+			std::vector<double> distancias_sorted = S.inst.t_med.at(pedido_aleatorio);
+			std::sort(distancias_sorted.begin(), distancias_sorted.end());
+			
+			// Vetor com pedidos ordenados de acordo com distância
+			std::vector<double> pedidos_sorted {};
+			
+			// Iterando no vetor ordenado
+			for (auto i: distancias_sorted){
+				
+				// Buscando índice do pedido do vetor ordenado no vetor não ordenado:
+				auto index = std::find(S.inst.t_med.at(pedido_aleatorio).begin(), S.inst.t_med.at(pedido_aleatorio).end(), i);
+				
+				int pedido = std::distance(S.inst.t_med.at(pedido_aleatorio).begin(), index);
+				
+				// Caso o pedido não seja o depósito central ou o próprio pedido aleatório (distância igual a 0) e esteja na solução
+				if ((pedido != 0) && (!count(S.L.begin(), S.L.end(), pedido))){
+					
+					pedidos_sorted.push_back(pedido);
+					
+				}
+				
+			}
+			
+			// std::cout << "Pedido escolhido: " << pedido_aleatorio << std::endl;
 			
 			// Removendo pedidos
 			
+			int qtdPedidosRemovidos {0};
+			
+			for (auto pedido: pedidos_sorted){
+				
+				S.remover_pedido(pedido);
+				
+				qtdPedidosRemovidos += 1;
+				
+				// std::cout << "Pedido retirado: " << pedido << std::endl;
+				
+				if (qtdPedidosRemovidos == (n_requests - 1)){
+					
+					break;
+					
+				}
+				
+			}
+			
 			// Reinserindo pedidos pelo método da primeira inserção factível
 			
+			// Pedidos não inseridos na solução (referenciar diretamente no for loop deu um bug)
 			
+			std::vector<double> pedidos_nao_inseridos = S.L;
+			
+			// *obs: aleatorizar "pedidos_nao_inseridos"?
+			
+			for (auto pedido: pedidos_nao_inseridos){
+				
+				// std::cout << "\nPedido: " << pedido << std::endl;
+				
+				S = primeira_insercao_factivel(S, pedido);
+				
+			}
 			
 			// Fim da heurística concentric removal
 			break;
