@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <chrono>
+#include <random>
 
 AILS::AILS()
 {
@@ -22,8 +23,8 @@ Sol AILS::LocalSearch(Sol &S){
 	
 	// Criando cópia da solução, para controle das melhorias
 	
-	// Solução de referência
-	Sol S_r = S;
+	// Solução de referência da busca local
+	Sol S_r_LS = S;
 	
 	// Criando uma cópia do vetor que contém os operadores de busca local
 	std::vector<LocalSearchOperator> LSOperatorsIt = LSOperators;
@@ -37,53 +38,56 @@ Sol AILS::LocalSearch(Sol &S){
 		
 		LocalSearchOperator LSOperator = LSOperatorsIt.at(index_LS);
 		
+		// std::cout << "Nome: " << LSOperator.name << std::endl;
+		
 		LSOperator.apply(S);
 		
 		// Caso a solução tenha sido melhorada:
-		if ((S.FO() < S_r.FO()) && (S.L.size() <= S_r.L.size()) && (S.isFeasible())){
+		if ((S.FO() < S_r_LS.FO()) && (S.isFeasible())){
+		// if ((S.FO() < S_r_LS.FO()) && (S.L.size() <= S_r_LS.L.size()) && (S.isFeasible())){
 			
-			std::cout << "Solucao melhorada! LSOperator: " << LSOperator.name << std::endl;
+			// std::cout << "Solucao melhorada! LSOperator: " << LSOperator.name << std::endl;
 			
-			std::cout << "S_r: \n";
+			// std::cout << "S_r: \n";
 			
-			S_r.print_sol();
+			// S_r.print_sol();
 			
-			std::cout << "\n FO: " << S_r.FO() << std::endl;
+			// std::cout << "\n FO: " << S_r.FO() << std::endl;
 			
-			std::cout << "S: \n";
+			// std::cout << "S: \n";
 			
-			S.print_sol();
+			// S.print_sol();
 			
-			std::cout << "\n FO: " << S.FO() << std::endl;
+			// std::cout << "\n FO: " << S.FO() << std::endl;
 			
-			std::cout << "\n\n";
+			// std::cout << "\n\n";
 			
 			// Atualizar solução de referência
-			S_r = S;
+			S_r_LS = S;
 			
 			// Restaurar vetor de operadores
 			LSOperatorsIt = LSOperators;
 			
 		} else { // Caso a solução não tenha sido melhorada:
 			
-			std::cout << "Solucao piorada! LSOperator: " << LSOperator.name << std::endl;
+			// std::cout << "Solucao piorada! LSOperator: " << LSOperator.name << std::endl;
 			
-			std::cout << "\nS_r: \n\n";
+			// std::cout << "\nS_r: \n\n";
 			
-			S_r.print_sol();
+			// S_r.print_sol();
 			
-			std::cout << "\n FO: " << S_r.FO() << std::endl;
+			// std::cout << "\n FO: " << S_r.FO() << std::endl;
 			
-			std::cout << "\nS: \n\n";
+			// std::cout << "\nS: \n\n";
 			
-			S.print_sol();
+			// S.print_sol();
 			
-			std::cout << "\n\n";
+			// std::cout << "\n\n";
 			
-			std::cout << "\n FO: " << S.FO() << std::endl;
+			// std::cout << "\n FO: " << S.FO() << std::endl;
 			
 			// Restaurar solução incumbente
-			S = S_r;
+			S = S_r_LS;
 			
 			// Excluir operador do vetor
 			LSOperatorsIt.erase(LSOperatorsIt.begin() + index_LS);
@@ -92,7 +96,7 @@ Sol AILS::LocalSearch(Sol &S){
 		
 	}
 	
-	return S_r;
+	return S_r_LS;
 	
 }
 
@@ -211,8 +215,6 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 		PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 0;
 	}
 	
-	
-	
 }
 
 // Método para o critério de aceitação 
@@ -246,7 +248,8 @@ bool AILS::acceptationCriterion(Sol &S){
 	// Atualizando valor de eta
 	
 	// O valor de eta é atualizado se o número de soluções aceitas atinge o valor Gamma
-	if (qtdSolucoesAceitas == Gamma){
+	//if (qtdSolucoesAceitas == Gamma){
+	if (qtdSolucoesTotais == Gamma){
 		
 		eta = (kappa*eta)/(qtdSolucoesAceitas/qtdSolucoesTotais);
 		
@@ -254,6 +257,10 @@ bool AILS::acceptationCriterion(Sol &S){
 		if (eta < 0.001){
 			
 			eta = 0.001;
+			
+		} else if (eta > 1){
+			
+			eta = 1;
 			
 		}
 		
@@ -265,7 +272,11 @@ bool AILS::acceptationCriterion(Sol &S){
 	
 	// Atualizando valor de b_UP
 	
+	// std::cout << "f_UP: " << f_UP << std::endl;
+	
 	b_UP = f_UND + eta*(f_UP - f_UND);
+	
+	// std::cout << "b_UP: " << b_UP << std::endl;
 	
 	// Se a solução atual for menor do que o limite calculado, haverá uma chance de "kappa" de ela ser escolhida
 	
@@ -273,13 +284,22 @@ bool AILS::acceptationCriterion(Sol &S){
 		
 		// Valor aleatório "n" entre 0 e 1
 		
-		double n = (double) rand()/(RAND_MAX);
+		std::mt19937_64 rng;
+		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
+		rng.seed(ss);
+		// initialize a uniform distribution between 0 and 1
+		std::uniform_real_distribution<double> unif(0, 1);
+		// ready to generate random numbers
+		double n = unif(rng);
 		
 		// Caso o número aleatório seja menor do que kappa (kappa*100% chance)
 		if (n < kappa){
 			
 			// Solução aceita!
 			Accept = true;
+			
+			std::cout << "Solucao aceita! " << std::endl;
 			
 			qtdSolucoesAceitas += 1;
 			
@@ -297,23 +317,43 @@ bool AILS::acceptationCriterion(Sol &S){
 
 void AILS::executeAILS(int max_it){
 	
-	// Variável para o número de iterações:
-	int n_it {};
+	// Para gerar números aleatórios
+	srand(time(NULL));
 	
-	while (n_it < max_it){
+	// Variável para o número de iterações:
+	
+	while (it < max_it){
 		
+		std::cout << "Iteracao: " << it << std::endl;
 		
 		// Escolhendo um método de perturbação aleatório
 		
-		int perturbationProcedureIndex = rand()%(PerturbationProcedures.size());
+		std::mt19937_64 rng;
+		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
+		rng.seed(ss);
+		// initialize a uniform distribution between 0 and 1
+		std::uniform_real_distribution<double> unif(0, PerturbationProcedures.size());
+		// ready to generate random numbers
+		double n = unif(rng);
+		
+		int perturbationProcedureIndex = trunc(n);
 		
 		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
 		
 		// Aplicando método de perturbação
 		
-		Sol S = perturbationProcedure.apply(S_r, perturbationProcedure.w);
+		std::cout << "Solucao S_r: " << std::endl;
 		
-		// Aplicando buscas locais
+		S_r.print_sol();
+		
+		// Assegurar que aqui o objeto "S_r" não está sendo alterado!
+		
+		// std::cout << "Perturbacao: " << std::endl;
+		
+		Sol S = S_r;
+		
+		perturbationProcedure.apply(S, perturbationProcedure.w);
 		
 		S = LocalSearch(S);
 		
@@ -337,7 +377,7 @@ void AILS::executeAILS(int max_it){
 			
 		}
 		
-		n_it += 1;
+		it += 1;
 		
 	}
 	

@@ -29,13 +29,14 @@ void print(std::vector<int> const &input)
 
 int main(){
 	
+	
+	
+	
 	Instance inst;
 	
-	inst.read("BB30");
+	inst.read("DD65");
 	
-	// Inicializando a partir do objeto instância:
-	
-	
+	// Inicializando solução a partir do objeto instância:
 	
 	Sol S(inst);
 	
@@ -45,14 +46,25 @@ int main(){
 	
 	Constructive.apply(S);
 	
-	S.print_sol();
+	// Inicializando objeto da AILS
 	
-	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+	AILS AILSObject;
 	
+	// Solução incumbente e melhor solução encontrada:
 	
-	/*
+	AILSObject.S_p = S;
 	
-	// Testando Random Variable Neighborhood Ordering:
+	AILSObject.S_r = S;
+	
+	// Inicializando métodos de perturbação:
+	
+	Perturbation Random('R');
+	
+	Perturbation Worst('W');
+	
+	Perturbation Concentric('C');
+	
+	// Inicializando operadores de busca local:
 	
 	LocalSearchOperator Or_opt_1('O', 2);
 	
@@ -70,10 +82,22 @@ int main(){
 	
 	LocalSearchOperator Swap_2_2('S', 2,2);
 	
-	AILS AILSObject;
+	// Atribuindo ao objeto da AILS
+	
+	AILSObject.PerturbationProcedures = {Random, Worst, Concentric};
 	
 	AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Shift, Swap_1_1, Swap_2_1, Swap_2_2, Two_Opt};
 	
+	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Two_Opt};
+	
+	AILSObject.executeAILS(400);
+	
+	AILSObject.S_p.print_sol();
+	
+	cout << "\n FO: " << std::setprecision(7) << AILSObject.S_p.FO() << endl;
+	
+	
+	/*
 	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Two_Opt};
 	
 	cout << "\nRealizando perturbacoes: " << endl;

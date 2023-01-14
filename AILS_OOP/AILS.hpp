@@ -26,12 +26,12 @@ public:
 	Sol S_r;
 	
 	// Iterações do algoritmo:
-	int it {0};
+	int it {1};
 	
 	// Parâmetros para controle do grau de perturbação:
 	
 	// Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-	double Gamma {};
+	double Gamma {20};
 	
 	// d_b: Distância de referência ("ideal") entre soluções. A distância de uma solução para outra é o número de arcos diferentes entre elas
 	double d_b {24};
@@ -47,7 +47,8 @@ public:
 	// f_UND: Qualidade da melhor solução encontrada nas últimas "min{it, Gamma}" iterações
 	double f_UND {};
 	
-	double eta {};
+	// determina b_UP no critério de aceitação -> qual valor usar inicialmente?
+	double eta {0.5};
 	
 	// Porcentagem de soluções aceitas
 	double kappa {0.35};
@@ -59,8 +60,6 @@ public:
 	
 	// Quantidade de soluções menores do que b_up que foram aceitas
 	double qtdSolucoesAceitas {};
-	
-	
 	
 	
 	

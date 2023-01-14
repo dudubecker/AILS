@@ -345,7 +345,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				while (pedido > S.inst.n){
 				
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
+					double index_pedido_removido = rand()%(n_nodes - 3) + 1;
 					
 					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
 					
