@@ -158,6 +158,34 @@ void Instance::read(std::string file_name){
 		}
 	}
 	
+	// Populando vetores para concentric removal
+	
+	x_med = std::vector<double> (n + 1, 0);
+	
+	y_med = std::vector<double> (n + 1, 0);
+	
+	t_med = std::vector<std::vector<double>> (n + 1, std::vector<double> (n + 1, 0));
+	
+	// Determinando valores médios entre os pontos correspondentes a pickup e delivery
+	
+	for (int index_pedido {1}; index_pedido < n + 1; index_pedido++){
+		
+		x_med.at(index_pedido) = (x.at(index_pedido) + x.at(index_pedido + n))/2;
+		
+		y_med.at(index_pedido) = (y.at(index_pedido) + y.at(index_pedido + n))/2;
+		
+	}
+	
+	// Determinando distâncias entre pedidos
+	
+	for (int i {1}; i < n + 1; i++){
+		
+		for (int j {1}; j < n + 1; j++){
+			
+			t_med[i][j] = floor(sqrt(pow(x_med[i]-x_med[j], 2) + pow(y_med[i]-y_med[j],2))*1000.0)/1000.00;
+			
+		}
+	}
 	
 	
 }

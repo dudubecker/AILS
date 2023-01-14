@@ -39,6 +39,18 @@ class Instance
 	
 	std::vector<std::vector<double>> t {};
 	
+	// Atributos para a perturbação adaptada de concentric removal
+	
+	// Vetor com valores "x" médios para cada pedido (ponto médio entre pickup e delivery)
+	std::vector<double> x_med {};
+	
+	// Vetor com valores "y" médios para cada pedido (ponto médio entre pickup e delivery)
+	std::vector<double> y_med {};
+	
+	// Vetor com distâncias entre pontos médios dos pedidos "i" e "j"
+	std::vector<std::vector<double>> t_med {};
+	
+	
 	// Dados normalizados para Shaw's removal: demandas (q) e tempos de viagem (t)
 	
 	std::vector <double> q_norm {};

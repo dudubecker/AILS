@@ -189,6 +189,28 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			break;
 		}
 		
+			// Concentric removal + Primeira Inserção Factível Aleatória
+		case 'C':{
+			
+			// std::cout << "Solucao apos concentric removal" << std::endl;
+			
+			// Escolhendo um pedido aleatório
+			double pedido_aleatorio = S.A.at(rand()%S.A.size());
+			
+			
+			// Nomeando "w - 1" pedidos mais próximos do pedido escolhido
+			
+			
+			// Removendo pedidos
+			
+			// Reinserindo pedidos pelo método da primeira inserção factível
+			
+			
+			
+			// Fim da heurística concentric removal
+			break;
+		}
+		
 		/*
 		// Shaw's removal + Primeira Inserção Factível Aleatória
 		case 'S':{

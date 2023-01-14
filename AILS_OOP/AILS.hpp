@@ -76,7 +76,7 @@ public:
 	int symmetricDistance(Sol &S, Sol &S_r);
 	
 	// Método para atualização dos graus de perturbação
-	void updatePerturbationDegree(Sol &S, Sol &S_r, Perturbation perturbationProcedure);
+	void updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureIndex);
 	
 	// Método para o critério de aceitação 
 	bool acceptationCriterion(Sol &S);

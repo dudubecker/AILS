@@ -29,39 +29,40 @@ void print(std::vector<int> const &input)
 
 int main(){
 	
-	//double random_number = {};
-	//random_number = ((double) rand() / (RAND_MAX));
-	
-	
-	
-	
-	/*
 	Instance inst;
 	
-	inst.read("DD65");
+	inst.read("AA10");
+	
 	
 	// Inicializando a partir do objeto instância:
+	
+	// Printando valores de t_med
+	//for (int i {0}; i < inst.n + 1; i++){
+		
+	//	for (int j {0}; j < inst.n + 1; j++){
+			
+			
+	//		cout << inst.t_med[i][j] << " ";
+			
+	//	}
+		
+	//	cout << "\n";
+	//}
+	
 	
 	Sol S(inst);
 	
 	// Heurística construtiva:
 	
-	
 	LocalSearchOperator Constructive('C');
 	
 	Constructive.apply(S);
 	
-	AILS AILSObject;
-	
-	AILSObject.acceptationCriterion(S);
-	
-	
-	Sol S_cons = S;
-	
 	S.print_sol();
 	
-	
 	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
+	
+	/*
 	
 	// Testando Random Variable Neighborhood Ordering:
 	
