@@ -299,7 +299,7 @@ bool AILS::acceptationCriterion(Sol &S){
 			// Solução aceita!
 			Accept = true;
 			
-			std::cout << "Solucao aceita! " << std::endl;
+			// std::cout << "Solucao aceita! " << std::endl;
 			
 			qtdSolucoesAceitas += 1;
 			
@@ -342,14 +342,8 @@ void AILS::executeAILS(int max_it){
 		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
 		
 		// Aplicando método de perturbação
-		
-		std::cout << "Solucao S_r: " << std::endl;
-		
-		S_r.print_sol();
-		
+
 		// Assegurar que aqui o objeto "S_r" não está sendo alterado!
-		
-		// std::cout << "Perturbacao: " << std::endl;
 		
 		Sol S = S_r;
 		
@@ -367,6 +361,13 @@ void AILS::executeAILS(int max_it){
 			
 			S_r = S;
 			
+			std::cout << "Nova solucao de referencia" << std::endl;
+			
+			// S_r.print_sol();
+			
+			// std::cout << "\n FO: " << S_r.FO() << std::endl;
+			
+			
 		}
 		
 		// Atualizando melhor solução encontrada
@@ -374,6 +375,9 @@ void AILS::executeAILS(int max_it){
 		if (S.FO() < S_p.FO()){
 			
 			S_p = S;
+			
+			std::cout << "Novo otimo global descoberto" << std::endl;
+			
 			
 		}
 		

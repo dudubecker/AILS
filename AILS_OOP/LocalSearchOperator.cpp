@@ -353,6 +353,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 				S.remover_pedido(pedido, index_rota);
 				
+				
 				// Atualizando variável com tamanho da rota, após remoção do pedido
 				n_nodes -= 2;
 				
@@ -377,7 +378,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 				S = melhor_insercao(S, pedido);
 				
 			}
-			
 			
 			break;
 		}

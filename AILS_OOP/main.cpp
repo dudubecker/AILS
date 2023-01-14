@@ -16,7 +16,7 @@ using namespace std;
 
 // Função para printar vetores: debug
 
-void print(std::vector<int> const &input)
+void print(std::vector<double> const &input)
 {
     for (auto const &i: input) {
         cout << i << " ";
@@ -28,8 +28,6 @@ void print(std::vector<int> const &input)
 
 
 int main(){
-	
-	
 	
 	
 	Instance inst;
@@ -90,49 +88,10 @@ int main(){
 	
 	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Two_Opt};
 	
-	AILSObject.executeAILS(400);
+	AILSObject.executeAILS(200);
 	
 	AILSObject.S_p.print_sol();
 	
 	cout << "\n FO: " << std::setprecision(7) << AILSObject.S_p.FO() << endl;
 	
-	
-	/*
-	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Two_Opt};
-	
-	cout << "\nRealizando perturbacoes: " << endl;
-	
-	// Perturbation Random('R');
-	
-	// Random.apply(S, 2);
-	
-	Perturbation Worst('W');
-	
-	Worst.apply(S, 3);
-	
-	S.print_sol();
-	
-	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
-	
-	S = AILSObject.LocalSearch(S);
-	
-	cout << "\n Solucao Final: " << endl;
-	
-	S.print_sol();
-	
-	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
-	
-	cout << "\n\n\n\n\n";
-	
-	cout <<"Solucao S: \n";
-	
-	S.print_sol();
-	cout << "\n FO: " << std::setprecision(7) << S.FO() << endl;
-	
-	cout <<"Solucao S_cons: \n";
-	S_cons.print_sol();
-	cout << "\n FO: " << std::setprecision(7) << S_cons.FO() << endl;
-	
-	// AILSObject.symmetricDistance(S, S_cons);
-	*/
 }
