@@ -38,7 +38,7 @@ Sol AILS::LocalSearch(Sol &S){
 		
 		LocalSearchOperator LSOperator = LSOperatorsIt.at(index_LS);
 		
-		// std::cout << "Nome: " << LSOperator.name << std::endl;
+		std::cout << "Nome: " << LSOperator.name << std::endl;
 		
 		LSOperator.apply(S);
 		

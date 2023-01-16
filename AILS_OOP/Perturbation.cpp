@@ -61,7 +61,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 				// std::cout << "\nPedido: " << pedido << std::endl;
 				
-				S = primeira_insercao_factivel(S, pedido);
+				// S = primeira_insercao_factivel(S, pedido);
+				S = melhor_insercao(S, pedido);
+				
 				
 			}
 			
@@ -177,7 +179,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 				// std::cout << "\nPedido: " << pedido << std::endl;
 				
-				S = primeira_insercao_factivel(S, pedido);
+				// S = primeira_insercao_factivel(S, pedido);
+				
+				S = melhor_insercao(S, pedido);
 				
 			}
 			
@@ -262,7 +266,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 				// std::cout << "\nPedido: " << pedido << std::endl;
 				
-				S = primeira_insercao_factivel(S, pedido);
+				// S = primeira_insercao_factivel(S, pedido);
+				S = melhor_insercao(S, pedido);
+				
 				
 			}
 			

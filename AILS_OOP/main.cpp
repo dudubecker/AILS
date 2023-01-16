@@ -32,7 +32,7 @@ int main(){
 	
 	Instance inst;
 	
-	inst.read("DD65");
+	inst.read("CC50");
 	
 	// Inicializando solução a partir do objeto instância:
 	
@@ -45,6 +45,7 @@ int main(){
 	Constructive.apply(S);
 	
 	// Inicializando objeto da AILS
+	
 	
 	AILS AILSObject;
 	
@@ -64,7 +65,7 @@ int main(){
 	
 	// Inicializando operadores de busca local:
 	
-	LocalSearchOperator Or_opt_1('O', 2);
+	LocalSearchOperator Or_opt_1('O', 1);
 	
 	LocalSearchOperator Or_opt_2('O', 3);
 	
@@ -72,7 +73,11 @@ int main(){
 	
 	LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
 	
-	LocalSearchOperator Shift('T', 8);
+	LocalSearchOperator Shift_5('T', 5);
+	
+	LocalSearchOperator Shift_10('T', 10);
+	
+	LocalSearchOperator Shift_15('T', 15);
 	
 	LocalSearchOperator Swap_1_1('S', 1,1);
 	
@@ -80,18 +85,27 @@ int main(){
 	
 	LocalSearchOperator Swap_2_2('S', 2,2);
 	
+	LocalSearchOperator Swap_4_4('S', 4,4);
+	
+	LocalSearchOperator Swap_3_3('S', 3,3);
+	
 	// Atribuindo ao objeto da AILS
 	
 	AILSObject.PerturbationProcedures = {Random, Worst, Concentric};
 	
-	AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Shift, Swap_1_1, Swap_2_1, Swap_2_2, Two_Opt};
+	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Shift, Swap_1_1, Swap_2_1, Swap_2_2, Two_Opt};
 	
-	// AILSObject.LSOperators = {Or_opt_1, Or_opt_2, Shaw_1, Two_Opt};
+	AILSObject.LSOperators = {Shaw_1, Or_opt_1, Swap_1_1, Two_Opt};
 	
-	AILSObject.executeAILS(200);
+	// AILSObject.LSOperators = {Shaw_1};
+	
+	cout << S.FO();
+	
+	AILSObject.executeAILS(10000);
 	
 	AILSObject.S_p.print_sol();
 	
 	cout << "\n FO: " << std::setprecision(7) << AILSObject.S_p.FO() << endl;
+	
 	
 }

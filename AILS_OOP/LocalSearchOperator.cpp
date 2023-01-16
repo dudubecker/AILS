@@ -130,6 +130,43 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// std::cout << "\nindex_R1: " << index_R1 << "\nindex_R2: " << index_R2 << std::endl;
 			
+			// Resolvendo bug quando a rota se esvazia: o número de pedidos a serem retirados não pode ser maior do que o número de pedidos na rota!!
+			
+			// Contabilizando número de pedidos atendidos pela rota R1
+			
+			int n_requests_R1 {};
+			
+			for (auto &node: S.Rotas.at(index_R1)){
+				
+				if ((node > 0) && (node <= S.inst.n)){
+					
+					n_requests_R1 += 1;
+					
+				}
+				
+			}
+			
+			// Contabilizando número de pedidos atendidos pela rota R2
+			/*
+			int n_requests_R2 {};
+			
+			for (auto &node: S.Rotas.at(index_R2)){
+				
+				if ((node > 0) && (node <= S.inst.n)){
+					
+					n_requests_R2 += 1;
+					
+				}
+				
+			}
+			
+			// "k" deve ser o mínimo entre o valor atribuído à heurística e o número de pedidos atendidos pela rota
+			
+			k1 = std::min(k1, n_requests_R1);
+			
+			k2 = std::min(k2, n_requests_R2);
+			*/
+			
 			// Removendo pedidos:
 			
 			// Escolhendo aleatoriamente k1 pedidos da rota R1 para serem retirados:
@@ -145,7 +182,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				while (pedido > S.inst.n){
 				
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
 					
@@ -173,7 +210,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				while (pedido > S.inst.n){
 				
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 1);
+					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
 					
@@ -265,6 +302,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Contabilizando todos os pedidos contidos na seção de "index_no_inicial" a "index_no_final":
 			
+			// std::cout << index_no_final - index_no_inicial << std::endl;
+			
 			std::vector<double> k_nodes = {};
 			
 			for (int index {index_no_inicial}; index < index_no_final; index++){
@@ -333,6 +372,24 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Número de nós contidos na rota:
 			int n_nodes = S.Rotas.at(index_rota).size();
 			
+			
+			// Corrigindo bug quanto "or_opt" é maior do que o número de pedidos na rota
+			int n_requests {};
+			
+			for (auto &node: S.Rotas.at(index_rota)){
+				
+				if ((node > 0) && (node <= S.inst.n)){
+					
+					n_requests += 1;
+					
+				}
+				
+			}
+			
+			// "or_opt" deve ser o mínimo entre o valor atribuído à heurística e o número de pedidos atendidos pela rota
+			
+			or_opt = std::min(or_opt, n_requests);
+			
 			// Removendo pedidos:
 			
 			// Removendo "or_opt" pedidos da rota
@@ -343,16 +400,15 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
 				while (pedido > S.inst.n){
-				
+					
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = rand()%(n_nodes - 3) + 1;
+					double index_pedido_removido = 1 + rand()%(n_nodes - 3);
 					
 					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
 					
 				}
 				
 				S.remover_pedido(pedido, index_rota);
-				
 				
 				// Atualizando variável com tamanho da rota, após remoção do pedido
 				n_nodes -= 2;
@@ -829,32 +885,22 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 	}
 	
-	// Dúvida pertinente: if S.isfeasible // se a mudança melhorou a função objetivo ?
+	// Checando se há rotas vazias: se houver, a rota é removida!
+	
+	for (int index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
+		
+		if (S.Rotas.at(index_rota).size() <= 2){
+			
+			
+			std::cout << "\n\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n" << std::endl;
+			
+			S.Rotas.erase(S.Rotas.begin() + index_rota);
+			
+		}
+	}
 	
 	return S;
 	
-	// Caso a aplicação do operador tenha resultado uma função objetivo menor:
-	
-	/*
-	
-	if (name == 'C'){
-		
-		return S;
-		
-	}
-	
-	if (S.FO() < FO_S){ // && S.isfeasible && S.L.size() < L_S
-		
-		std::cout << "Solucao melhorada: de " << FO_S << " para " << S.FO() << std::endl;
-		
-		return S;
-	} else {
-		
-		std::cout << "Solucao piorada! De " << FO_S << " para " << S.FO() << std::endl;
-		return S_ins;
-	}
-	
-	*/
 	
 	
 }
