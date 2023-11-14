@@ -7,6 +7,7 @@
 #include <chrono>
 #include <numeric>
 
+/*
 
 // Funções utilizadas ao longo da implementação das heurísticas:
 
@@ -723,7 +724,7 @@ bool isRouteFeasible(std::vector<double> &Rota, Instance &inst){
 	return factivel;
 	
 }
-*/
+
 
 Sol primeira_insercao_factivel(Sol &S,double &pedido){
 	

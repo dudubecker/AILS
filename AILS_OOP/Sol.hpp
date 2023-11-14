@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Instance.hpp"
+#include <map>
 
 class Sol
 {
@@ -14,11 +15,29 @@ public:
 	// Rotas da solução:
 	std::vector<std::vector<double>> Rotas {};
 	
+	// Vetor de cargas
+	std::vector<std::vector<double>> Cargas {};
+	
+	// Vetor de tempos de visita
+	std::vector<std::vector<double>> TemposDeVisita {};
+	
+	// Tamanho das rotas na solução
+	std::vector<int> RotasSize {};
+	
 	// Pedidos não atendidos na solução (chamados aqui de "L")
 	std::vector<double> L {};
 	
+	// Tamanho do vetor de pedidos não atendidos
+	int LSize {};
+	
 	// Pedidos atendidos na solução (chamados aqui de "A")
 	std::vector<double> A {};
+	
+	// Tamanho do vetor de pedidos atendidos
+	int ASize {};
+	
+	// Posição do pedido na solução
+	std::map<int, std::vector<int>> request_positions {};
 	
 	// Instância da solução
 	Instance inst;
@@ -29,24 +48,6 @@ public:
 	
 	// Adicionado na última atualização:
 	Sol();
-	
-	// Criando objeto solução a partir de inst, Rotas, L e A
-	Sol(std::vector<std::vector<double>>& Rotas_init, std::vector<double>& L_init, std::vector<double>& A_init, Instance& inst_init)
-	{
-		Rotas = Rotas_init;
-		inst = inst_init;
-		L = L_init;
-		A = A_init;
-	}
-	
-	// Criando objeto solução a partir de outro
-	Sol(const Sol& S)
-	{
-		Rotas = S.Rotas;
-		inst = S.inst;
-		L = S.L;
-		A = S.A;
-	}
 	
 	~Sol();
 	
@@ -63,9 +64,6 @@ public:
 	
 	// Método para remoção de um pedido
 	void remover_pedido(double &pedido);
-	
-	// Método para remoção de um pedido conhecida a rota
-	void remover_pedido(double &pedido, double &index_rota);
 	
 	// Checagem se uma solução é factível ou não:
 	bool isFeasible();

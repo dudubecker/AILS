@@ -109,7 +109,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 				// Removendo pedido de R1:
 				
-				S.remover_pedido(pedido, index_R1);
+				S.remover_pedido(pedido);
 				pedidosRemovidos_R1.push_back(pedido);
 				
 			}
@@ -260,7 +260,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 					
 					// std::cout << "Pedido removido: " << node << std::endl;
 					
-					S.remover_pedido(node, index_R1);
+					S.remover_pedido(node);
 					
 				}
 				
@@ -352,7 +352,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 					
 				}
 				
-				S.remover_pedido(pedido, index_rota);
+				S.remover_pedido(pedido);
 				
 				// Atualizando variável com tamanho da rota, após remoção do pedido
 				n_nodes -= 2;

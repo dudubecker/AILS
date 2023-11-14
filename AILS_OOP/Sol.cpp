@@ -20,27 +20,27 @@ Sol::Sol(Instance &inst_data){
 	}
 	
 	// Dando valor inicial para o número de pedidos não atendidos
-	// LSize = inst.n;
+	LSize = inst.n;
 	
 	// Populando o vetor de posições
 	
-	//for (int i = 1; i <= inst.n; ++i) {
+	for (int i = 1; i <= inst.n; ++i) {
 		
-	//	request_positions[i] = std::vector<int>();
+		request_positions[i] = std::vector<int>();
 		
-	//}
+	}
 	
 	// Criando uma rota inicial vazia para a solução:
 	Rotas.push_back({0, 2*(inst.n) + 1});
 	
 	// Adicionando vetor de cargas vazio
-	//Cargas.push_back({0,0});
+	Cargas.push_back({0,0});
 	
 	// Adicionando vetor de tempos de visita - (0,0), já que os nós finais e inicial estão no mesmo lugar!
-	//TemposDeVisita.push_back({0,0});
+	TemposDeVisita.push_back({0,0});
 	
 	// Criando posição de tamanho igual a 2 no atributo com tamanhos de Rotas
-	//RotasSize.push_back(2);
+	RotasSize.push_back(2);
 	
 	// Quantidade de requests atendidos (inicia-se em 0)
 	int qtd_atendidos {0};
@@ -89,13 +89,13 @@ Sol::Sol(Instance &inst_data){
 			
 			Rotas.push_back(nova_rota);
 			
-			// Cargas.push_back({0,0});
+			Cargas.push_back({0,0});
 			
-			// TemposDeVisita.push_back({0,0});
+			TemposDeVisita.push_back({0,0});
 			
 			// Adicionando valor igual a 2 (nós do depósito central) no vetor de tamanhos de rota
 			
-			// RotasSize.push_back(2);
+			RotasSize.push_back(2);
 			
 			inserir_pedido(pedido, Rotas.size() - 1, 1, 2);
 			
@@ -221,20 +221,178 @@ void Sol::inserir_pedido(double &pedido, int index_rota, int pos_no_pickup, int 
 	// Índice do nó de delivery correspondente ao request
 	int no_delivery {pedido + inst.n};
 	
-	// Inserindo nós na rota, nas determinadas
+	// Inserindo nós na rota, nas determinadas posições
 	
 	Rotas.at(index_rota).insert(Rotas.at(index_rota).begin() + pos_no_pickup, no_pickup);
 	Rotas.at(index_rota).insert(Rotas.at(index_rota).begin() + pos_no_delivery, no_delivery);
 	
-	//Rotas.at(index_rota) = novaRota;
+	// Aumentando o número de nós da rota correspondente
+	RotasSize.at(index_rota) += 2;
 	
 	// Retirando pedido da lista de pedidos não atendidos
 	
 	L.erase(std::remove_if(L.begin(), L.end(), [&pedido](double value) -> bool { return value == pedido; }), L.end());
 	
-	// Adicionando pedido da lista de pedidos atendidos
+	// Diminuindo o número de pedidos não atendidos
+	LSize -= 1;
+	
+	// Adicionando pedido na lista de pedidos atendidos
 	
 	A.push_back(pedido);
+	
+	// Aumentando o número de pedidos atendidos
+	ASize += 1;
+	
+	// Atualizando vetor de posições para o pedido inserido
+	
+	request_positions[pedido] = {index_rota, pos_no_pickup, pos_no_delivery};
+	
+	// Atualizando vetor de posições para demais pedidos da rota 
+	
+	// Para pedidos anteriores a P - as posições não se alteram!
+	
+	// Para pedidos entre P e D - Acréscimo de 1 unidade na posição
+	
+	// * OBS: no caso em que pos_no_pickup = pos_no_delivery - 1 (coleta e entrega consecutivas), esse laço não é executado!
+	for (int index_node {pos_no_pickup + 1}; index_node < pos_no_delivery; index_node++){
+		
+		// Nó de referência
+		int node = Rotas.at(index_rota).at(index_node);
+		
+		// Se o nó é de pickup
+		if (node <= inst.n){
+			
+			int request = node;
+			
+			// Atualizando posição no atributo de posições (pickup)
+			int posicao = request_positions.at(request).at(1) + 1;
+			request_positions.at(request).at(1) = posicao;
+			
+			
+		// Se o nó é de delivery
+		} else {
+			
+			// Índice do pedido correspondente
+			int request = node - inst.n;
+			
+			// Atualizando posição no atributo de posições (delivery)
+			int posicao = request_positions.at(request).at(2) + 1;
+			request_positions.at(request).at(2) = posicao;
+			
+		}
+		
+	}
+	
+	// Para pedidos após D - Acréscimo de 2 unidades na posição
+	
+	for (int index_node {pos_no_delivery + 1}; index_node < RotasSize.at(index_rota) - 1; index_node++){
+		
+		// Nó de referência
+		int node = Rotas.at(index_rota).at(index_node);
+		
+		// Se o nó é de pickup
+		if (node <= inst.n){
+			
+			int request = node;
+			
+			// Atualizando posição no atributo de posições (pickup)
+			int posicao = request_positions.at(request).at(1) + 2;
+			request_positions.at(request).at(1) = posicao;
+			
+			
+		// Se o nó é de delivery
+		} else {
+			
+			// Índice do pedido correspondente
+			int request = node - inst.n;
+			
+			// Atualizando posição no atributo de posições (delivery)
+			int posicao = request_positions.at(request).at(2) + 2;
+			request_positions.at(request).at(2) = posicao;
+			
+		}
+		
+		
+	}
+	
+	// Incrementando vetor de Cargas
+	
+	// Se as posições de inserção são consecutivas
+	if (pos_no_pickup + 1 == pos_no_delivery){
+		
+		// Valor da carga na posição anterior à posição de pickup
+		double carga_anterior = Cargas.at(index_rota).at(pos_no_pickup - 1);
+		
+		// [0, ..., Q, +P, -D, ..., ] -> [0, ..., Q, Q + d, Q, ..., ]
+		
+		// Adicionando carga na posição de pickup
+		Cargas.at(index_rota).insert(Cargas.at(index_rota).begin() + pos_no_pickup, carga_anterior + inst.q.at(pedido));
+		
+		// Adicionando carga na posição de delivery
+		Cargas.at(index_rota).insert(Cargas.at(index_rota).begin() + pos_no_delivery, carga_anterior);
+		
+	
+	// Se as posições de inserção não são consecutivas
+	} else {
+		
+		// Valor da carga na posição anterior à posição de pickup
+		double carga_anterior_pickup = Cargas.at(index_rota).at(pos_no_pickup - 1);
+		
+		// Valor da carga na posição anterior à posição de delivery
+		double carga_anterior_delivery = Cargas.at(index_rota).at(pos_no_delivery - 2);
+		
+		// std::cout << "\nCarga anterior pickup: " << carga_anterior_pickup << std::endl;
+		// std::cout << "Carga anterior delivery: " << carga_anterior_delivery << std::endl;
+		
+		// Adicionando carga na posição de pickup
+		Cargas.at(index_rota).insert(Cargas.at(index_rota).begin() + pos_no_pickup, carga_anterior_pickup + inst.q.at(pedido));
+		
+		// Adicionando carga na posição de delivery
+		Cargas.at(index_rota).insert(Cargas.at(index_rota).begin() + pos_no_delivery, carga_anterior_delivery);
+		
+		// Incrementando cargas intermediárias - entre nós de pickup e delivery
+		for (auto index_node {pos_no_pickup + 1}; index_node < pos_no_delivery; index_node++){
+			
+			Cargas.at(index_rota).at(index_node) += inst.q.at(pedido);
+			
+		}
+		
+		
+	}
+	
+	
+	// Incrementando vetor com tempos de visita
+	
+	// A alteração nos tempos de visita só se dá a partir do vetor de pickup
+	
+	// Inserindo "zeros" no vetor de tempo de visitas:
+	
+	TemposDeVisita.at(index_rota).insert(TemposDeVisita.at(index_rota).begin() + pos_no_pickup, 0);
+	
+	TemposDeVisita.at(index_rota).insert(TemposDeVisita.at(index_rota).begin() + pos_no_delivery, 0);
+	
+	// Tempo inicial - a partir do nó anterior ao nó de pickup - os tempos de visitas dos nós anteriores são conservados!
+	
+	double t_atual = TemposDeVisita.at(index_rota).at(pos_no_pickup - 1);
+	
+	// Atualizando tempos de visita
+	for (int index_node {pos_no_pickup - 1}; index_node < RotasSize.at(index_rota) - 1; index_node++){
+		
+		int no_atual = Rotas.at(index_rota).at(index_node);
+		
+		int no_seguinte = Rotas.at(index_rota).at(index_node + 1);
+		
+		double delta_t = inst.t.at(no_atual).at(no_seguinte);
+		
+		// Será atribuída à variável "t_atual" o maior valor entre o delta e o tempo de abertura de TW, no caso de adiantamentos!
+		t_atual = std::max(t_atual + delta_t, inst.e.at(no_seguinte));
+		
+		TemposDeVisita.at(index_rota).at(index_node + 1) = t_atual;
+		
+		
+	}
+	
+	
 	
 	
 }
@@ -248,71 +406,159 @@ void Sol::remover_pedido(double &pedido){
 	// Índice do nó de delivery correspondente ao request
 	int no_delivery {pedido + inst.n};
 	
-	// "Procurando" pedido (no_pickup) na solução:
+	// Índice da rota onde o pedido está:
+	int index_rota = request_positions[pedido].at(0);
 	
-	for (auto &rota: Rotas){
+	// Posição original de pickup do pedido
+	int pos_no_pickup = request_positions[pedido].at(1);
+	
+	// Posição original de delivery do pedido
+	int pos_no_delivery = request_positions[pedido].at(2);
+	
+	// Atualizando posições antes de realizar a remoção (mais simples)
+	
+	// Atualizando vetor de posições para o pedido removido
+	// A chave 9999 indicará que o pedido não está mais na solução!
+	request_positions[pedido] = {9999, 9999, 9999};
+	
+	// Para pedidos anteriores a P - as posições não se alteram!
+	
+	// Para pedidos entre P e D - Decréscimo de 1 unidade na posição
+	
+	
+	
+	// * OBS: no caso em que pos_no_pickup = pos_no_delivery - 1 (coleta e entrega consecutivas), esse laço não é executado!
+	for (int index_node {pos_no_pickup + 1}; index_node < pos_no_delivery; index_node++){
 		
-		// Caso o nó esteja contido na rota
-		if (count(rota.begin(), rota.end(), no_pickup)){
+		// Nó de referência
+		int node = Rotas.at(index_rota).at(index_node);
+		
+		// Se o nó é de pickup
+		if (node <= inst.n){
 			
-			// Removendo nó de pickup
+			int request = node;
 			
-			rota.erase(std::remove_if(rota.begin(), rota.end(), [&no_pickup](int value) -> bool { return value == no_pickup; }), rota.end());
+			// Atualizando posição no atributo de posições (pickup)
+			int posicao = request_positions.at(request).at(1) - 1;
+			request_positions.at(request).at(1) = posicao;
 			
-			// Removendo nó de delivery
 			
-			rota.erase(std::remove_if(rota.begin(), rota.end(), [&no_delivery](int value) -> bool { return value == no_delivery; }), rota.end());
+		// Se o nó é de delivery
+		} else {
 			
-			break;
+			// Índice do pedido correspondente
+			int request = node - inst.n;
+			
+			// Atualizando posição no atributo de posições (delivery)
+			int posicao = request_positions.at(request).at(2) - 1;
+			request_positions.at(request).at(2) = posicao;
 			
 		}
+		
 	}
 	
-	// Adicionando pedido ao conjunto L
-	L.push_back(pedido);
+	// Para pedidos após D - Decréscimo de 2 unidades na posição
 	
-	// Removendo pedido do conjunto A
-	A.erase(std::remove_if(A.begin(), A.end(), [&pedido](double value) -> bool { return value == pedido; }), A.end());
-	
-	
-}
-
-// Método para remoção de um pedido sabendo-se o índice da rota
-void Sol::remover_pedido(double &pedido, double &index_rota){
-	
-	// Índice do nó de pickup correspondente ao request
-	int no_pickup {pedido};
-	
-	// Índice do nó de delivery correspondente ao request
-	int no_delivery {pedido + inst.n};
-	
-	// "Procurando" pedido (no_pickup) na solução:
-	
-	//for (auto &rota: Rotas){
+	for (int index_node {pos_no_delivery + 1}; index_node < RotasSize.at(index_rota) - 1; index_node++){
 		
-		// Caso o nó esteja contido na rota
-		//if (count(rota.begin(), rota.end(), no_pickup)){
+		// Nó de referência
+		int node = Rotas.at(index_rota).at(index_node);
+		
+		// Se o nó é de pickup
+		if (node <= inst.n){
 			
+			int request = node;
+			
+			// Atualizando posição no atributo de posições (pickup)
+			int posicao = request_positions.at(request).at(1) - 2;
+			request_positions.at(request).at(1) = posicao;
+			
+			
+		// Se o nó é de delivery
+		} else {
+			
+			// Índice do pedido correspondente
+			int request = node - inst.n;
+			
+			// Atualizando posição no atributo de posições (delivery)
+			int posicao = request_positions.at(request).at(2) - 2;
+			request_positions.at(request).at(2) = posicao;
+			
+		}
+		
+		
+	}
+	
+	
+	// Realizando remoções no vetor de rotas
+	
 	// Removendo nó de pickup
+	Rotas.at(index_rota).erase(Rotas.at(index_rota).begin() + pos_no_pickup);
 	
-	Rotas.at(index_rota).erase(std::remove_if(Rotas.at(index_rota).begin(), Rotas.at(index_rota).end(), [&no_pickup](int value) -> bool { return value == no_pickup; }), Rotas.at(index_rota).end());
+	// Removendo nó de delivery (um índice a menos)
+	Rotas.at(index_rota).erase(Rotas.at(index_rota).begin() + pos_no_delivery - 1);
 	
-	// Removendo nó de delivery
-	
-	Rotas.at(index_rota).erase(std::remove_if(Rotas.at(index_rota).begin(), Rotas.at(index_rota).end(), [&no_delivery](int value) -> bool { return value == no_delivery; }), Rotas.at(index_rota).end());
-	
-			// break;
-			
-		// }
-	// }
+	// Diminuindo número de nós na rota correspondente
+	RotasSize.at(index_rota) -= 2;
 	
 	// Adicionando pedido ao conjunto L
 	L.push_back(pedido);
 	
+	// Aumentando o número de pedidos não atendidos
+	LSize += 1;
+	
 	// Removendo pedido do conjunto A
 	A.erase(std::remove_if(A.begin(), A.end(), [&pedido](double value) -> bool { return value == pedido; }), A.end());
 	
+	// Diminuindo o número de pedidos atendidos
+	ASize -= 1;
 	
+	// Vetor de Cargas
+	
+	// Decrementando posições entre P e D (contempla também casos onde pos_pickup = pos_delivery - 1)
+	for (auto index_node {pos_no_pickup + 1}; index_node < pos_no_delivery; index_node++){
+		
+		Cargas.at(index_rota).at(index_node) -= inst.q.at(pedido);
+		
+	}
+	
+	// Retirando posições no vetor de Cargas
+	
+	// Posição de Pickup
+	Cargas.at(index_rota).erase(Cargas.at(index_rota).begin() + pos_no_pickup);
+	
+	// Posição de delivery (um índice a menos)
+	Cargas.at(index_rota).erase(Cargas.at(index_rota).begin() + pos_no_delivery - 1);
+	
+	// Atualizando valores do vetor de tempos de visita
+	
+	// Posição de Pickup
+	TemposDeVisita.at(index_rota).erase(TemposDeVisita.at(index_rota).begin() + pos_no_pickup);
+	
+	// Posição de delivery (um índice a menos)
+	TemposDeVisita.at(index_rota).erase(TemposDeVisita.at(index_rota).begin() + pos_no_delivery - 1);
+	
+	// Atualizando valores a partir de pos_pickup - 1
+	
+	// Tempo inicial - a partir do nó anterior ao nó de pickup - os tempos de visitas dos nós anteriores são conservados!
+	
+	double t_atual = TemposDeVisita.at(index_rota).at(pos_no_pickup - 1);
+	
+	// Atualizando tempos de visita
+	for (int index_node {pos_no_pickup - 1}; index_node < RotasSize.at(index_rota) - 1; index_node++){
+		
+		int no_atual = Rotas.at(index_rota).at(index_node);
+		
+		int no_seguinte = Rotas.at(index_rota).at(index_node + 1);
+		
+		double delta_t = inst.t.at(no_atual).at(no_seguinte);
+		
+		// Será atribuída à variável "t_atual" o maior valor entre o delta e o tempo de abertura de TW, no caso de adiantamentos!
+		t_atual = std::max(t_atual + delta_t, inst.e.at(no_seguinte));
+		
+		TemposDeVisita.at(index_rota).at(index_node + 1) = t_atual;
+		
+	}
 }
 
 // Método para checar factibilidade
@@ -734,8 +980,8 @@ std::vector<double> Sol::delta_melhor_insercao(double &pedido){
 				// A iteração começa em 1 e termina no tamanho da rota porque não se considera a primeira e última posição da rota, que são o depósito
 				if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
 					
-					if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
-					// if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					// if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
 					
 						num_rotas_factiveis += 1;
 						
@@ -824,8 +1070,8 @@ std::vector<double> Sol::delta_melhor_insercao(double &pedido, int &index_rota){
 				// S_teste.inserir_pedido(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
 				
 				// if (S_teste.isFeasible(index_rota)){
-				if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
-				// if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+				// if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+				if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
 					
 					num_rotas_factiveis += 1;
 					
@@ -912,8 +1158,8 @@ void Sol::executar_melhor_insercao(double &pedido){
 					// S_teste.inserir_pedido(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
 					
 					//if (S_teste.isFeasible(index_rota)){
-					if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
-					//if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					//if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
 						
 						num_rotas_factiveis += 1;
 						
@@ -982,7 +1228,8 @@ void Sol::executar_melhor_insercao(double &pedido, int index_rota){
 				// A iteração começa em 1 e termina no tamanho da rota porque não se considera a primeira e última posição da rota, que são o depósito
 				if ((pos_insercao_no_pickup != pos_insercao_no_delivery) and (pos_insercao_no_pickup < pos_insercao_no_delivery)){
 					
-					if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					if (checar_factibilidade(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
+					// if (isInsertionFeasible(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery)){
 						
 						num_rotas_factiveis += 1;
 						
@@ -1016,3 +1263,154 @@ void Sol::executar_melhor_insercao(double &pedido, int index_rota){
 	
 }
 
+bool Sol::checar_factibilidade(double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery){
+	
+	// Variável booleana, que controla a factibilidade
+	bool factivel = true;
+	
+	// Índice do nó de pickup correspondente ao request
+	int no_pickup {pedido};
+	
+	// Índice do nó de delivery correspondente ao request
+	int no_delivery {pedido + inst.n};
+	
+	// Demanda a ser adicionada na chunk entre P e D
+	double demanda = inst.q.at(pedido);
+	
+	// Carga atual - Anterior à posição de pickup
+	double cap_atual = Cargas.at(index_rota).at(pos_no_pickup - 1);
+	
+	// Tempo atual - Anterior à posição de pickup
+	double t_atual = TemposDeVisita.at(index_rota).at(pos_no_pickup - 1);
+	
+	// Iterando a partir da posição de pickup
+	
+	for (auto index_no {pos_no_pickup - 1}; index_no < RotasSize.at(index_rota) + 1; index_no++){
+		
+		// Variável que guarda o nó atual considerado na checagem de factibilidade
+		int no_atual {};
+		
+		// Variável que guarda o nó seguinte considerado na checagem de factibilidade
+		int no_seguinte {};
+		
+		// Se as posições de inserção são consecutivas (pos_no_delivery = pos_no_pickup + 1)
+		if (pos_no_delivery == pos_no_pickup + 1){
+			
+			if (index_no < pos_no_pickup - 1){
+				
+				no_atual = Rotas.at(index_rota).at(index_no);
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no + 1);
+				
+			} else if (index_no == pos_no_pickup - 1){
+				
+				no_atual = Rotas.at(index_rota).at(index_no);
+				
+				no_seguinte = no_pickup;
+				
+			} else if (index_no == pos_no_pickup){
+				
+				no_atual = no_pickup;
+				
+				no_seguinte = no_delivery;
+				
+			} else if (index_no == pos_no_pickup + 1){
+				
+				no_atual = no_delivery;
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no - 1);
+				
+				
+			} else {
+				
+				no_atual = Rotas.at(index_rota).at(index_no - 2);
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no - 1);
+				
+			}
+			
+			
+			
+		// Se as posições de inserção não são consecutivas (pos_no_delivery > pos_no_pickup + 1)
+		} else if (pos_no_delivery > pos_no_pickup + 1){
+			
+			if (index_no < pos_no_pickup - 1){
+				
+				no_atual = Rotas.at(index_rota).at(index_no);
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no + 1);
+				
+			} else if (index_no == pos_no_pickup - 1){
+				
+				no_atual = Rotas.at(index_rota).at(index_no);
+				
+				no_seguinte = no_pickup;
+				
+			} else if (index_no == pos_no_pickup){
+				
+				no_atual = no_pickup;
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no);
+				
+			} else if ((index_no > pos_no_pickup) && (index_no < pos_no_delivery - 1)){
+				
+				no_atual = Rotas.at(index_rota).at(index_no - 1);
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no);
+				
+			} else if (index_no == pos_no_delivery - 1){
+				
+				no_atual = Rotas.at(index_rota).at(index_no - 1);
+				
+				no_seguinte = no_delivery;
+				
+			} else if (index_no == pos_no_delivery){
+				
+				no_atual = no_delivery;
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no - 1);
+				
+				
+			} else {
+				
+				no_atual = Rotas.at(index_rota).at(index_no - 2);
+				
+				no_seguinte = Rotas.at(index_rota).at(index_no - 1);
+				
+			}
+			
+			
+		}
+		
+		// Checando se ir do no atual para o nó seguinte irá violar as restrições de capacidade e time window
+		if ((cap_atual + inst.q.at(no_seguinte) > inst.Cap) || (inst.l.at(no_seguinte) < t_atual + inst.t.at(no_atual).at(no_seguinte))){
+			
+			// Atribuindo valor falso para a variável de factibilidade e quebrando o laço for
+			factivel = false;
+			break;
+			
+		// Caso seja possível, os valores são atualizados
+		} else {
+			
+			// Atualizando valores
+			
+			// Capacidade
+			cap_atual += inst.q.at(no_seguinte);
+			
+			// Tempo
+			// Caso haja adiantamento (tempo de chegada menor que a janela de tempo de abertura)
+			if (t_atual + inst.t.at(no_atual).at(no_seguinte) < inst.e.at(no_seguinte)){
+				t_atual = inst.e.at(no_seguinte);
+				
+			} else {
+				t_atual += inst.t.at(no_atual).at(no_seguinte);
+				
+			}
+		}
+		
+	}
+	
+	
+	return factivel;
+	
+}

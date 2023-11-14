@@ -111,7 +111,7 @@ int main(){
 					
 					// cout << S.FO();
 					
-					AILSObject.executeAILS(5000);
+					AILSObject.executeAILS(10000);
 					
 					// AILSObject.S_p.print_sol();
 					
