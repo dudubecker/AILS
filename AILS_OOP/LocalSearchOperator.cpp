@@ -23,80 +23,8 @@ LocalSearchOperator::~LocalSearchOperator()
 
 Sol LocalSearchOperator::apply(Sol &S){
 	
-	// Contabilizando características da solução fornecida
-	
-	// Solução:
-	// Sol S_ins = S;
-	
-	
-	// FO:
-	// double FO_S = S.FO();
-	
-	// Número de pedidos não atendidos:
-	
-	// Factibilidade:
-	
 	
 	switch (name){
-		
-		// Heurística construtiva
-		case 'C':{
-			
-			// std::cout << "Solucao apos heuristica construtiva" << std::endl;
-			
-			// Criando variáveis com valores atualizados a cada inserção
-			// Inserindo no conjunto L os pedidos não atendidos
-			for(double value = 1; value < S.inst.n + 1; value++){
-				
-				S.L.push_back(value);
-			}
-			
-			// Criando uma rota inicial vazia para a solução:
-			S.Rotas.push_back({0, 2*(S.inst.n) + 1});
-			
-			// Quantidade de requests atendidos (inicia-se em 0)
-			int qtd_atendidos {0};
-			
-			// Início do algoritmo de inserção:
-			while (qtd_atendidos < S.inst.n){
-				
-				// Variável que abrigará o request a ser inserido na iteração
-				double pedido {S.L.at(0)};
-				
-				// Objeto solução, que tentará fazer melhor inserção
-				Sol S_best = melhor_insercao(S, pedido);
-				
-				// Caso o pedido tenha sido inserido:
-				if (S_best.L.size() != S.L.size()){
-					
-					S = S_best;
-					
-				// Caso não seja possível fazer a inserção, isso significará que não foram encontradas posições de inserção factíveis para as rotas em questão
-				// fazendo-se necessária uma nova rota
-				
-				} else {
-					
-					// Rota vazia com os nós da iteração
-					std::vector <double> nova_rota {0, pedido, pedido + S.inst.n, 2*(S.inst.n) + 1};
-					S.Rotas.push_back(nova_rota);
-					
-					// Removendo pedido de L
-					S.L.erase(S.L.begin());
-					
-					// Adicionando pedido em A
-					S.A.push_back(pedido);
-					
-				}
-				
-				// Atualizando quantidade de pedidos atendidos
-				qtd_atendidos += 1;
-				
-				
-			}
-			// Fim da heurística construtiva
-			
-			break;
-		}
 		
 		// Estrutura de busca local: Swap
 		
@@ -145,27 +73,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 				}
 				
 			}
-			
-			// Contabilizando número de pedidos atendidos pela rota R2
-			/*
-			int n_requests_R2 {};
-			
-			for (auto &node: S.Rotas.at(index_R2)){
-				
-				if ((node > 0) && (node <= S.inst.n)){
-					
-					n_requests_R2 += 1;
-					
-				}
-				
-			}
-			
-			// "k" deve ser o mínimo entre o valor atribuído à heurística e o número de pedidos atendidos pela rota
-			
-			k1 = std::min(k1, n_requests_R1);
-			
-			k2 = std::min(k2, n_requests_R2);
-			*/
 			
 			// Removendo pedidos:
 			
@@ -254,7 +161,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
 			for (auto &pedido: pedidosRemovidos_R1){
 				
-				S = melhor_insercao(S, pedido, index_R2);
+				S.executar_melhor_insercao(pedido, index_R2);
 				
 			}
 			
@@ -264,15 +171,17 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			for (auto &pedido: pedidosRemovidos_R2){
 				
-				S = melhor_insercao(S, pedido, index_R1);
+				S.executar_melhor_insercao(pedido, index_R1);
 				
 			}
 			
 			// Teste: inserindo em quaisquer posições os pedidos após tentar trocá-los:
 			
-			for (auto &pedido: S.L){
+			std::vector<double> pedidos_nao_atendidos = S.L;
+			
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				S = melhor_insercao(S, pedido);
+				S.executar_melhor_insercao(pedido);
 				
 			}
 			
@@ -359,17 +268,21 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
-			for (auto &pedido: S.L){
+			std::vector<double> pedidos_nao_atendidos = S.L;
+			
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				S = melhor_insercao(S, pedido, index_R2);
+				S.executar_melhor_insercao(pedido, index_R2);
 				
 			}
 			
 			// Caso não tenha sido possível realizar a inserção
 			
-			for (auto &pedido: S.L){
+			pedidos_nao_atendidos = S.L;
+			
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				S = melhor_insercao(S, pedido);
+				S.executar_melhor_insercao(pedido);
 				
 			}
 			
@@ -452,17 +365,22 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
-			for (auto &pedido: S.L){
+			
+			std::vector<double> pedidos_nao_atendidos = S.L;
+			
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				S = melhor_insercao(S, pedido, index_rota);
+				S.executar_melhor_insercao(pedido, index_rota);
 				
 			}
 			
 			// Caso não tenha sido possível realizar a inserção
 			
-			for (auto &pedido: S.L){
+			pedidos_nao_atendidos = S.L;
+			
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				S = melhor_insercao(S, pedido);
+				S.executar_melhor_insercao(pedido);
 				
 			}
 			
@@ -746,179 +664,14 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			}
 			
-			for (auto &pedido: S.L){
-				
-				S = melhor_insercao(S, pedido);
-				
-			}
+			std::vector<double> pedidos_nao_atendidos = S.L;
 			
-			
-			//} else {
+			for (auto &pedido: pedidos_nao_atendidos){
 				
-				// Inicia-se por 1, pois o pedido de índice 0 é o pedido que já está em L!
-				
-			//	for (int index {1}; index < D.size() ; index++){
-					
-			//		S.remover_pedido(D.at(index));
-					
-			//	}
-				
-			//}
-			
-			// S.print_sol();
-			
-			// Inserindo pedidos
-			
-			// Cada pedido tentará ser inserido em cada uma das posições 
-			
-			// Buscando rota, posição de pickup e posição de delivery de cada pedido na solução
-			
-			/*
-			
-			// Vetor para guardar informações de cada pedido
-			std::vector<std::vector<double>> posicoes_pedidos {};
-			
-			for (auto pedido: D){
-				
-				// Índice do nó de pickup correspondente ao request
-				int no_pickup {pedido};
-				
-				// Índice do nó de delivery correspondente ao request
-				int no_delivery {pedido + S.inst.n};
-				
-				// "Procurando" pedido (no_pickup) na solução:
-				
-				for (auto index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
-					
-					// Caso o nó esteja contido na rota
-					if (count(S.Rotas.at(index_rota).begin(), S.Rotas.at(index_rota).end(), no_pickup)){
-						
-						// Índice (posição) do nó de pickup na rota
-						double pos_no_pickup = std::find(S.Rotas.at(index_rota).begin(),S.Rotas.at(index_rota).end(), no_pickup) - S.Rotas.at(index_rota).begin();
-						
-						// Índice (posição) do nó de delivery na rota
-						double pos_no_delivery = std::find(S.Rotas.at(index_rota).begin(),S.Rotas.at(index_rota).end(), no_delivery) - S.Rotas.at(index_rota).begin();
-						
-						posicoes_pedidos.push_back({index_rota, pos_no_pickup, pos_no_delivery});
-						
-						break;
-						
-					}
-				}
+				S.executar_melhor_insercao(pedido);
 				
 			}
 			
-			//for (auto i {0}; i < k_shaw; i++){
-				
-			//	std::cout << "\nPedido: " << D.at(i) << std::endl;
-				
-			//	std::cout << "\n index_rota: " << posicoes_pedidos.at(i).at(0) << std::endl;
-				
-			//	std::cout << "\n pos_no_pickup: " << posicoes_pedidos.at(i).at(1) << std::endl;
-				
-			//	std::cout << "\n pos_no_delivery: " << posicoes_pedidos.at(i).at(2) << std::endl;
-				
-			//}
-			
-			// Testando valor de cada posição de troca:
-			
-			// Dados do pedido "i" cuja troca resulta no custo mínimo
-			
-			/*
-			
-			std::vector<double> dados_pedido_i_min = {};
-			
-			// Dados do pedido "j" cuja troca resulta no custo mínimo
-			std::vector<double> dados_pedido_j_min = {};
-			
-			// Delta mínimo de função objetivo encontrado
-			double delta_min {0};
-			
-			// Quantidade de trocas factíveis entre pedidos encontradas
-			// int trocas_factiveis {0};
-			
-			// Realizando troca entre as posições dos nós do pedido "i" com o pedido "j"
-			
-			for (int index_pedido_i {0}; index_pedido_i < k_shaw; index_pedido_i ++){
-				
-				for (int index_pedido_j {0}; index_pedido_j < k_shaw; index_pedido_j ++){
-					
-					// Para testar todas as combinações possíveis:
-					if (index_pedido_j > index_pedido_i){
-						
-						// Rota, posição de pickup e delivery para cada pedido:
-						
-						std::vector<double> dados_pedido_i = posicoes_pedidos.at(index_pedido_i);
-						
-						std::vector<double> dados_pedido_j = posicoes_pedidos.at(index_pedido_j);
-						
-						// Criando uma cópia do objeto solução
-						S_teste = S;
-						
-						// Trocando nós:
-						
-						// *obs: possivelmente transformar em um método/função "trocar pedidos" possa deixar o código mais legível!
-						
-						S_teste.Rotas.at(dados_pedido_i.at(0)).at(dados_pedido_i.at(1)) = dados_pedido_j.at(1);
-						S_teste.Rotas.at(dados_pedido_i.at(0)).at(dados_pedido_i.at(2)) = dados_pedido_j.at(2);
-						
-						S_teste.Rotas.at(dados_pedido_j.at(0)).at(dados_pedido_j.at(1)) = dados_pedido_i.at(1);
-						S_teste.Rotas.at(dados_pedido_j.at(0)).at(dados_pedido_j.at(2)) = dados_pedido_i.at(2);
-						
-						// Se a troca for factível
-						if (S_teste.isFeasible()){
-							
-							// trocas_factiveis += 1;
-							
-							// Calculando variação na função objetivo (uma vez que a troca afeta possivelmente mais de uma rota)
-							double delta = S_teste.FO() - S.FO();
-							
-							// Caso a troca tenha resultado em uma melhoria na função objetivo, os dados da troca são guardados
-							if (delta < delta_min){
-								
-								dados_pedido_i_min = dados_pedido_i;
-								dados_pedido_j_min = dados_pedido_j;
-								
-								delta_min = delta;
-								
-							}
-							
-							
-							
-						}
-						
-					}
-					
-				}
-					
-			}
-			
-			// Caso tenha sido encontrada alguma troca factível com decremento na função objetivo:
-			
-			
-			// if (dados_pedido_i_min.size() > 0){
-				
-				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(1)) = dados_pedido_j_min.at(1);
-				S.Rotas.at(dados_pedido_i_min.at(0)).at(dados_pedido_i_min.at(2)) = dados_pedido_j_min.at(2);
-				
-				S.Rotas.at(dados_pedido_j_min.at(0)).at(dados_pedido_j_min.at(1)) = dados_pedido_i_min.at(1);
-				S.Rotas.at(dados_pedido_j_min.at(0)).at(dados_pedido_j_min.at(2)) = dados_pedido_i_min.at(2);
-				
-			}
-			
-			
-			// Trocando nó de pickup do pedido "i" pelo nó de pickup do pedido "j"
-			S.Rotas.at( posicoes_pedidos.at(0).at(0) ).at( posicoes_pedidos.at(0).at(1) ) =  D.at(1);//posicoes_pedidos.at(1).at(1);
-			
-			// Trocando nó de delivery do pedido "i" pelo nó de delivery do pedido "j"
-			S.Rotas.at( posicoes_pedidos.at(0).at(0) ).at( posicoes_pedidos.at(0).at(2) ) =  D.at(1) + S.inst.n;//posicoes_pedidos.at(1).at(2);
-			
-			// Trocando nó de pickup do pedido "j" pelo nó de pickup do pedido "i"
-			S.Rotas.at( posicoes_pedidos.at(1).at(0) ).at( posicoes_pedidos.at(1).at(1) ) =  D.at(0) ;//posicoes_pedidos.at(0).at(1);
-			
-			// Trocando nó de delivery do pedido "j" pelo nó de delivery do pedido "i"
-			S.Rotas.at( posicoes_pedidos.at(1).at(0) ).at( posicoes_pedidos.at(1).at(2) ) =  D.at(0) + S.inst.n;//posicoes_pedidos.at(0).at(2);
-			*/
 			
 			// Fim da heurística Shaw's removal
 			

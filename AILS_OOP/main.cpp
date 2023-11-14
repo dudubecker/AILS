@@ -47,14 +47,8 @@ int main(){
 					inst.read(instancia);
 					
 					// Inicializando solução a partir do objeto instância:
-					
 					Sol S(inst);
 					
-					// Heurística construtiva:
-					
-					LocalSearchOperator Constructive('C');
-					
-					Constructive.apply(S);
 					
 					// S.print_sol();
 					
@@ -109,7 +103,7 @@ int main(){
 					
 					AILSObject.PerturbationProcedures = {Random, Worst, Concentric};
 					
-					AILSObject.LSOperators = {Or_opt_1, Shaw_1, Shaw_2, Shift_5, Shift_10, Swap_1_1};
+					AILSObject.LSOperators = {Or_opt_1, Shaw_1, Shift_5, Swap_1_1, Swap_2_1, Two_Opt};
 					
 					// AILSObject.LSOperators = {Shaw_1, Shaw_2};
 					

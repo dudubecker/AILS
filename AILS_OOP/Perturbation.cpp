@@ -47,9 +47,6 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			// S.print_sol();
-			
-			// Inserindo pedidos com método de primeira inserção factível aleatória (sem critérios para a ordem dos pedidos)
 			
 			// Pedidos não inseridos na solução (referenciar diretamente no for loop deu um bug)
 			
@@ -59,18 +56,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
-				// std::cout << "\nPedido: " << pedido << std::endl;
-				
-				// S = primeira_insercao_factivel(S, pedido);
-				S = melhor_insercao(S, pedido);
-				
+				S.executar_melhor_insercao(pedido);
 				
 			}
-			
-			// std::cout << "Solucao apos insercoes" << std::endl;
-			
-			// S.print_sol();
-			
 			
 			// Fim da heurística random removal
 			break;
@@ -102,7 +90,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				for (auto pedido: pedidos){
 					
 					// Calculando variação no custo da rota com a remoção do pedido
-					double delta = delta_FO_rem(S, pedido);
+					double delta = S.delta_FO_rem(pedido);
 					
 					delta_custos.push_back(delta);
 					
@@ -181,7 +169,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 				// S = primeira_insercao_factivel(S, pedido);
 				
-				S = melhor_insercao(S, pedido);
+				S.executar_melhor_insercao(pedido);
 				
 			}
 			
@@ -267,7 +255,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				// std::cout << "\nPedido: " << pedido << std::endl;
 				
 				// S = primeira_insercao_factivel(S, pedido);
-				S = melhor_insercao(S, pedido);
+				S.executar_melhor_insercao(pedido);
 				
 				
 			}

@@ -25,9 +25,8 @@ public:
 	
 	// Constructor/Destructor
 	// Constructor com objeto instance:
-	Sol(Instance inst_val){
-		inst = inst_val;
-	};
+	Sol(Instance &inst_data);
+	
 	// Adicionado na última atualização:
 	Sol();
 	
@@ -92,6 +91,9 @@ public:
 	
 	// Executa a melhor inserção considerando todas as rotas:
 	void executar_melhor_insercao(double &pedido);
+	
+	// Executa a melhor inserção considerando uma rota específica
+	void executar_melhor_insercao(double &pedido, int index_rota);
 	
 	// Avaliando factibilidade da inserção de um pedido (sem realizar a inserção!)
 	bool isInsertionFeasible(double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery);

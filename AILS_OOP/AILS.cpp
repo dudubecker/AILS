@@ -269,7 +269,13 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 		
 		PerturbationProcedures.at(perturbationProcedureIndex).w = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
 		
-		std::cout << "Valor atualizado, igual a: " << PerturbationProcedures.at(perturbationProcedureIndex).w << std::endl;
+		if (PerturbationProcedures.at(perturbationProcedureIndex).w < 0){
+			
+			PerturbationProcedures.at(perturbationProcedureIndex).w = 1;
+			
+		}
+		
+		// std::cout << "Valor atualizado, igual a: " << PerturbationProcedures.at(perturbationProcedureIndex).w << std::endl;
 		
 		// perturbationProcedure = std::min(S.inst.n, std::max_element(1, perturbationProcedure.w));
 		
