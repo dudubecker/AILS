@@ -30,159 +30,144 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'S':{
 			
-			// std::cout << "Solucao apos heuristica Swap" << std::endl;
+			// std::cout << "Aplicando operador Swap" << std::endl;
 			
-			// Para gerar números aleatórios (índices das rotas e pedidos escolhidos)
-			srand(time(NULL));
+			// Swap só deve funcionar caso o número de rotas seja maior ou igual a 2!
 			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
 			
-			// Escolhendo índice da rota R1:
-			double index_R1 = rand()%(m);
-			
-			// Escolhendo índice da rota R2, necessariamente diferente de R1:
-			double index_R2 = rand()%(m);
-			
-			while (index_R1 == index_R2){
+			// Swap só deve funcionar caso o número de rotas seja maior ou igual a 2!
+			if (m >= 2){
 				
-				index_R2 = rand()%(m);
+				// Escolhendo índice da rota R1:
+				double index_R1 = rand()%(m);
 				
-			}
-			
-			// Vetor com pedidos retirados da rota R1:
-			std::vector<double> pedidosRemovidos_R1 {};
-			
-			// Vetor com pedidos retirados da rota R2:
-			std::vector<double> pedidosRemovidos_R2 {};
-			
-			// std::cout << "\nindex_R1: " << index_R1 << "\nindex_R2: " << index_R2 << std::endl;
-			
-			// Resolvendo bug quando a rota se esvazia: o número de pedidos a serem retirados não pode ser maior do que o número de pedidos na rota!!
-			
-			// Contabilizando número de pedidos atendidos pela rota R1
-			
-			int n_requests_R1 {};
-			
-			for (auto &node: S.Rotas.at(index_R1)){
+				// Escolhendo índice da rota R2, necessariamente diferente de R1:
+				double index_R2 = rand()%(m);
 				
-				if ((node > 0) && (node <= S.inst.n)){
+				while (index_R1 == index_R2){
 					
-					n_requests_R1 += 1;
+					index_R2 = rand()%(m);
 					
 				}
 				
-			}
-			
-			// Removendo pedidos:
-			
-			// Escolhendo aleatoriamente k1 pedidos da rota R1 para serem retirados:
-			for (int i {0}; i < k1; i++){
+				// Tratando exceção: quando a rota possui menos pedidos do que "k1" ou "k2"
 				
-				// Número de nós da rota R1 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
-				int n_nodes = S.Rotas.at(index_R1).size();
+				// k1: número de pedidos a serem retirados de R1 e inseridos em R2
+				int k1_value = std::min(k1, (S.RotasSize.at(index_R1) - 2)/2);
 				
-				// Inicializando pedido a ser removido:
-				double pedido {9999};
+				// k2: número de pedidos a serem retirados de R2 e inseridos em R1
+				int k2_value = std::min(k2, (S.RotasSize.at(index_R2) - 2)/2);
 				
-				int n_it = 0;
+				// std::cout << k1_value << " " << k2_value << std::endl;
 				
-				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
-				while (pedido > S.inst.n){
+				// Vetor com pedidos retirados da rota R1:
+				std::vector<double> pedidosRemovidos_R1 {};
 				
-					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
+				// Vetor com pedidos retirados da rota R2:
+				std::vector<double> pedidosRemovidos_R2 {};
+				
+				// Contabilizando número de pedidos atendidos pela rota R1
+				
+				// Removendo pedidos:
+				
+				// Escolhendo aleatoriamente k1 pedidos da rota R1 para serem retirados:
+				for (int i {0}; i < k1_value; i++){
 					
-					pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
+					// Número de nós da rota R1 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
+					int n_nodes = S.RotasSize.at(index_R1);
 					
+					// Inicializando pedido a ser removido:
+					double pedido {9999};
 					
-					n_it += 1;
+					// int n_it = 0;
 					
-					if (n_it == 1000){
+					// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
+					while (pedido > S.inst.n){
+					
+						// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
+						double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 						
-						break;
+						pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
+						
+						// n_it += 1;
+						
+						// if (n_it == 1000){
+							
+						// 	break;
+						// }
+						
 					}
 					
+					// Removendo pedido de R1:
+					
+					S.remover_pedido(pedido);
+					pedidosRemovidos_R1.push_back(pedido);
+					
 				}
 				
-				// std::cout << "\nPedido escolhido: " << pedido << std::endl;
-				
-				// Removendo pedido de R1:
-				
-				S.remover_pedido(pedido);
-				pedidosRemovidos_R1.push_back(pedido);
-				
-			}
-			
-			// Escolhendo aleatoriamente k2 pedidos da rota R2 para serem retirados:
-			for (int i {0}; i < k2; i++){
-				
-				// Número de nós da rota R2 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
-				int n_nodes = S.Rotas.at(index_R2).size();
-				
-				// Inicializando pedido a ser removido:
-				double pedido {9999};
-				
-				int n_it = 0;
-				
-				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
-				while (pedido > S.inst.n){
-				
-					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
+				// Escolhendo aleatoriamente k2 pedidos da rota R2 para serem retirados:
+				for (int i {0}; i < k2_value; i++){
 					
-					pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
+					int n_nodes = S.RotasSize.at(index_R2);
 					
+					// Inicializando pedido a ser removido:
+					double pedido {9999};
 					
-					n_it += 1;
+					// int n_it = 0;
 					
-					if (n_it == 1000){
+					// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
+					while (pedido > S.inst.n){
+					
+						// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
+						double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 						
-						break;
+						pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
+						
+						// n_it += 1;
+						
+						// if (n_it == 1000){
+							
+							// break;
+						// }
+						
+						
 					}
 					
+					// Removendo pedido de R2:
+					
+					S.remover_pedido(pedido);
+					pedidosRemovidos_R2.push_back(pedido);
 					
 				}
 				
-				// std::cout << "\nPedido escolhido: " << pedido << std::endl;
 				
-				// Removendo pedido de R2:
+				// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
+				for (auto &pedido: pedidosRemovidos_R1){
+					
+					S.executar_melhor_insercao(pedido, index_R2);
+					
+				}
 				
-				S.remover_pedido(pedido);
-				pedidosRemovidos_R2.push_back(pedido);
+				// Inserindo os "k2" pedidos na rota R1, na melhor posição factível:
 				
-			}
-			
-			
-			// std::cout << "\nSolucao apos remocoes: \n" << std::endl;
-			
-			// S.print_sol();
-			
-			// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
-			for (auto &pedido: pedidosRemovidos_R1){
+				for (auto &pedido: pedidosRemovidos_R2){
+					
+					S.executar_melhor_insercao(pedido, index_R1);
+					
+				}
 				
-				S.executar_melhor_insercao(pedido, index_R2);
+				// Teste: inserindo em quaisquer posições os pedidos após tentar trocá-los:
 				
-			}
-			
-			// Inserindo os "k2" pedidos na rota R2, na melhor posição factível:
-			
-			// Obs -> inserir na melhor posição considerando todos os pedidos ou apenas a ordem deles na lista?
-			
-			for (auto &pedido: pedidosRemovidos_R2){
+				std::vector<double> pedidos_nao_atendidos = S.L;
 				
-				S.executar_melhor_insercao(pedido, index_R1);
-				
-			}
+				for (auto &pedido: pedidos_nao_atendidos){
+					
+					S.executar_melhor_insercao(pedido);
+					
+				}
 			
-			// Teste: inserindo em quaisquer posições os pedidos após tentar trocá-los:
-			
-			std::vector<double> pedidos_nao_atendidos = S.L;
-			
-			for (auto &pedido: pedidos_nao_atendidos){
-				
-				S.executar_melhor_insercao(pedido);
-				
 			}
 			
 			break;
@@ -193,97 +178,87 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'T':{
 			
+			// std::cout << "Aplicando operador Shift" << std::endl;
+			
 			// Possível ponto de melhoria na heurística:
 			
 			// Calculando probabilidades de escolha: desejável que, quanto maior a rota, mais provável é sua escolha para ter pedidos removidos!
 			
 			// *obs: para reduzir o número de rotas, a lógica deve ser a oposta: quanto maior o número de pedidos na rota, menor a chance de ela ser destruída
 			
-			// Para gerar números aleatórios
-			srand(time(NULL));
-			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
 			
-			// Escolhendo índice da rota R1, que terá os nós removidos
-			double index_R1 = rand()%(m);
-			
-			// Escolhendo índice da rota R2, necessariamente diferente de R1:
-			double index_R2 = rand()%(m);
-			
-			while (index_R1 == index_R2){
+			// Shift só deve funcionar caso o número de rotas seja maior ou igual a 2!
+			if (m >= 2){
 				
-				index_R2 = rand()%(m);
+				// Escolhendo índice da rota R1, que terá os nós removidos
+				double index_R1 = rand()%(m);
 				
-			}
-			
-			// Retirando subseção com "k" elementos da rota:
-			
-			// Número de nós da rota R1
-			int n_nodes = S.Rotas.at(index_R1).size();
-			
-			// Escolhendo índice do nó inicial para remoção (a partir do índice 1)
-			// int index_no_inicial = 1 + rand()%(n_nodes - 1); // -> Problema: se selecionasse um nó de índice muito grande (perto do tamanho da rota), o número de pedidos removidos não é suficientemente grande!
-			
-			int index_no_inicial = 1 + rand()%(n_nodes - 3);
-			
-			// Escolhendo índice do nó final para remoção: mínimo entre o último nó visitado e "no_inicial + k" (não considerando o depósito central) 
-			int index_no_final = std::min(n_nodes - 2, index_no_inicial + k);
-			
-			// Contabilizando todos os pedidos contidos na seção de "index_no_inicial" a "index_no_final":
-			
-			// std::cout << index_no_final - index_no_inicial << std::endl;
-			
-			std::vector<double> k_nodes = {};
-			
-			for (int index {index_no_inicial}; index < index_no_final; index++){
+				// Escolhendo índice da rota R2, necessariamente diferente de R1:
+				double index_R2 = rand()%(m);
 				
-				k_nodes.push_back(S.Rotas.at(index_R1).at(index));
-				
-			}
-			
-			
-			// std::cout << "\nSubsecao escolhida: ";
-			
-			// for (auto &node: k_nodes){
-				
-			// 	std::cout << node << " ";
-				
-			// }
-			
-			// std::cout << "\n";
-			
-			for (auto &node: k_nodes){
-				
-				// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
-				if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
+				while (index_R1 == index_R2){
 					
-					// std::cout << "Pedido removido: " << node << std::endl;
-					
-					S.remover_pedido(node);
+					index_R2 = rand()%(m);
 					
 				}
 				
-			}
-			
-			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
-			
-			std::vector<double> pedidos_nao_atendidos = S.L;
-			
-			for (auto &pedido: pedidos_nao_atendidos){
+				// Retirando subseção com "k" elementos da rota:
 				
-				S.executar_melhor_insercao(pedido, index_R2);
+				// Número de nós da rota R1
+				int n_nodes = S.RotasSize.at(index_R1);
 				
-			}
-			
-			// Caso não tenha sido possível realizar a inserção
-			
-			pedidos_nao_atendidos = S.L;
-			
-			for (auto &pedido: pedidos_nao_atendidos){
+				// Escolhendo índice do nó inicial para remoção (a partir do índice 1)
+				// int index_no_inicial = 1 + rand()%(n_nodes - 1); // -> Problema: se selecionasse um nó de índice muito grande (perto do tamanho da rota), o número de pedidos removidos não é suficientemente grande!
 				
-				S.executar_melhor_insercao(pedido);
+				// int index_no_inicial = 1 + rand()%(n_nodes - 3);
+				int index_no_inicial = 1 + rand()%(n_nodes - 2);
 				
+				// Escolhendo índice do nó final para remoção: mínimo entre o último nó visitado e "no_inicial + k" (não considerando o depósito central) 
+				int index_no_final = std::min(n_nodes - 2, index_no_inicial + k);
+				
+				// Contabilizando todos os nós contidos na seção de "index_no_inicial" a "index_no_final":
+				
+				std::vector<double> k_nodes = {};
+				
+				for (int index {index_no_inicial}; index < index_no_final; index++){
+					
+					k_nodes.push_back(S.Rotas.at(index_R1).at(index));
+					
+				}
+				
+				
+				for (auto &node: k_nodes){
+					
+					// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
+					if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
+						
+						S.remover_pedido(node);
+						
+					}
+					
+				}
+				
+				std::vector<double> pedidos_nao_atendidos = S.L;
+				
+				for (auto &pedido: pedidos_nao_atendidos){
+					
+					S.executar_melhor_insercao(pedido, index_R2);
+					
+				}
+				
+				// Caso não tenha sido possível realizar a inserção
+				
+				pedidos_nao_atendidos = S.L;
+				
+				for (auto &pedido: pedidos_nao_atendidos){
+					
+					S.executar_melhor_insercao(pedido);
+					
+				}
+			
+			
 			}
 			
 			break;
@@ -294,8 +269,12 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'O':{
 			
+			// std::cout << "Aplicando operador Or-opt" << std::endl;
+			
+			// std::cout << "A" << std::endl;
+			
 			// Para gerar números aleatórios
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
@@ -304,21 +283,20 @@ Sol LocalSearchOperator::apply(Sol &S){
 			double index_rota = rand()%(m);
 			
 			// Número de nós contidos na rota:
-			int n_nodes = S.Rotas.at(index_rota).size();
-			
+			int n_nodes = S.RotasSize.at(index_rota);
 			
 			// Corrigindo bug quanto "or_opt" é maior do que o número de pedidos na rota
-			int n_requests {};
+			int n_requests = (S.RotasSize.at(index_rota) - 2)/2;
 			
-			for (auto &node: S.Rotas.at(index_rota)){
+			//for (auto &node: S.Rotas.at(index_rota)){
 				
-				if ((node > 0) && (node <= S.inst.n)){
+			//	if ((node > 0) && (node <= S.inst.n)){
 					
-					n_requests += 1;
+			//		n_requests += 1;
 					
-				}
+			//	}
 				
-			}
+			//}
 			
 			// "or_opt" deve ser o mínimo entre o valor atribuído à heurística e o número de pedidos atendidos pela rota
 			
@@ -332,22 +310,23 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// Inicializando pedido a ser removido:
 				double pedido {9999};
 				
-				int n_it = {0};
+				// int n_it = {0};
 				
 				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
 				while (pedido > S.inst.n){
 					
 					// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
-					double index_pedido_removido = 1 + rand()%(n_nodes - 3);
+					// double index_pedido_removido = 1 + rand()%(n_nodes - 3);
+					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
 					
-					n_it += 1;
+					//n_it += 1;
 					
-					if (n_it == 1000){
+					//if (n_it == 1000){
 						
-						break;
-					}
+					//	break;
+					//}
 					
 					
 				}
@@ -366,6 +345,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
 			
 			
+			// std::cout << "B" << std::endl;
+			
 			std::vector<double> pedidos_nao_atendidos = S.L;
 			
 			for (auto &pedido: pedidos_nao_atendidos){
@@ -375,7 +356,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 			}
 			
 			// Caso não tenha sido possível realizar a inserção
-			
 			pedidos_nao_atendidos = S.L;
 			
 			for (auto &pedido: pedidos_nao_atendidos){
@@ -391,8 +371,10 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'W':{
 			
+			std::cout << "Aplicando operador 2-opt" << std::endl;
+			
 			// Para gerar números aleatórios
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// Quantidade "m" de rotas na solução:
 			int m = S.Rotas.size();
@@ -491,9 +473,9 @@ Sol LocalSearchOperator::apply(Sol &S){
 		
 		case 'H':{
 			
-			srand(time(NULL));
+			// srand(time(NULL));
 			
-			// std::cout << "Solucao apos shaws removal" << std::endl;
+			// std::cout << "Aplicando operador Shaw" << std::endl;
 			
 			// Parâmetro "delta" para controle da aleatoriedade 
 			const int delta {2};
@@ -574,7 +556,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Criando vetor D com pedidos removidos, inicializado pelo primeiro pedido escolhido
 			std::vector <double> D {};
 			
-			if (S.L.size() == 0){
+			if (S.LSize() == 0){
 				
 				double r = S.A.at(rand()%((S.A).size()));
 				D.push_back(r);
@@ -672,7 +654,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			}
 			
-			
 			// Fim da heurística Shaw's removal
 			
 			
@@ -690,17 +671,17 @@ Sol LocalSearchOperator::apply(Sol &S){
 	
 	// Checando se há rotas vazias: se houver, a rota é removida!
 	
-	for (int index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
+	//for (int index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
 		
-		if (S.Rotas.at(index_rota).size() <= 2){
+	//	if (S.Rotas.at(index_rota).size() <= 2){
 			
 			
 	// 		std::cout << "\n\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n" << std::endl;
 			
-	 		S.Rotas.erase(S.Rotas.begin() + index_rota);
+	//		S.Rotas.erase(S.Rotas.begin() + index_rota);
 			
-		}
-	}
+	//	}
+	//}
 	
 	return S;
 	

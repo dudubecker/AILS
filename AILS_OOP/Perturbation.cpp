@@ -31,7 +31,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			// std::cout << "Solucao apos random removal" << std::endl;
 			
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// Variável com quantidade de pedidos removidos
 			int n_pedidos_removidos {0};
@@ -70,7 +70,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			// std::cout << "Solucao apos worst removal" << std::endl;
 			
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// Parâmetro "delta" para controle da aleatoriedade 
 			const int delta {6};
@@ -184,7 +184,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 		// Concentric removal + Primeira Inserção Factível Aleatória
 		case 'C':{
 			
-			srand(time(NULL));
+			// srand(time(NULL));
 			
 			// std::cout << "Solucao apos concentric removal" << std::endl;
 			

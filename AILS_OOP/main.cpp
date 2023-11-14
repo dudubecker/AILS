@@ -29,13 +29,121 @@ void print(std::vector<double> const &input)
 
 int main(){
 		
+		// Para gerar números aleatórios
+		// srand(time(NULL));
 		
-		std::vector<std::string> instancias = {"instances/AA20"};
+		// Para ter controle sobre os outputs
+		srand(125);
+		
+		
+		std::vector<std::string> instancias = {"instances/AA30"};
+		
+		// Número de iterações para debug
+		int iteracoes = 100000;
+		
+		// Métodos de perturbação
+		Perturbation Random('R');
+		
+		// Métodos de busca local
+		LocalSearchOperator Or_opt_1('O', 1);
+					
+		LocalSearchOperator Or_opt_2('O', 3);
+		
+		LocalSearchOperator Two_Opt('W');
+		
+		LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
+		
+		LocalSearchOperator Shaw_2('H', 2,0,0,1);
+		
+		LocalSearchOperator Shift_5('T', 5);
+		
+		LocalSearchOperator Shift_10('T', 10);
+		
+		LocalSearchOperator Shift_15('T', 15);
+		
+		LocalSearchOperator Swap_1_1('S', 1,1);
+		
+		LocalSearchOperator Swap_2_1('S', 2,1);
+		
+		LocalSearchOperator Swap_2_2('S', 2,2);
+		
+		LocalSearchOperator Swap_4_4('S', 4,4);
+		
+		LocalSearchOperator Swap_3_3('S', 3,3);
+		
+		std::vector<LocalSearchOperator> operators = {
+							Or_opt_1,
+							Or_opt_2,
+							// Two_Opt,
+							Shaw_1,
+							Shaw_2,
+							Shift_5,
+							Shift_10,
+							Shift_15,
+							Swap_1_1,
+							Swap_2_1,
+							Swap_2_2,
+							Swap_3_3,
+							Swap_4_4
+							};
+		
+		
+		for (auto instancia: instancias){
+			
+			// Inicializando solução
+			
+			Instance inst;
+			
+			inst.read(instancia);
+			
+			Sol S(inst);
+			
+			std::cout << "Instancia: " << instancia << std::endl;
+			
+			// Aplicando métodos iterativamente
+			
+			for (int i {0}; i < iteracoes; i++){
+				
+				if (i%1000 == 0){
+					
+					std::cout << "Iteracao " << i << std::endl;
+					
+				}
+				
+				// Aplicando método de perturbação
+				Random.apply(S, 6);
+				
+				// Aplicando método de busca local
+				for (auto op: operators){
+					
+					op.apply(S);
+					
+				}
+				
+				
+			}
+			
+			S.print_sol();
+			
+		}
+		
+		
+		
+		
+		
+		/*
+		
+		
 		
 		for (auto instancia: instancias){
 			
 			for (int i {0}; i < 5; i++){
 				
+				double a;
+				
+				std::cout << "A: ";
+				
+				std::cin >> a;
 				
 				try{
 					
@@ -103,7 +211,7 @@ int main(){
 					
 					AILSObject.PerturbationProcedures = {Random, Worst, Concentric};
 					
-					AILSObject.LSOperators = {Or_opt_1, Shaw_1, Shift_5, Swap_1_1, Swap_2_1, Two_Opt};
+					AILSObject.LSOperators = {Or_opt_1};
 					
 					// AILSObject.LSOperators = {Shaw_1, Shaw_2};
 					
@@ -129,4 +237,9 @@ int main(){
 				}
 			}
 		}
+		 * 
+		 * 
+		*/
+		
+		return 0;
 }

@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Session Name="C:\Users\User\Documents\AILS_OOP\AILS_OOP.workspace">
-  <int Value="5" Name="m_selectedTab"/>
+  <int Value="0" Name="m_selectedTab"/>
   <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
       <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\main.cpp" Name="FileName"/>
-      <int Value="35" Name="FirstVisibleLine"/>
-      <int Value="47" Name="CurrentLine"/>
+      <int Value="109" Name="FirstVisibleLine"/>
+      <int Value="118" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
     <TabInfo>
-      <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\Perturbation.cpp" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="0" Name="CurrentLine"/>
+      <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\Sol.cpp" Name="FileName"/>
+      <int Value="164" Name="FirstVisibleLine"/>
+      <int Value="1254" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
+      <IntVector Name="CollapsedFolds">
+        <IntVectorItem Value="120"/>
+        <IntVectorItem Value="153"/>
+        <IntVectorItem Value="212"/>
+        <IntVectorItem Value="400"/>
+        <IntVectorItem Value="564"/>
+        <IntVectorItem Value="629"/>
+        <IntVectorItem Value="687"/>
+        <IntVectorItem Value="722"/>
+        <IntVectorItem Value="797"/>
+        <IntVectorItem Value="943"/>
+        <IntVectorItem Value="1027"/>
+        <IntVectorItem Value="1117"/>
+        <IntVectorItem Value="1265"/>
+      </IntVector>
     </TabInfo>
     <TabInfo>
       <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\LocalSearchOperator.cpp" Name="FileName"/>
-      <int Value="283" Name="FirstVisibleLine"/>
-      <int Value="295" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\AILS.cpp" Name="FileName"/>
-      <int Value="132" Name="FirstVisibleLine"/>
-      <int Value="133" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\AILS.hpp" Name="FileName"/>
-      <int Value="77" Name="FirstVisibleLine"/>
-      <int Value="86" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="C:\Users\User\Documents\AILS_OOP\AILS_OOP\Instance.cpp" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="21" Name="CurrentLine"/>
+      <int Value="286" Name="FirstVisibleLine"/>
+      <int Value="299" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
