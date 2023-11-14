@@ -2,7 +2,7 @@
 <CodeLite_Workspace Name="AILS_OOP" Database="" Version="10000">
   <Project Name="AILS_OOP" Path="AILS_OOP/AILS_OOP.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="yes">
+    <WorkspaceConfiguration Name="Debug" Selected="no">
       <Environment/>
       <Project Name="AILS_OOP" ConfigName="Debug"/>
     </WorkspaceConfiguration>

@@ -82,7 +82,10 @@ public:
 	
 	// Método para execução do algoritmo em si:
 	void executeAILS(int max_it);
-
+	
+	// Método que tentará reduzir rotas
+	Sol routeReductionHeuristic(Sol &S_i);
+	
 };
 
 #endif // _AILS_H_

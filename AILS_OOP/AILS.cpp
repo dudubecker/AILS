@@ -17,6 +17,75 @@ AILS::~AILS()
 {
 }
 
+Sol AILS::routeReductionHeuristic(Sol &S_i){
+	
+	// Criando uma cópia da solução:
+	Sol S = S_i;
+	
+	// Solução para armazenar a melhor solução (de menor número de rotas)
+	// Sol BKS = S_i;
+	
+	// Para gerar números aleatórios
+	srand(time(NULL));
+	
+	// Caso "L" esteja vazio, a rota é excluída e os pedidos são colocados no banco de pedidos não atendidos
+	if (S.L.size() == 0){
+		
+		// Quantidade "m" de rotas na solução:
+		int m = S.Rotas.size();
+		
+		// Escolhendo índice da rota que será removida
+		double index_rota = rand()%(m);
+		
+		std::vector<double> Rota = S.Rotas.at(index_rota);
+		
+		// Removendo nós da solução
+		for (auto &node: Rota){
+			
+			// Caso seja um nó correspondente a um pedido de pickup:
+			if ((node > 0) && (node <= S.inst.n)){
+				
+				S.remover_pedido(node);
+				
+			}
+			
+		}
+		
+		// Removendo rota vazia da solução
+		S.Rotas.erase(S.Rotas.begin() + index_rota);
+		
+		// Escolhendo um método de perturbação aleatório
+		
+		std::mt19937_64 rng;
+		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
+		rng.seed(ss);
+		// initialize a uniform distribution between 0 and 1
+		std::uniform_real_distribution<double> unif(0, PerturbationProcedures.size());
+		// ready to generate random numbers
+		double n = unif(rng);
+		
+		int perturbationProcedureIndex = trunc(n);
+		
+		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
+		
+		perturbationProcedure.apply(S, perturbationProcedure.w);
+		
+		if (S.L.size() == 0){
+			
+			S_i = S;
+			
+		}
+		
+		
+	}
+	
+	
+	return S_i;
+	
+}
+
+
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 
 Sol AILS::LocalSearch(Sol &S){
@@ -38,7 +107,7 @@ Sol AILS::LocalSearch(Sol &S){
 		
 		LocalSearchOperator LSOperator = LSOperatorsIt.at(index_LS);
 		
-		std::cout << "Nome: " << LSOperator.name << std::endl;
+		// std::cout << "Nome: " << LSOperator.name << std::endl;
 		
 		LSOperator.apply(S);
 		
@@ -61,6 +130,8 @@ Sol AILS::LocalSearch(Sol &S){
 			// std::cout << "\n FO: " << S.FO() << std::endl;
 			
 			// std::cout << "\n\n";
+			
+			// S = routeReductionHeuristic(S);
 			
 			// Atualizar solução de referência
 			S_r_LS = S;
@@ -198,6 +269,8 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 		
 		PerturbationProcedures.at(perturbationProcedureIndex).w = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
 		
+		std::cout << "Valor atualizado, igual a: " << PerturbationProcedures.at(perturbationProcedureIndex).w << std::endl;
+		
 		// perturbationProcedure = std::min(S.inst.n, std::max_element(1, perturbationProcedure.w));
 		
 		if (PerturbationProcedures.at(perturbationProcedureIndex).w < 1){
@@ -324,7 +397,7 @@ void AILS::executeAILS(int max_it){
 	
 	while (it < max_it){
 		
-		std::cout << "Iteracao: " << it << std::endl;
+		// std::cout << "Iteracao: " << it << std::endl;
 		
 		// Escolhendo um método de perturbação aleatório
 		
@@ -349,7 +422,18 @@ void AILS::executeAILS(int max_it){
 		
 		perturbationProcedure.apply(S, perturbationProcedure.w);
 		
-		S = LocalSearch(S);
+		try {
+			
+			S = LocalSearch(S);
+			
+		}
+		
+		catch (...){
+			
+			std::cout << "Erro!" << std::endl;
+			
+		}
+		
 		
 		// só "LocalSearch(S)" funcionaria?
 		
@@ -361,7 +445,7 @@ void AILS::executeAILS(int max_it){
 			
 			S_r = S;
 			
-			std::cout << "Nova solucao de referencia" << std::endl;
+			// std::cout << "Nova solucao de referencia" << std::endl;
 			
 			// S_r.print_sol();
 			
@@ -376,7 +460,7 @@ void AILS::executeAILS(int max_it){
 			
 			S_p = S;
 			
-			std::cout << "Novo otimo global descoberto" << std::endl;
+			// std::cout << "Novo otimo global descoberto" << std::endl;
 			
 			
 		}

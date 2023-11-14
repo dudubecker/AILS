@@ -77,6 +77,32 @@ public:
 	// Método para printar solução
 	void print_sol();
 	
+	// Incremento por inserção: calcula o custo de inserção de um pedido em posições pré-determinadas e sem checar factibilidade!
+	double delta_FO_ins(double &pedido, int &index_rota, int &pos_no_pickup, int &pos_no_delivery);
+	
+	// Decréscimo por remoção: calcula o decréscimo na FO pela remoção de um pedido
+	double delta_FO_rem(double &pedido);
+	
+	// Retorna um vetor com o delta de melhor inserção, rota, posição de nó pickup e delivery correspondentes ao pedido passado
+	std::vector<double> delta_melhor_insercao(double &pedido);
+	
+	// Delta melhor inserção considerando rota (regret insertion):
+	// Retorna um vetor com o delta de melhor inserção, rota, posição de nó pickup e delivery correspondentes ao pedido passado
+	std::vector<double> delta_melhor_insercao(double &pedido, int &index_rota);
+	
+	// Executa a melhor inserção considerando todas as rotas:
+	void executar_melhor_insercao(double &pedido);
+	
+	// Avaliando factibilidade da inserção de um pedido (sem realizar a inserção!)
+	bool isInsertionFeasible(double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery);
+	
+	// Novo método de checagem de factibilidade, que usa vetor de cargas e tempos de visita
+	bool checar_factibilidade(double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery);
+	
+	// Método para remoção de uma rota (usado na heurística de remoção de rotas)
+	void remover_rota(int index_rota);
+	
+	
 };
 
 #endif // _SOL_H

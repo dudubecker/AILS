@@ -42,7 +42,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 		// Heurística construtiva
 		case 'C':{
 			
-			std::cout << "Solucao apos heuristica construtiva" << std::endl;
+			// std::cout << "Solucao apos heuristica construtiva" << std::endl;
 			
 			// Criando variáveis com valores atualizados a cada inserção
 			// Inserindo no conjunto L os pedidos não atendidos
@@ -178,6 +178,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// Inicializando pedido a ser removido:
 				double pedido {9999};
 				
+				int n_it = 0;
+				
 				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
 				while (pedido > S.inst.n){
 				
@@ -185,6 +187,14 @@ Sol LocalSearchOperator::apply(Sol &S){
 					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
+					
+					
+					n_it += 1;
+					
+					if (n_it == 1000){
+						
+						break;
+					}
 					
 				}
 				
@@ -206,6 +216,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// Inicializando pedido a ser removido:
 				double pedido {9999};
 				
+				int n_it = 0;
+				
 				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
 				while (pedido > S.inst.n){
 				
@@ -213,6 +225,15 @@ Sol LocalSearchOperator::apply(Sol &S){
 					double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 					
 					pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
+					
+					
+					n_it += 1;
+					
+					if (n_it == 1000){
+						
+						break;
+					}
+					
 					
 				}
 				
@@ -398,6 +419,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// Inicializando pedido a ser removido:
 				double pedido {9999};
 				
+				int n_it = {0};
+				
 				// Escolhendo pedido: deve ser representado por um nó de pickup, menor ou igual a "n"!
 				while (pedido > S.inst.n){
 					
@@ -405,6 +428,14 @@ Sol LocalSearchOperator::apply(Sol &S){
 					double index_pedido_removido = 1 + rand()%(n_nodes - 3);
 					
 					pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
+					
+					n_it += 1;
+					
+					if (n_it == 1000){
+						
+						break;
+					}
+					
 					
 				}
 				
@@ -480,6 +511,8 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			int no_D1 {};
 			
+			int n_it = 0;
+			
 			// O pedido deve ser de delivery!
 			while (no_D1 <= S.inst.n){
 				
@@ -489,12 +522,22 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 				no_D1 = S.Rotas.at(index_rota).at(index_D1);
 				
+				n_it += 1;
+				
+				if (n_it == 1000){
+					
+					break;
+				}
+			
+				
 			}
 			
 			// Escolhendo pedido P2, com ordinalidade necessariamente maior que D1
 			int index_P2 {};
 			
 			int no_P2 {9999};
+			
+			n_it = 0;
 			
 			// O pedido deve ser de pickup!
 			while (no_P2 > S.inst.n){
@@ -504,6 +547,13 @@ Sol LocalSearchOperator::apply(Sol &S){
 				index_P2 = index_D1 + rand()%(n_nodes - index_D1 - 2);
 				
 				no_P2 = S.Rotas.at(index_rota).at(index_P2);
+				
+				n_it += 1;
+					
+				if (n_it == 1000){
+					
+					break;
+				}
 				
 			}
 			
@@ -892,9 +942,9 @@ Sol LocalSearchOperator::apply(Sol &S){
 		if (S.Rotas.at(index_rota).size() <= 2){
 			
 			
-			std::cout << "\n\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n" << std::endl;
+	// 		std::cout << "\n\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n" << std::endl;
 			
-			S.Rotas.erase(S.Rotas.begin() + index_rota);
+	 		S.Rotas.erase(S.Rotas.begin() + index_rota);
 			
 		}
 	}
