@@ -26,7 +26,6 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 	
 	switch (name){
 		
-		// Random removal + Primeira Inserção Factível Aleatória
 		case 'R':{
 			
 			// std::cout << "Solucao apos random removal" << std::endl;
@@ -52,7 +51,8 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			std::vector<double> pedidos_nao_inseridos = S.L;
 			
-			// Aleatorizar "pedidos_nao_inseridos"?
+			// S.executar_melhores_insercoes(pedidos_nao_inseridos);
+			
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
@@ -161,21 +161,15 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			std::vector<double> pedidos_nao_inseridos = S.L;
 			
-			// *obs: aleatorizar "pedidos_nao_inseridos"?
+			// S.executar_melhores_insercoes(pedidos_nao_inseridos);
+			
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
-				// std::cout << "\nPedido: " << pedido << std::endl;
-				
-				// S = primeira_insercao_factivel(S, pedido);
 				
 				S.executar_melhor_insercao(pedido);
 				
 			}
-			
-			// std::cout << "Solucao apos insercoes" << std::endl;
-			
-			// S.print_sol();
 			
 			// Fim da heurística worst removal
 			break;
@@ -248,15 +242,12 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			std::vector<double> pedidos_nao_inseridos = S.L;
 			
-			// *obs: aleatorizar "pedidos_nao_inseridos"?
+			
+			// S.executar_melhores_insercoes(pedidos_nao_inseridos);
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
-				// std::cout << "\nPedido: " << pedido << std::endl;
-				
-				// S = primeira_insercao_factivel(S, pedido);
 				S.executar_melhor_insercao(pedido);
-				
 				
 			}
 			

@@ -93,6 +93,12 @@ public:
 	// Executa a melhor inserção considerando uma rota específica
 	void executar_melhor_insercao(double &pedido, int index_rota);
 	
+	// Executa, de forma gulosa, as melhores inserções considerando todas as rotas
+	void executar_melhores_insercoes(std::vector<double> &pedidos);
+	
+	// Executa, de forma gulosa, as melhores inserções considerando uma rota específica
+	void executar_melhores_insercoes(std::vector<double> &pedidos, int index_rota);
+	
 	// Avaliando factibilidade da inserção de um pedido (sem realizar a inserção!)
 	bool isInsertionFeasible(double &pedido, int index_rota, int &pos_no_pickup, int &pos_no_delivery);
 	

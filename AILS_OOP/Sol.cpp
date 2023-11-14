@@ -149,29 +149,6 @@ double Sol::FO(){
 	return (double) custos_totais;
 }
 
-// Método de cálculo da função objetivo penalizada, como em Gasque 2022
-
-/*
-double Sol::FO_W(){
-	
-	// Custos totais
-	double custos_totais {};
-	
-	for (unsigned index_rota {0}; index_rota < Rotas.size(); index_rota++){
-		
-		//custos_totais += custo_veiculo;
-		//std::vector Rota = Rotas[index_rota];
-		
-		for (unsigned index_no {0}; index_no < Rota.size() - 1; index_no++){
-			
-			custos_totais += inst.t[Rota[index_no]][Rota[index_no + 1]];
-			
-		}
-	}
-	
-}
-*/
-
 void Sol::print_sol(){
 	
 	std::cout << "S: " << std::endl;
@@ -206,6 +183,56 @@ void Sol::print_sol(){
 	}
 	
 	std::cout << "\n";
+	
+}
+
+void Sol::remover_rota(int index_rota){
+	
+	// Removendo pedidos contidos na rota
+	
+	std::vector<double> pedidos_a_remover {};
+	
+	for (auto &node: Rotas.at(index_rota)){
+		
+		if ((node > 0) && (node <= inst.n)){
+			
+			pedidos_a_remover.push_back(node);
+			
+		}
+		
+	}
+	
+	for (auto &node: pedidos_a_remover){
+		
+		remover_pedido(node);
+		
+	}
+	
+	
+	// Atualizando índices de rota na estrutura de posições de pedidos, para rotas com ordinalidade maior do que "index_rota"
+	for (int pedido = 1; pedido <= inst.n; pedido++){
+		
+		if ((request_positions[pedido].at(0) > index_rota) && (request_positions[pedido].at(0) != 9999)){
+			
+			request_positions[pedido].at(0) -= 1;
+			
+		}
+		
+	}
+	
+	// Removendo rotas vazias dos vetores de rotas, cargas e tempos de visita
+	
+	// Removendo rota vazia da solução
+	Rotas.erase(Rotas.begin() + index_rota);
+	
+	// Removendo vetor de cargas
+	Cargas.erase(Cargas.begin() + index_rota);
+	
+	// Removendo vetor de tempos de visita
+	TemposDeVisita.erase(TemposDeVisita.begin() + index_rota);
+	
+	// Removendo posição no vetor de tamanhos
+	RotasSize.erase(RotasSize.begin() + index_rota);
 	
 }
 
@@ -391,6 +418,25 @@ void Sol::inserir_pedido(double &pedido, int index_rota, int pos_no_pickup, int 
 		
 		
 	}
+	
+	// Adição -> para remover rotas vazias
+	
+	if (LSize == 0){
+		
+		for (int index_rota {0}; index_rota < Rotas.size(); index_rota++){
+			
+			if (RotasSize.at(index_rota) == 2){
+				
+				remover_rota(index_rota);
+				
+			}
+			
+			
+		}
+		
+	}
+	
+	
 	
 	
 	
@@ -1107,7 +1153,8 @@ std::vector<double> Sol::delta_melhor_insercao(double &pedido, int &index_rota){
 		
 		// Possível problema em retornar um valor grande: se não for factível, como busca-se maximizar (regret), vai dar problema!
 		
-		return_vector = {0, 0, 0,0};
+		// return_vector = {0, 0, 0,0};
+		return_vector = {99999, 0, 0,0};
 		
 	}
 	
@@ -1414,3 +1461,178 @@ bool Sol::checar_factibilidade(double &pedido, int index_rota, int &pos_no_picku
 	return factivel;
 	
 }
+
+void Sol::executar_melhores_insercoes(std::vector<double> &pedidos){
+	
+	// Variável que controlará o número de pedidos inseridos pelo algoritmo
+	int qtd_inseridos {0};
+	
+	// Quantidade de pedidos não atendidos na solução 
+	int qtd_pedidos_nao_atendidos {pedidos.size()};
+	
+	// Condição de parada do algoritmo: caso não tenham sido encontradas posições factíveis de inserção ou caso todos os pedidos tenham sido inseridos
+	while (true){
+		
+		// Variável que controlará o número de inserções factíveis encontradas
+		int qtd_insercoes_factiveis {0};
+		
+		// Menor delta de inserção encontrado
+		double delta_min {9999};
+		
+		// Pedido correspondente ao menor delta de inserção
+		double pedido_min {};
+		
+		// Dados de rota e posição dos nós para o pedido de menor delta:
+		std::vector<double> dados_melhor_insercao_min {};
+		
+		for (auto &pedido: pedidos){
+			
+			// Obtendo dados para melhor insercao do pedido (chamando função com parâmetro char)
+			std::vector<double> dados_melhor_insercao = delta_melhor_insercao(pedido);
+			
+			// Delta FO -> Primeiro dado do vetor retornado pela função
+			double delta = dados_melhor_insercao.at(0);
+			
+			// Aplicando ruído no cálculo da FO
+			//if (eta > 0){
+				
+				// Random noise, entre -eta*max_dist e +eta*max_dist
+			//	int randValue = std::rand();
+				
+			//	double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta)*(S.inst.max_dist);
+				
+			//	delta = std::max(0.0, delta + noise);
+				
+			//}
+			
+			
+			if (delta < delta_min){
+				
+				delta_min = delta;
+				pedido_min = pedido;
+				
+				dados_melhor_insercao_min = dados_melhor_insercao;
+				
+				// A função retornará um valor maior do que 9999 para delta! Por isso a contagem de inserções factíveis está aqui!
+				qtd_insercoes_factiveis += 1;
+				
+			}
+			
+		}
+		
+		// Caso se tenha achado pelo menos uma posição de inserção factível (delta_min < 9999)
+		if (delta_min < 9999){
+			
+			// S = melhor_insercao(S, pedido_min);
+			// Inserindo pedido de delta mínimo, com dados do vetor retornado pela função
+			inserir_pedido(pedido_min, dados_melhor_insercao_min.at(1), dados_melhor_insercao_min.at(2), dados_melhor_insercao_min.at(3));
+			
+			qtd_inseridos += 1;
+			
+			// Removendo pedido da lista de pedidos
+			pedidos.erase(std::remove_if(pedidos.begin(), pedidos.end(), [&pedido_min](double value) -> bool { return value == pedido_min; }), pedidos.end());
+			
+		// Caso não tenha se achado pelo menos uma posição de inserção factível (delta_min == 99999, valor retornado pela função)
+		} else {
+			
+			qtd_insercoes_factiveis == 0;
+			
+		}
+		
+		if ((qtd_inseridos == qtd_pedidos_nao_atendidos) || (qtd_insercoes_factiveis == 0)){
+			
+			break;
+			
+		}
+		
+	}
+}
+
+void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, int index_rota){
+	
+	// Variável que controlará o número de pedidos inseridos pelo algoritmo
+	int qtd_inseridos {0};
+	
+	// Quantidade de pedidos não atendidos na solução 
+	int qtd_pedidos_nao_atendidos {pedidos.size()};
+	
+	// Condição de parada do algoritmo: caso não tenham sido encontradas posições factíveis de inserção ou caso todos os pedidos tenham sido inseridos
+	while (true){
+		
+		// Variável que controlará o número de inserções factíveis encontradas
+		int qtd_insercoes_factiveis {0};
+		
+		// Menor delta de inserção encontrado
+		double delta_min {9999};
+		
+		// Pedido correspondente ao menor delta de inserção
+		double pedido_min {};
+		
+		// Dados de rota e posição dos nós para o pedido de menor delta:
+		std::vector<double> dados_melhor_insercao_min {};
+		
+		for (auto &pedido: pedidos){
+			
+			// Obtendo dados para melhor insercao do pedido (chamando função com parâmetro char)
+			std::vector<double> dados_melhor_insercao = delta_melhor_insercao(pedido, index_rota);
+			
+			// Delta FO -> Primeiro dado do vetor retornado pela função
+			double delta = dados_melhor_insercao.at(0);
+			
+			// Aplicando ruído no cálculo da FO
+			//if (eta > 0){
+				
+				// Random noise, entre -eta*max_dist e +eta*max_dist
+			//	int randValue = std::rand();
+				
+			//	double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta)*(S.inst.max_dist);
+				
+			//	delta = std::max(0.0, delta + noise);
+				
+			//}
+			
+			
+			if (delta < delta_min){
+				
+				delta_min = delta;
+				pedido_min = pedido;
+				
+				dados_melhor_insercao_min = dados_melhor_insercao;
+				
+				// A função retornará um valor maior do que 9999 para delta! Por isso a contagem de inserções factíveis está aqui!
+				qtd_insercoes_factiveis += 1;
+				
+			}
+			
+		}
+		
+		// Caso se tenha achado pelo menos uma posição de inserção factível (delta_min < 9999)
+		if (delta_min < 9999){
+			
+			// S = melhor_insercao(S, pedido_min);
+			// Inserindo pedido de delta mínimo, com dados do vetor retornado pela função
+			inserir_pedido(pedido_min, dados_melhor_insercao_min.at(1), dados_melhor_insercao_min.at(2), dados_melhor_insercao_min.at(3));
+			
+			qtd_inseridos += 1;
+			
+			// Removendo pedido da lista de pedidos
+			pedidos.erase(std::remove_if(pedidos.begin(), pedidos.end(), [&pedido_min](double value) -> bool { return value == pedido_min; }), pedidos.end());
+			
+		// Caso não tenha se achado pelo menos uma posição de inserção factível (delta_min == 99999, valor retornado pela função)
+		} else {
+			
+			qtd_insercoes_factiveis == 0;
+			
+		}
+		
+		if ((qtd_inseridos == qtd_pedidos_nao_atendidos) || (qtd_insercoes_factiveis == 0)){
+			
+			break;
+			
+		}
+		
+	}
+	
+	
+}
+

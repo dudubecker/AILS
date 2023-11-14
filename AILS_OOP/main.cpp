@@ -36,20 +36,33 @@ int main(){
 		srand(125);
 		
 		
-		std::vector<std::string> instancias = {"instances/AA30"};
+		std::vector<std::string> instancias = {
+			
+			"instances/AA25",
+			"instances/AA50",
+			"instances/BB25",
+			"instances/BB50",
+			"instances/CC25",
+			"instances/CC50",
+			"instances/DD25",
+			"instances/DD50",
+			
+			};
 		
 		// Número de iterações para debug
-		int iteracoes = 100000;
+		int iteracoes = 10000;
 		
 		// Métodos de perturbação
 		Perturbation Random('R');
 		
+		Perturbation Worst('W');
+		
+		Perturbation Concentric('C');
+		
 		// Métodos de busca local
 		LocalSearchOperator Or_opt_1('O', 1);
-					
-		LocalSearchOperator Or_opt_2('O', 3);
 		
-		LocalSearchOperator Two_Opt('W');
+		LocalSearchOperator Or_opt_2('O', 3);
 		
 		LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
 		
@@ -74,7 +87,6 @@ int main(){
 		std::vector<LocalSearchOperator> operators = {
 							Or_opt_1,
 							Or_opt_2,
-							// Two_Opt,
 							Shaw_1,
 							Shaw_2,
 							Shift_5,
@@ -90,6 +102,11 @@ int main(){
 		
 		for (auto instancia: instancias){
 			
+			// Medindo tempo
+			auto begin = std::chrono::high_resolution_clock::now();
+			
+			std::cout << "\nInstancia: " << instancia << std::endl;
+			
 			// Inicializando solução
 			
 			Instance inst;
@@ -98,11 +115,13 @@ int main(){
 			
 			Sol S(inst);
 			
-			std::cout << "Instancia: " << instancia << std::endl;
+			Sol S_best(inst);
 			
 			// Aplicando métodos iterativamente
 			
 			for (int i {0}; i < iteracoes; i++){
+				
+				// S = S_best;
 				
 				if (i%1000 == 0){
 					
@@ -111,19 +130,39 @@ int main(){
 				}
 				
 				// Aplicando método de perturbação
-				Random.apply(S, 6);
+				if(i % 2 == 0){
+					
+					Random.apply(S, 6);
+					
+					
+				} else {
+					
+					Concentric.apply(S, 6);
+					
+				}
 				
 				// Aplicando método de busca local
 				for (auto op: operators){
 					
 					op.apply(S);
 					
+					if (S.FO() < S_best.FO()){
+						
+						S_best = S;
+						
+					}
+					
 				}
 				
 				
 			}
 			
-			S.print_sol();
+			S_best.print_sol();
+			auto end = std::chrono::high_resolution_clock::now();
+			auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+			
+			cout << "\n FO: " << std::setprecision(7) << S_best.FO() << endl;
+			std::cout << "\n Tempo: " << elapsed.count() * 1e-9 << std::endl;
 			
 		}
 		

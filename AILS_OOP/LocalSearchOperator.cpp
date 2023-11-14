@@ -143,6 +143,10 @@ Sol LocalSearchOperator::apply(Sol &S){
 				}
 				
 				
+				// Código não guloso:
+				
+				/*
+				
 				// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
 				for (auto &pedido: pedidosRemovidos_R1){
 					
@@ -167,7 +171,27 @@ Sol LocalSearchOperator::apply(Sol &S){
 					S.executar_melhor_insercao(pedido);
 					
 				}
-			
+				
+				*/
+				
+				// Código guloso:
+				
+				// /*
+				
+				// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
+				S.executar_melhores_insercoes(pedidosRemovidos_R1, index_R2);
+				
+				// Inserindo os "k2" pedidos na rota R1, na melhor posição factível:
+				S.executar_melhores_insercoes(pedidosRemovidos_R2, index_R1);
+				
+				// Inserindo em quaisquer posições os pedidos após tentar trocá-los:
+				
+				std::vector<double> pedidos_nao_inseridos = S.L;
+				
+				S.executar_melhores_insercoes(pedidos_nao_inseridos);
+				
+				// */
+				
 			}
 			
 			break;
@@ -240,6 +264,12 @@ Sol LocalSearchOperator::apply(Sol &S){
 					
 				}
 				
+				// Inserindo pedidos
+				
+				// Código não guloso:
+				
+				/*
+				
 				std::vector<double> pedidos_nao_atendidos = S.L;
 				
 				for (auto &pedido: pedidos_nao_atendidos){
@@ -257,8 +287,23 @@ Sol LocalSearchOperator::apply(Sol &S){
 					S.executar_melhor_insercao(pedido);
 					
 				}
-			
-			
+				
+				*/
+				
+				// Código guloso:
+				
+				// /*
+				
+				std::vector<double> pedidos_nao_atendidos = S.L;
+				
+				S.executar_melhores_insercoes(pedidos_nao_atendidos, index_R2);
+				
+				pedidos_nao_atendidos = S.L;
+				
+				S.executar_melhores_insercoes(pedidos_nao_atendidos);
+				
+				
+				// */
 			}
 			
 			break;
@@ -340,12 +385,9 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			// Reinserindo pedidos:
 			
-			// Obs -> inserir na melhor posição considerando todos os pedidos ou apenas a ordem deles na lista?
+			// Código não guloso
 			
-			// Questão: tentar inserir todos pedidos de L ou apenas os recém-removidos pela heurística?
-			
-			
-			// std::cout << "B" << std::endl;
+			/*
 			
 			std::vector<double> pedidos_nao_atendidos = S.L;
 			
@@ -363,6 +405,23 @@ Sol LocalSearchOperator::apply(Sol &S){
 				S.executar_melhor_insercao(pedido);
 				
 			}
+			
+			*/
+			
+			// Código guloso
+			
+			// /*
+			
+			std::vector<double> pedidos_nao_atendidos = S.L;
+			
+			S.executar_melhores_insercoes(pedidos_nao_atendidos, index_rota);
+			
+			pedidos_nao_atendidos = S.L;
+			
+			S.executar_melhores_insercoes(pedidos_nao_atendidos);
+			
+			
+			// */
 			
 			break;
 		}
@@ -556,7 +615,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			// Criando vetor D com pedidos removidos, inicializado pelo primeiro pedido escolhido
 			std::vector <double> D {};
 			
-			if (S.LSize() == 0){
+			if (S.LSize == 0){
 				
 				double r = S.A.at(rand()%((S.A).size()));
 				D.push_back(r);
@@ -646,6 +705,9 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 			}
 			
+			// Código não guloso
+			
+			/*
 			std::vector<double> pedidos_nao_atendidos = S.L;
 			
 			for (auto &pedido: pedidos_nao_atendidos){
@@ -653,6 +715,21 @@ Sol LocalSearchOperator::apply(Sol &S){
 				S.executar_melhor_insercao(pedido);
 				
 			}
+			*/
+			
+			
+			// Código guloso
+			
+			// /*
+			
+			std::vector<double> pedidos_nao_atendidos = S.L;
+			
+			S.executar_melhores_insercoes(pedidos_nao_atendidos);
+			
+			
+			
+			// */
+			
 			
 			// Fim da heurística Shaw's removal
 			
