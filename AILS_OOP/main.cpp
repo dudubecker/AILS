@@ -41,13 +41,8 @@ int main(){
 		
 		std::vector<std::string> instancias = {
 			
-			"instances/AA25",
-			"instances/AA50",
-			"instances/BB25",
-			"instances/BB50",
-			"instances/CC25",
+			
 			"instances/CC50",
-			"instances/DD25",
 			"instances/DD50",
 			
 			};
@@ -175,15 +170,66 @@ int main(){
 		
 		std::vector<std::string> instancias = {
 			
+			"instances/AA5",
+			"instances/AA10",
+			"instances/AA15",
+			"instances/AA20",
 			"instances/AA25",
+			"instances/AA30",
+			"instances/AA35",
+			"instances/AA40",
+			"instances/AA45",
 			"instances/AA50",
+			"instances/AA55",
+			"instances/AA60",
+			"instances/AA65",
+			"instances/AA70",
+			"instances/AA75",
+			"instances/BB5",
+			"instances/BB10",
+			"instances/BB15",
+			"instances/BB20",
 			"instances/BB25",
+			"instances/BB30",
+			"instances/BB35",
+			"instances/BB40",
+			"instances/BB45",
 			"instances/BB50",
+			"instances/BB55",
+			"instances/BB60",
+			"instances/BB65",
+			"instances/BB70",
+			"instances/BB75",
+			"instances/CC5",
+			"instances/CC10",
+			"instances/CC15",
+			"instances/CC20",
 			"instances/CC25",
+			"instances/CC30",
+			"instances/CC35",
+			"instances/CC40",
+			"instances/CC45",
 			"instances/CC50",
+			"instances/CC55",
+			"instances/CC60",
+			"instances/CC65",
+			"instances/CC70",
+			"instances/CC75",
+			"instances/DD5",
+			"instances/DD10",
+			"instances/DD15",
+			"instances/DD20",
 			"instances/DD25",
+			"instances/DD30",
+			"instances/DD35",
+			"instances/DD40",
+			"instances/DD45",
 			"instances/DD50",
-			
+			"instances/DD55",
+			"instances/DD60",
+			"instances/DD65",
+			"instances/DD70",
+			"instances/DD75",
 		};
 		
 		for (auto instancia: instancias){
@@ -241,11 +287,9 @@ int main(){
 					
 					LocalSearchOperator Shaw_2('H', 2,0,0,1);
 					
-					LocalSearchOperator Shift_5('T', 5);
+					LocalSearchOperator Shift_2('T', 2);
 					
-					LocalSearchOperator Shift_10('T', 10);
-					
-					LocalSearchOperator Shift_15('T', 15);
+					LocalSearchOperator Shift_4('T', 4);
 					
 					LocalSearchOperator Swap_1_1('S', 1,1);
 					
@@ -253,9 +297,6 @@ int main(){
 					
 					LocalSearchOperator Swap_2_2('S', 2,2);
 					
-					LocalSearchOperator Swap_4_4('S', 4,4);
-					
-					LocalSearchOperator Swap_3_3('S', 3,3);
 					
 					// Atribuindo ao objeto da AILS
 					
@@ -266,18 +307,15 @@ int main(){
 								Or_opt_2,
 								Shaw_1,
 								Shaw_2,
-								Shift_5,
-								//Shift_10,
-								//Shift_15,
+								Shift_2,
+								Shift_4,
 								Swap_1_1,
 								Swap_2_1,
 								Swap_2_2,
-								//Swap_3_3,
-								//Swap_4_4,
 								};
 					
 					
-					AILSObject.executeAILS(10000);
+					AILSObject.executeAILS(2500);
 					
 					// AILSObject.S_p.print_sol();
 					
@@ -290,8 +328,8 @@ int main(){
 				
 				catch(...){
 					
-					std::cout << "Erro: instancia " << instancia << std::endl; 
-					
+					std::cout << "\n\nErro: instancia " << instancia << "\n\n" << std::endl; 
+					break;
 				}
 			}
 		}

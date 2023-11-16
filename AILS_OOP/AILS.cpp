@@ -17,70 +17,68 @@ AILS::~AILS()
 {
 }
 
-Sol AILS::routeReductionHeuristic(Sol &S_i){
+Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 	
-	// Criando uma cópia da solução:
+	
+	// Criando uma cópia da rota:
 	Sol S = S_i;
 	
 	// Solução para armazenar a melhor solução (de menor número de rotas)
-	// Sol BKS = S_i;
+	Sol BKS = S_i;
 	
-	// Para gerar números aleatórios
-	// srand(time(NULL));
+	// Variável para o número de iterações:
+	int n_it {0};
 	
-	// Caso "L" esteja vazio, a rota é excluída e os pedidos são colocados no banco de pedidos não atendidos
-	if (S.L.size() == 0){
+	while (n_it < it_RRH){
 		
-		// Quantidade "m" de rotas na solução:
-		int m = S.Rotas.size();
-		
-		// Escolhendo índice da rota que será removida
-		double index_rota = rand()%(m);
-		
-		std::vector<double> Rota = S.Rotas.at(index_rota);
-		
-		// Removendo nós da solução
-		for (auto &node: Rota){
-			
-			// Caso seja um nó correspondente a um pedido de pickup:
-			if ((node > 0) && (node <= S.inst.n)){
-				
-				S.remover_pedido(node);
-				
-			}
-			
-		}
-		
-		// Removendo rota vazia da solução
-		S.Rotas.erase(S.Rotas.begin() + index_rota);
-		
-		// Escolhendo um método de perturbação aleatório
-		
-		std::mt19937_64 rng;
-		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
-		rng.seed(ss);
-		// initialize a uniform distribution between 0 and 1
-		std::uniform_real_distribution<double> unif(0, PerturbationProcedures.size());
-		// ready to generate random numbers
-		double n = unif(rng);
-		
-		int perturbationProcedureIndex = trunc(n);
-		
-		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
-		
-		perturbationProcedure.apply(S, perturbationProcedure.w);
-		
+		// Caso "L" esteja vazio, a rota é excluída e os pedidos são colocados no banco de pedidos não atendidos
 		if (S.L.size() == 0){
 			
-			S_i = S;
+			BKS = S;
+			
+			// Quantidade "m" de rotas na solução:
+			int m = S.Rotas.size();
+			
+			// Escolhendo índice da rota que será removida
+			double index_rota = rand()%(m);
+			
+			// Removendo rota
+			S.remover_rota(index_rota);
 			
 		}
 		
+		// Escolhendo perturbações e aplicando-as à solução
+		
+		// Escolhendo e aplicando método de perturbação
+		
+		// int randomIndex = std::rand() % PerturbationProcedures.size();
+		
+		// int perturbationProcedureIndex = trunc(randomIndex);
+		
+		// Determinando quantidade de nós a serem removidos e reinseridos pela heurística
+		
+		int RRH_nodes = {};
+		
+		if (S.Rotas.size() <= 2){
+			
+			RRH_nodes = 1;
+			
+		} else {
+			
+			RRH_nodes = 4;
+			
+		}
+		
+		// Aplicando random removal
+		PerturbationProcedures.at(0).apply(S, RRH_nodes);
+		
+		n_it += 1;
 		
 	}
 	
-	return S_i;
+	return BKS;
+	
+	
 	
 }
 
@@ -158,7 +156,6 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 	}
 	
 	
-	
 	// Contabilizando arcos da solução S_r
 	
 	for (int index_rota {0}; index_rota < S_r.Rotas.size(); index_rota++){
@@ -205,11 +202,12 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 	return distance;
 }
 
-
 void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureIndex){ //Perturbation perturbationProcedure){
 	
-	// Contabilizando distância entre soluções:
+	
 	int distance = symmetricDistance(S, S_r);
+	
+	// Contabilizando distância entre soluções:
 	
 	// Incrementando número de iterações da perturbação
 	PerturbationProcedures.at(perturbationProcedureIndex).it += 1;
@@ -235,7 +233,6 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 		
 		PerturbationProcedures.at(perturbationProcedureIndex).w = std::min(S.inst.n/2, (std::max(1, new_perturbation_degree)));
 		
-		
 		// Reiniciando contagens
 		PerturbationProcedures.at(perturbationProcedureIndex).it = 0;
 		
@@ -243,7 +240,6 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 		
 	}
 }
-
 
 // Método para o critério de aceitação 
 bool AILS::acceptanceCriteria(Sol &S){
@@ -337,9 +333,16 @@ void AILS::executeAILS(int max_it){
 	// Para gerar números aleatórios
 	// srand(time(NULL));
 	
-	// Variável para o número de iterações:
+	// Variável para o número de iterações sem melhoria:
+	int no_improvement_iterations = 0;
 	
 	while (it < max_it){
+		
+		if (no_improvement_iterations == 1000){
+			
+			break;
+			
+		}
 		
 		
 		if (it%1000 == 0){
@@ -349,9 +352,18 @@ void AILS::executeAILS(int max_it){
 		}
 		
 		
+		
 		// Criando uma cópia da solução de referência
 		
 		Sol S = S_r;
+		
+		// Aplicando código para redução de rotas, a cada 10 iterações
+		
+		if ((it%10 == 0) && (S.Rotas.size() > 1)){
+			
+			routeReductionHeuristic(S, 10);
+			
+		}
 		
 		// Escolhendo e aplicando método de perturbação
 		
@@ -361,11 +373,12 @@ void AILS::executeAILS(int max_it){
 		
 		PerturbationProcedures.at(perturbationProcedureIndex).apply(S, PerturbationProcedures.at(perturbationProcedureIndex).w);
 		
-		// Aplicando buscas locais, na forma de VNS
+		// Aplicando buscas locais, na forma de RVND
 		LocalSearch(S);
 		
 		// Atualizando grau de perturbação
 		updatePerturbationDegree(S, S_r, perturbationProcedureIndex);
+		
 		
 		// Aplicando critério de aceitação
 		if (acceptanceCriteria(S)){
@@ -387,7 +400,16 @@ void AILS::executeAILS(int max_it){
 			
 			S_p = S;
 			
+			no_improvement_iterations = 0;
+			
+		} else {
+			
+			no_improvement_iterations += 1;
+			
 		}
+		
+		
+		
 		
 		it += 1;
 		

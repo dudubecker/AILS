@@ -62,7 +62,6 @@ public:
 	double qtdSolucoesAceitas {};
 	
 	
-	
 	AILS();
 	~AILS();
 	
@@ -84,7 +83,7 @@ public:
 	void executeAILS(int max_it);
 	
 	// Método que tentará reduzir rotas
-	Sol routeReductionHeuristic(Sol &S_i);
+	Sol routeReductionHeuristic(Sol &S_i, int it_RRH);
 	
 };
 

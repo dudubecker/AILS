@@ -53,7 +53,6 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			// S.executar_melhores_insercoes(pedidos_nao_inseridos);
 			
-			
 			for (auto pedido: pedidos_nao_inseridos){
 				
 				S.executar_melhor_insercao(pedido);
@@ -214,29 +213,35 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				
 			}
 			
-			// std::cout << "Pedido escolhido: " << pedido_aleatorio << std::endl;
 			
 			// Removendo pedidos
 			
-			int qtdPedidosRemovidos {0};
+			int qtdPedidosRemovidos {1};
 			
 			for (auto pedido: pedidos_sorted){
 				
-				S.remover_pedido(pedido);
-				
-				qtdPedidosRemovidos += 1;
-				
-				// std::cout << "Pedido retirado: " << pedido << std::endl;
-				
-				if (qtdPedidosRemovidos == (n_requests - 1)){
+				if (qtdPedidosRemovidos == (n_requests)){
 					
 					break;
 					
+				} else {
+					
+					if (!count(S.L.begin(), S.L.end(), pedido)){
+						
+						S.remover_pedido(pedido);
+						
+						qtdPedidosRemovidos += 1;
+						
+					}
+					
 				}
+				
+				
+				// std::cout << "Pedido retirado: " << pedido << std::endl;
 				
 			}
 			
-			// Reinserindo pedidos pelo método da primeira inserção factível
+			
 			
 			// Pedidos não inseridos na solução (referenciar diretamente no for loop deu um bug)
 			
@@ -250,6 +255,9 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 				S.executar_melhor_insercao(pedido);
 				
 			}
+			
+			
+			
 			
 			// Fim da heurística concentric removal
 			break;
