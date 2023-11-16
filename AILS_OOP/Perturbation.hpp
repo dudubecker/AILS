@@ -12,7 +12,7 @@ public:
 	char name {};
 	
 	// Número de nós a serem removidos e reinseridos pela perturbação (grau de perturbação)
-	int w {3};
+	double w {3};
 	
 	// Quantidade de iterações pelas quais o método de perturbação passou (até o valor Gamma)
 	double it {};

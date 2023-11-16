@@ -17,7 +17,7 @@ public:
 	std::vector<LocalSearchOperator> LSOperators {};
 	
 	// Vetor que guardará os métodos de perturbação já inicializados
-	std::vector<Perturbation>  PerturbationProcedures {};
+	std::vector<Perturbation> PerturbationProcedures {};
 	
 	// Melhor solução encontrada pelo algoritmo:
 	Sol S_p;
@@ -78,7 +78,7 @@ public:
 	void updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureIndex);
 	
 	// Método para o critério de aceitação 
-	bool acceptationCriterion(Sol &S);
+	bool acceptanceCriteria(Sol &S);
 	
 	// Método para execução do algoritmo em si:
 	void executeAILS(int max_it);

@@ -26,7 +26,7 @@ Sol AILS::routeReductionHeuristic(Sol &S_i){
 	// Sol BKS = S_i;
 	
 	// Para gerar números aleatórios
-	srand(time(NULL));
+	// srand(time(NULL));
 	
 	// Caso "L" esteja vazio, a rota é excluída e os pedidos são colocados no banco de pedidos não atendidos
 	if (S.L.size() == 0){
@@ -80,11 +80,9 @@ Sol AILS::routeReductionHeuristic(Sol &S_i){
 		
 	}
 	
-	
 	return S_i;
 	
 }
-
 
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 
@@ -102,36 +100,14 @@ Sol AILS::LocalSearch(Sol &S){
 	while(LSOperatorsIt.size() > 0){
 		
 		// Aplicar operador de busca local aleatório
-		
-		int index_LS = rand()%(LSOperatorsIt.size()); // rand()%
+		int index_LS = rand()%(LSOperatorsIt.size());
 		
 		LocalSearchOperator LSOperator = LSOperatorsIt.at(index_LS);
-		
-		// std::cout << "Nome: " << LSOperator.name << std::endl;
 		
 		LSOperator.apply(S);
 		
 		// Caso a solução tenha sido melhorada:
-		if ((S.FO() < S_r_LS.FO()) && (S.isFeasible())){
-		// if ((S.FO() < S_r_LS.FO()) && (S.L.size() <= S_r_LS.L.size()) && (S.isFeasible())){
-			
-			// std::cout << "Solucao melhorada! LSOperator: " << LSOperator.name << std::endl;
-			
-			// std::cout << "S_r: \n";
-			
-			// S_r.print_sol();
-			
-			// std::cout << "\n FO: " << S_r.FO() << std::endl;
-			
-			// std::cout << "S: \n";
-			
-			// S.print_sol();
-			
-			// std::cout << "\n FO: " << S.FO() << std::endl;
-			
-			// std::cout << "\n\n";
-			
-			// S = routeReductionHeuristic(S);
+		if ((S.FO() < S_r_LS.FO())){
 			
 			// Atualizar solução de referência
 			S_r_LS = S;
@@ -140,22 +116,6 @@ Sol AILS::LocalSearch(Sol &S){
 			LSOperatorsIt = LSOperators;
 			
 		} else { // Caso a solução não tenha sido melhorada:
-			
-			// std::cout << "Solucao piorada! LSOperator: " << LSOperator.name << std::endl;
-			
-			// std::cout << "\nS_r: \n\n";
-			
-			// S_r.print_sol();
-			
-			// std::cout << "\n FO: " << S_r.FO() << std::endl;
-			
-			// std::cout << "\nS: \n\n";
-			
-			// S.print_sol();
-			
-			// std::cout << "\n\n";
-			
-			// std::cout << "\n FO: " << S.FO() << std::endl;
 			
 			// Restaurar solução incumbente
 			S = S_r_LS;
@@ -187,33 +147,27 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 	
 	// std::cout << "\nArcos: ";
 	
-	for (auto Rota: S.Rotas){
+	for (int index_rota {0}; index_rota < S.Rotas.size(); index_rota++){
 		
-		for (int index_no {0}; index_no < Rota.size() - 1; index_no++){
+		for (int index_no {0}; index_no < S.RotasSize.at(index_rota) - 1; index_no++){
 			
-			E_S.at(Rota.at(index_no)).at(Rota.at(index_no + 1)) = 1;
-			
-			// std::cout << Rota.at(index_no) << " " << Rota.at(index_no + 1)<< " | ";
+			E_S.at(S.Rotas.at(index_rota).at(index_no)).at(S.Rotas.at(index_rota).at(index_no + 1)) = 1;
 			
 		}
-		
-		// std::cout << "\n";
 		
 	}
 	
+	
+	
 	// Contabilizando arcos da solução S_r
 	
-	for (auto Rota: S_r.Rotas){
+	for (int index_rota {0}; index_rota < S_r.Rotas.size(); index_rota++){
 		
-		for (int index_no {0}; index_no < Rota.size() - 1; index_no++){
+		for (int index_no {0}; index_no < S_r.RotasSize.at(index_rota) - 1; index_no++){
 			
-			E_S_r.at(Rota.at(index_no)).at(Rota.at(index_no + 1)) = 1;
-			
-			// std::cout << Rota.at(index_no) << " " << Rota.at(index_no + 1)<< " | ";
+			E_S_r.at(S_r.Rotas.at(index_rota).at(index_no)).at(S_r.Rotas.at(index_rota).at(index_no + 1)) = 1;
 			
 		}
-		
-		// std::cout << "\n";
 		
 	}
 	
@@ -237,10 +191,9 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 		for (int j {0}; j < 2*S.inst.n + 2 ; j++){
 			
 			// Caso o número em "i, j" nas matrizes seja diferente:
-			if ( E_S.at(i).at(j) !=  E_S_r.at(i).at(j)){
+			if (E_S.at(i).at(j) !=  E_S_r.at(i).at(j)){
 				
 				// std::cout << i << " " << j << " | ";
-				
 				distance += 1;
 				
 			}
@@ -249,10 +202,9 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 		
 	}
 	
-	// std::cout << "\nDistancia: " << distance << std::endl;
-	
 	return distance;
 }
+
 
 void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureIndex){ //Perturbation perturbationProcedure){
 	
@@ -265,42 +217,36 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 	// Alterando valor de distância média encontrada pela perturbação
 	PerturbationProcedures.at(perturbationProcedureIndex).avgDist = ((PerturbationProcedures.at(perturbationProcedureIndex).avgDist)*(PerturbationProcedures.at(perturbationProcedureIndex).it - 1)+(distance))/(PerturbationProcedures.at(perturbationProcedureIndex).it);
 	
+	// std::cout << PerturbationProcedures.at(perturbationProcedureIndex).avgDist << std::endl;
+	
 	if (PerturbationProcedures.at(perturbationProcedureIndex).it == Gamma){
 		
-		PerturbationProcedures.at(perturbationProcedureIndex).w = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
+		// Valor do novo grau de perturbação calculado
 		
-		if (PerturbationProcedures.at(perturbationProcedureIndex).w < 0){
+		// Corrigindo bug (relativamente raro) quando avgDist é igual a 0:
+		if (PerturbationProcedures.at(perturbationProcedureIndex).avgDist == 0){
 			
-			PerturbationProcedures.at(perturbationProcedureIndex).w = 1;
+			PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 1;
 			
 		}
 		
-		// std::cout << "Valor atualizado, igual a: " << PerturbationProcedures.at(perturbationProcedureIndex).w << std::endl;
+		// Novo valor para o grau de perturbação
+		int new_perturbation_degree = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
 		
-		// perturbationProcedure = std::min(S.inst.n, std::max_element(1, perturbationProcedure.w));
+		PerturbationProcedures.at(perturbationProcedureIndex).w = std::min(S.inst.n/2, (std::max(1, new_perturbation_degree)));
 		
-		if (PerturbationProcedures.at(perturbationProcedureIndex).w < 1){
-			
-			PerturbationProcedures.at(perturbationProcedureIndex).w = 1;
-			
-		} else if (PerturbationProcedures.at(perturbationProcedureIndex).w > S.inst.n){
-			
-			PerturbationProcedures.at(perturbationProcedureIndex).w = S.inst.n;
-			
-		}
 		
+		// Reiniciando contagens
 		PerturbationProcedures.at(perturbationProcedureIndex).it = 0;
 		
 		PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 0;
+		
 	}
-	
 }
 
+
 // Método para o critério de aceitação 
-bool AILS::acceptationCriterion(Sol &S){
-	
-	// Para gerar números aleatórios
-	srand(time(NULL));
+bool AILS::acceptanceCriteria(Sol &S){
 	
 	// Valor da função objetivo correspondente à solução f(S):
 	double f_S = S.FO();
@@ -362,15 +308,7 @@ bool AILS::acceptationCriterion(Sol &S){
 	if (f_S < b_UP){
 		
 		// Valor aleatório "n" entre 0 e 1
-		
-		std::mt19937_64 rng;
-		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
-		rng.seed(ss);
-		// initialize a uniform distribution between 0 and 1
-		std::uniform_real_distribution<double> unif(0, 1);
-		// ready to generate random numbers
-		double n = unif(rng);
+		double n = static_cast<double>(std::rand()) / RAND_MAX;
 		
 		// Caso o número aleatório seja menor do que kappa (kappa*100% chance)
 		if (n < kappa){
@@ -397,57 +335,40 @@ bool AILS::acceptationCriterion(Sol &S){
 void AILS::executeAILS(int max_it){
 	
 	// Para gerar números aleatórios
-	srand(time(NULL));
+	// srand(time(NULL));
 	
 	// Variável para o número de iterações:
 	
 	while (it < max_it){
 		
-		// std::cout << "Iteracao: " << it << std::endl;
 		
-		// Escolhendo um método de perturbação aleatório
+		if (it%1000 == 0){
+			
+			std::cout << "Iteracao " << it << std::endl;
+			
+		}
 		
-		std::mt19937_64 rng;
-		uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
-		rng.seed(ss);
-		// initialize a uniform distribution between 0 and 1
-		std::uniform_real_distribution<double> unif(0, PerturbationProcedures.size());
-		// ready to generate random numbers
-		double n = unif(rng);
 		
-		int perturbationProcedureIndex = trunc(n);
-		
-		Perturbation perturbationProcedure = PerturbationProcedures.at(perturbationProcedureIndex);
-		
-		// Aplicando método de perturbação
-
-		// Assegurar que aqui o objeto "S_r" não está sendo alterado!
+		// Criando uma cópia da solução de referência
 		
 		Sol S = S_r;
 		
-		perturbationProcedure.apply(S, perturbationProcedure.w);
+		// Escolhendo e aplicando método de perturbação
 		
-		try {
-			
-			S = LocalSearch(S);
-			
-		}
+		int randomIndex = std::rand() % PerturbationProcedures.size();
 		
-		catch (...){
-			
-			std::cout << "Erro!" << std::endl;
-			
-		}
+		int perturbationProcedureIndex = trunc(randomIndex);
 		
+		PerturbationProcedures.at(perturbationProcedureIndex).apply(S, PerturbationProcedures.at(perturbationProcedureIndex).w);
 		
-		// só "LocalSearch(S)" funcionaria?
+		// Aplicando buscas locais, na forma de VNS
+		LocalSearch(S);
 		
 		// Atualizando grau de perturbação
 		updatePerturbationDegree(S, S_r, perturbationProcedureIndex);
 		
 		// Aplicando critério de aceitação
-		if (acceptationCriterion(S)){
+		if (acceptanceCriteria(S)){
 			
 			S_r = S;
 			
@@ -465,9 +386,6 @@ void AILS::executeAILS(int max_it){
 		if (S.FO() < S_p.FO()){
 			
 			S_p = S;
-			
-			// std::cout << "Novo otimo global descoberto" << std::endl;
-			
 			
 		}
 		
