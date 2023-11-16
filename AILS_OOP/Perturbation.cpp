@@ -24,6 +24,22 @@ Perturbation::~Perturbation()
 
 Sol Perturbation::apply(Sol &S, int n_requests){
 	
+	// Código para aplicação de ruído aleatório
+	
+	// Deve ser um parâmetro de Perturbation:
+	double alpha = 0.001;
+	
+	double randomValue = static_cast<double>(std::rand()) / RAND_MAX;
+	
+	bool applyNoise = false;
+	
+	if (randomValue < alpha){
+		
+		applyNoise = true;
+		
+	}
+	
+	
 	switch (name){
 		
 		case 'R':{
@@ -55,7 +71,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
-				S.executar_melhor_insercao(pedido);
+				S.executar_melhor_insercao(pedido, applyNoise);
 				
 			}
 			
@@ -166,7 +182,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			for (auto pedido: pedidos_nao_inseridos){
 				
 				
-				S.executar_melhor_insercao(pedido);
+				S.executar_melhor_insercao(pedido, applyNoise);
 				
 			}
 			
@@ -252,7 +268,7 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 			
 			for (auto pedido: pedidos_nao_inseridos){
 				
-				S.executar_melhor_insercao(pedido);
+				S.executar_melhor_insercao(pedido, applyNoise);
 				
 			}
 			

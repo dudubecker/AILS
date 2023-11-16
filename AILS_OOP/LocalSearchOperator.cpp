@@ -23,6 +23,22 @@ LocalSearchOperator::~LocalSearchOperator()
 
 Sol LocalSearchOperator::apply(Sol &S){
 	
+	// Deve ser um parâmetro de LocalSearchOperator:
+	
+	double alpha = 0.001;
+	
+	double randomValue = static_cast<double>(std::rand()) / RAND_MAX;
+	
+	bool applyNoise = false;
+	
+	if (randomValue < alpha){
+		
+		applyNoise = true;
+		
+	}
+	
+	
+	
 	
 	switch (name){
 		
@@ -179,16 +195,16 @@ Sol LocalSearchOperator::apply(Sol &S){
 				// /*
 				
 				// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
-				S.executar_melhores_insercoes(pedidosRemovidos_R1, index_R2);
+				S.executar_melhores_insercoes(pedidosRemovidos_R1, index_R2, applyNoise);
 				
 				// Inserindo os "k2" pedidos na rota R1, na melhor posição factível:
-				S.executar_melhores_insercoes(pedidosRemovidos_R2, index_R1);
+				S.executar_melhores_insercoes(pedidosRemovidos_R2, index_R1, applyNoise);
 				
 				// Inserindo em quaisquer posições os pedidos após tentar trocá-los:
 				
 				std::vector<double> pedidos_nao_inseridos = S.L;
 				
-				S.executar_melhores_insercoes(pedidos_nao_inseridos);
+				S.executar_melhores_insercoes(pedidos_nao_inseridos, applyNoise);
 				
 				// */
 				
@@ -296,11 +312,11 @@ Sol LocalSearchOperator::apply(Sol &S){
 				
 				std::vector<double> pedidos_nao_atendidos = S.L;
 				
-				S.executar_melhores_insercoes(pedidos_nao_atendidos, index_R2);
+				S.executar_melhores_insercoes(pedidos_nao_atendidos, index_R2, applyNoise);
 				
 				pedidos_nao_atendidos = S.L;
 				
-				S.executar_melhores_insercoes(pedidos_nao_atendidos);
+				S.executar_melhores_insercoes(pedidos_nao_atendidos, applyNoise);
 				
 				
 				// */
@@ -414,11 +430,11 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			std::vector<double> pedidos_nao_atendidos = S.L;
 			
-			S.executar_melhores_insercoes(pedidos_nao_atendidos, index_rota);
+			S.executar_melhores_insercoes(pedidos_nao_atendidos, index_rota, applyNoise);
 			
 			pedidos_nao_atendidos = S.L;
 			
-			S.executar_melhores_insercoes(pedidos_nao_atendidos);
+			S.executar_melhores_insercoes(pedidos_nao_atendidos, applyNoise);
 			
 			
 			// */
@@ -724,7 +740,7 @@ Sol LocalSearchOperator::apply(Sol &S){
 			
 			std::vector<double> pedidos_nao_atendidos = S.L;
 			
-			S.executar_melhores_insercoes(pedidos_nao_atendidos);
+			S.executar_melhores_insercoes(pedidos_nao_atendidos, applyNoise);
 			
 			
 			

@@ -1162,7 +1162,7 @@ std::vector<double> Sol::delta_melhor_insercao(double &pedido, int &index_rota){
 	
 }
 
-void Sol::executar_melhor_insercao(double &pedido){
+void Sol::executar_melhor_insercao(double &pedido, bool applyNoise){
 	
 	// Índice do nó de pickup correspondente ao request
 	int no_pickup {pedido};
@@ -1212,6 +1212,20 @@ void Sol::executar_melhor_insercao(double &pedido){
 						
 						double delta_S = delta_FO_ins(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
 						
+						// Caso o algoritmo opte por aplicar o random noise nesse cálculo
+						if (applyNoise){
+							
+							// Random noise, entre -eta*max_dist e +eta*max_dist
+							int randValue = std::rand();
+							
+							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+							
+							delta_S = std::max(0.0, delta_S + noise);
+							
+						}
+						
+						
+						
 						if (delta_S < delta_min){
 							
 							delta_min = delta_S;
@@ -1241,7 +1255,7 @@ void Sol::executar_melhor_insercao(double &pedido){
 	
 }
 
-void Sol::executar_melhor_insercao(double &pedido, int index_rota){
+void Sol::executar_melhor_insercao(double &pedido, int index_rota, bool applyNoise){
 	
 	// Índice do nó de pickup correspondente ao request
 	int no_pickup {pedido};
@@ -1281,6 +1295,19 @@ void Sol::executar_melhor_insercao(double &pedido, int index_rota){
 						num_rotas_factiveis += 1;
 						
 						double delta_S = delta_FO_ins(pedido, index_rota, pos_insercao_no_pickup, pos_insercao_no_delivery);
+						
+						// Caso o algoritmo opte por aplicar o random noise nesse cálculo
+						if (applyNoise){
+							
+							// Random noise, entre -eta*max_dist e +eta*max_dist
+							int randValue = std::rand();
+							
+							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+							
+							delta_S = std::max(0.0, delta_S + noise);
+							
+						}
+						
 						
 						if (delta_S < delta_min){
 							
@@ -1462,7 +1489,7 @@ bool Sol::checar_factibilidade(double &pedido, int index_rota, int &pos_no_picku
 	
 }
 
-void Sol::executar_melhores_insercoes(std::vector<double> &pedidos){
+void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, bool applyNoise){
 	
 	// Variável que controlará o número de pedidos inseridos pelo algoritmo
 	int qtd_inseridos {0};
@@ -1493,17 +1520,17 @@ void Sol::executar_melhores_insercoes(std::vector<double> &pedidos){
 			// Delta FO -> Primeiro dado do vetor retornado pela função
 			double delta = dados_melhor_insercao.at(0);
 			
-			// Aplicando ruído no cálculo da FO
-			//if (eta > 0){
+			
+			// Caso o algoritmo opte por aplicar o random noise nesse cálculo
+			if (applyNoise){
 				
 				// Random noise, entre -eta*max_dist e +eta*max_dist
-			//	int randValue = std::rand();
+				int randValue = std::rand();
 				
-			//	double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta)*(S.inst.max_dist);
+				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
 				
-			//	delta = std::max(0.0, delta + noise);
-				
-			//}
+				delta = std::max(0.0, delta + noise);
+			}
 			
 			
 			if (delta < delta_min){
@@ -1548,7 +1575,7 @@ void Sol::executar_melhores_insercoes(std::vector<double> &pedidos){
 	}
 }
 
-void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, int index_rota){
+void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, int index_rota, bool applyNoise){
 	
 	// Variável que controlará o número de pedidos inseridos pelo algoritmo
 	int qtd_inseridos {0};
@@ -1579,17 +1606,17 @@ void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, int index_ro
 			// Delta FO -> Primeiro dado do vetor retornado pela função
 			double delta = dados_melhor_insercao.at(0);
 			
-			// Aplicando ruído no cálculo da FO
-			//if (eta > 0){
+			// Caso o algoritmo opte por aplicar o random noise nesse cálculo
+			if (applyNoise){
 				
 				// Random noise, entre -eta*max_dist e +eta*max_dist
-			//	int randValue = std::rand();
+				int randValue = std::rand();
 				
-			//	double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta)*(S.inst.max_dist);
+				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
 				
-			//	delta = std::max(0.0, delta + noise);
+				delta = std::max(0.0, delta + noise);
 				
-			//}
+			}
 			
 			
 			if (delta < delta_min){

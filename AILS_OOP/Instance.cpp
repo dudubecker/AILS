@@ -132,6 +132,8 @@ void Instance::read(std::string file_name){
 		
 	}
 	
+	max_dist = max_t;
+	
 	// Dados normalizados para Shaw's removal: demandas (q) e tempos de viagem (t)
 	
 	// Vetor com demandas normalizadas
