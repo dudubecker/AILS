@@ -13,23 +13,6 @@ public:
 	// Nome do operador: 
 	char name {};
 	
-	// Score da heurística, atualizado dinamicamente no algoritmo
-	// double score {0};
-	
-	// Peso (probabilidade de escolha) da heurística, atualizado dinamicamente no algoritmo
-	// double weight {0};
-	
-	// Número de iterações pelas quais a heurística passou
-	// int n_it {0};
-	
-	// Tempo computacional empregado na heurística:
-	// double processing_time {};
-	
-	// Número total de iterações pelas quais a heurística passou
-	// int n_it_total {0};
-	
-	// ... Demais parâmetros específicos de cada operador
-	
 	// Swap: trocando "k1" pedidos de uma rota "r1" e por "k2" pedidos de uma rota "r2"
 	int k1 {0};
 	
@@ -48,6 +31,9 @@ public:
 	double phi {};
 	double chi {};
 	double psi {};
+	
+	// Probabilidade de aplicação do ruído aleatório
+	double alpha = {};
 	
 	// LocalSearchOperator();
 	

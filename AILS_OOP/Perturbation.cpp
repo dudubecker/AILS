@@ -26,9 +26,6 @@ Sol Perturbation::apply(Sol &S, int n_requests){
 	
 	// Código para aplicação de ruído aleatório
 	
-	// Deve ser um parâmetro de Perturbation:
-	double alpha = 0.001;
-	
 	double randomValue = static_cast<double>(std::rand()) / RAND_MAX;
 	
 	bool applyNoise = false;

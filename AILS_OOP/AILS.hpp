@@ -31,10 +31,10 @@ public:
 	// Parâmetros para controle do grau de perturbação:
 	
 	// Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-	double Gamma {20};
+	double Gamma {};
 	
 	// d_b: Distância de referência ("ideal") entre soluções. A distância de uma solução para outra é o número de arcos diferentes entre elas
-	double d_b {24};
+	double d_b {};
 	
 	// Parâmetros para o critério de aceitação:
 	
@@ -48,10 +48,10 @@ public:
 	double f_UND {};
 	
 	// determina b_UP no critério de aceitação -> qual valor usar inicialmente?
-	double eta {0.5};
+	double eta {};
 	
 	// Porcentagem de soluções aceitas
-	double kappa {0.35};
+	double kappa {};
 	
 	// Atributos para determinação do valor de k_r (porcentagem de soluções menores do que b_up que foram, de fato, aceitas)
 	
@@ -62,7 +62,13 @@ public:
 	double qtdSolucoesAceitas {};
 	
 	
+	// Constructor
+	AILS(Sol &S_inicial, std::vector<LocalSearchOperator> &LSOperatorsObjects, std::vector<Perturbation> &PerturbationProceduresObjects,
+		double eta_value, double kappa_value, double Gamma_value, double d_b_value, double eta_noise_value, double alpha_value);
+	
+	
 	AILS();
+	
 	~AILS();
 	
 	// Métodos
@@ -80,7 +86,7 @@ public:
 	bool acceptanceCriteria(Sol &S);
 	
 	// Método para execução do algoritmo em si:
-	void executeAILS(int max_it);
+	void executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, int it_RRH);
 	
 	// Método que tentará reduzir rotas
 	Sol routeReductionHeuristic(Sol &S_i, int it_RRH);

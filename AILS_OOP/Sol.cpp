@@ -1218,7 +1218,7 @@ void Sol::executar_melhor_insercao(double &pedido, bool applyNoise){
 							// Random noise, entre -eta*max_dist e +eta*max_dist
 							int randValue = std::rand();
 							
-							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta_noise)*(inst.max_dist);
 							
 							delta_S = std::max(0.0, delta_S + noise);
 							
@@ -1302,7 +1302,7 @@ void Sol::executar_melhor_insercao(double &pedido, int index_rota, bool applyNoi
 							// Random noise, entre -eta*max_dist e +eta*max_dist
 							int randValue = std::rand();
 							
-							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+							double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta_noise)*(inst.max_dist);
 							
 							delta_S = std::max(0.0, delta_S + noise);
 							
@@ -1527,7 +1527,7 @@ void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, bool applyNo
 				// Random noise, entre -eta*max_dist e +eta*max_dist
 				int randValue = std::rand();
 				
-				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta_noise)*(inst.max_dist);
 				
 				delta = std::max(0.0, delta + noise);
 			}
@@ -1612,7 +1612,7 @@ void Sol::executar_melhores_insercoes(std::vector<double> &pedidos, int index_ro
 				// Random noise, entre -eta*max_dist e +eta*max_dist
 				int randValue = std::rand();
 				
-				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(0.02)*(inst.max_dist);
+				double noise = (-1.0 + (2.0 * randValue / RAND_MAX))*(eta_noise)*(inst.max_dist);
 				
 				delta = std::max(0.0, delta + noise);
 				

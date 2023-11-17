@@ -9,9 +9,62 @@
 #include <chrono>
 #include <random>
 
+
+
+// Constructor com parâmetros da heurística
+AILS::AILS(Sol &S_inicial, std::vector<LocalSearchOperator> &LSOperatorsObjects, std::vector<Perturbation> &PerturbationProceduresObjects,
+		double eta_value, double kappa_value, double Gamma_value, double d_b_value, double eta_noise_value, double alpha_value)
+		
+{
+	
+	// Atribuindo argumentos aos parâmetros
+	eta = eta_value;
+	kappa = kappa_value;
+	Gamma = Gamma_value;
+	d_b = d_b_value;
+	
+	// Inicializando objetos
+	
+	// Métodos de perturbação
+	PerturbationProcedures = PerturbationProceduresObjects;
+	
+	// Métodos de busca local
+	LSOperators = LSOperatorsObjects;
+	
+	// Inicializando cálculos de ruído
+	
+	// Parâmetro alpha - probabilidade de aplicação do ruído - atributo de LSOperators e PerturbationProcedures
+	for (auto LSOperator: LSOperators){
+		
+		LSOperator.alpha = alpha_value;
+		
+	}
+	
+	for (auto PerturbationProcedure: PerturbationProcedures){
+		
+		PerturbationProcedure.alpha = alpha_value;
+		
+	}
+	
+	// Parâmetro eta_noise - utilizado no cálculo da dimensão do ruído - atributo de Sol
+	S_inicial.eta_noise = eta_noise_value;
+	
+	
+	// Solução incumbente e melhor solução encontrada:
+	S_p = S_inicial;
+	
+	S_r = S_inicial;
+	
+}
+
+// Default contructor
 AILS::AILS()
 {
+	
+	
 }
+
+
 
 AILS::~AILS()
 {
@@ -328,7 +381,7 @@ bool AILS::acceptanceCriteria(Sol &S){
 	
 }
 
-void AILS::executeAILS(int max_it){
+void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, int it_RRH){
 	
 	// Para gerar números aleatórios
 	// srand(time(NULL));
@@ -338,7 +391,7 @@ void AILS::executeAILS(int max_it){
 	
 	while (it < max_it){
 		
-		if (no_improvement_iterations == 1000){
+		if (no_improvement_iterations == max_it_no_improv){
 			
 			break;
 			
@@ -352,16 +405,15 @@ void AILS::executeAILS(int max_it){
 		}
 		
 		
-		
 		// Criando uma cópia da solução de referência
 		
 		Sol S = S_r;
 		
-		// Aplicando código para redução de rotas, a cada 10 iterações
+		// Aplicando código para redução de rotas, a cada it_RRH_interval iterações
 		
-		if ((it%10 == 0) && (S.Rotas.size() > 1)){
+		if ((it%it_RRH_interval == 0) && (S.Rotas.size() > 1)){
 			
-			routeReductionHeuristic(S, 10);
+			routeReductionHeuristic(S, it_RRH);
 			
 		}
 		
@@ -409,8 +461,7 @@ void AILS::executeAILS(int max_it){
 		}
 		
 		
-		
-		
+
 		it += 1;
 		
 	}

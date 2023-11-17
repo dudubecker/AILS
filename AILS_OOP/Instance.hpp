@@ -61,13 +61,16 @@ class Instance
 	std::vector<std::vector<double>> t_norm {};
 	
 	// Constructor/Destructor
+	Instance(std::string &file_name);
+	
+	// Default constructor
 	Instance();
 	
 	~Instance();
 	
 	// Methods
 	
-	void read(std::string file_name);
+	// void read(std::string file_name);
 	
 };
 

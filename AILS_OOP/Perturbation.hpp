@@ -20,6 +20,9 @@ public:
 	// Distância média entre as soluções obtidas pela perturbação e a solução de referência s_r
 	double avgDist {};
 	
+	// Probabilidade de aplicação do ruído aleatório
+	double alpha = {};
+	
 	//Perturbation();
 	
 	// Inicialização padrão, apenas com o character

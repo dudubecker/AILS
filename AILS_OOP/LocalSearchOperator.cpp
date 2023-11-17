@@ -23,9 +23,7 @@ LocalSearchOperator::~LocalSearchOperator()
 
 Sol LocalSearchOperator::apply(Sol &S){
 	
-	// Deve ser um parâmetro de LocalSearchOperator:
-	
-	double alpha = 0.001;
+	// Determinando se será aplicado o ruído no cálculo da FO
 	
 	double randomValue = static_cast<double>(std::rand()) / RAND_MAX;
 	
@@ -36,8 +34,6 @@ Sol LocalSearchOperator::apply(Sol &S){
 		applyNoise = true;
 		
 	}
-	
-	
 	
 	
 	switch (name){

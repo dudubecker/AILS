@@ -42,6 +42,11 @@ public:
 	// Instância da solução
 	Instance inst;
 	
+	// Parâmetros para aplicação do ruído aleatório:
+	
+	// Cálculo do ruído
+	double eta_noise = {};
+	
 	// Constructor/Destructor
 	// Constructor com objeto instance:
 	Sol(Instance &inst_data);

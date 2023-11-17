@@ -7,14 +7,15 @@ Instance::Instance()
 {
 }
 
+
 Instance::~Instance()
 {
 }
 
 
-// Método de leitura:
+// Inicializando
 
-void Instance::read(std::string file_name){
+Instance::Instance(std::string &file_name){
 	
 	// A string "instancia" armazenará os dados linha a linha
 	std::string instancia;
