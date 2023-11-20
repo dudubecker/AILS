@@ -398,11 +398,11 @@ void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, in
 		}
 		
 		
-		if (it%1000 == 0){
+		//if (it%1000 == 0){
 			
-			std::cout << "Iteracao " << it << std::endl;
+		//	std::cout << "Iteracao " << it << std::endl;
 			
-		}
+		//}
 		
 		
 		// Criando uma cópia da solução de referência
