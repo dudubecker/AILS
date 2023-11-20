@@ -19,11 +19,7 @@ int main(int argc, char *argv[]){
 	
 	// Verifica se o número correto de argumentos foi fornecido
 	if (argc != 17) {
-		std::cerr << "Uso: seu_executavel -i <instancia> --seed <seed> --eta <eta> --kappa <kappa> --Gamma <Gamma> --d_b <d_b> --noise <noise> --alpha <alpha>" << std::endl;
-		
-		
-		long long seed = std::stoll(argv[3]);
-		
+		std::cerr << "Uso: seu_executavel <id_configuration> <id_instance> <seed> <instancia> --eta <eta> --kappa <kappa> --Gamma <Gamma> --d_b <d_b> --noise <noise> --alpha <alpha>" << std::endl;
 		return 1; // Retorna código de erro
 	}
 	
@@ -43,9 +39,6 @@ int main(int argc, char *argv[]){
 	int d_b = std::stoi(args["--d_b"]);
 	double noise = std::stod(args["--noise"]);
 	double alpha = std::stod(args["--alpha"]);
-	
-	
-	// Tratando erro de leitura:
 	
 	// Lendo argumentos e atribuindo variáveis
 	
