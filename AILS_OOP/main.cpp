@@ -4,7 +4,6 @@
 #include "Sol.hpp"
 #include "LocalSearchOperator.hpp"
 #include "AILS.hpp"
-//#include <heuristicsFunctions.h>
 #include "Perturbation.hpp"
 #include <iomanip>
 #include <iterator>
@@ -13,8 +12,47 @@
 #include <random>
 #include <unordered_map>
 
+/*
+int main(){
+	
+	// Para ter controle sobre os outputs
+	srand(123);
+	
+	
+	// Nome da instância
+	std::string instancia = "instances/AA30";
+	
+	// Objeto instância
+	Instance inst(instancia);
+	
+	// Inicializando objeto solução;
+	Sol S(inst);
+	
+	S.print_sol();
+	std::cout << "\nFO: " << S.FO() << std::endl;
+	
+	// Inicializando LocalSearchOperator - Swap
+	// Swap* Swap_2_2 = new Swap(2,2);
+	Swap Swap_2_2(2,2);
+	
+	Swap_2_2.aplicar(S);
+	
+	RandomRemoval Random;
+	
+	Random.aplicar(S);
+	
+	S.print_sol();
+	std::cout << "\nFO: " << S.FO() << std::endl;
+	
+	return 0;
+}
+
+*/
+
+
 // init para rodar IRACE
 
+/*
 int main(int argc, char *argv[]){
 	
 	// Verifica se o número correto de argumentos foi fornecido
@@ -156,58 +194,58 @@ int main(int argc, char *argv[]){
 	// return AILSObject.S_p.FO();
 	// return 0;
 }
+*/
+
 
 // Init normal, para ensaios computacionais
 
-/*
+// /*
 
 int main(){
 	
 	// Para gerar números aleatórios
 	// srand(time(NULL));
 	
-	
 	// Para ter controle sobre os outputs
 	srand(125);
 	
 	// Inicializando métodos de perturbação:
 	
-	Perturbation Random('R');
+	RandomRemoval* Random = new RandomRemoval;
 	
-	Perturbation Worst('W');
+	WorstRemoval* Worst = new WorstRemoval(6);
 	
-	Perturbation Concentric('C');
+	ConcentricRemoval* Concentric = new ConcentricRemoval;
 	
 	// Inicializando operadores de busca local:
 	
-	LocalSearchOperator Or_opt_1('O', 1);
+	OrOpt* Or_opt_1 = new OrOpt(1);
 	
-	LocalSearchOperator Or_opt_2('O', 2);
+	OrOpt* Or_opt_2 = new OrOpt(2);
 	
-	LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
+	Shaw* Shaw_1 = new Shaw(2,0.3,0.4,0.3);
 	
-	LocalSearchOperator Shaw_2('H', 2,1,0,0);
+	Shaw* Shaw_2 = new Shaw(2,1,0,0);
 	
-	LocalSearchOperator Shaw_3('H', 2,0,1,0);
+	Shaw* Shaw_3 = new Shaw(2,0,1,0);
 	
-	LocalSearchOperator Shaw_4('H', 2,0,0,1);
+	Shaw* Shaw_4 = new Shaw(2,0,0,1);
 	
-	LocalSearchOperator Shift_2('T', 2);
+	Shift* Shift_2 = new Shift(2);
 	
-	LocalSearchOperator Shift_4('T', 4);
+	Shift* Shift_4 = new Shift(4);
 	
-	LocalSearchOperator Swap_1_1('S', 1,1);
+	Swap* Swap_1_1 = new Swap(1,1);
 	
-	LocalSearchOperator Swap_2_1('S', 2,1);
+	Swap* Swap_2_1 = new Swap(2,1);
 	
-	LocalSearchOperator Swap_2_2('S', 2,2);
-	
+	Swap* Swap_2_2 = new Swap(2,2);
 	
 	// Vetor que guardará os métodos de perturbação já inicializados
-	std::vector<Perturbation> PerturbationProcedures {Random, Worst, Concentric};
+	std::vector<Perturbation*> PerturbationProcedures {Random, Worst, Concentric};
 	
 	// Vetor que guardará os operadores de busca local já inicializados
-	std::vector<LocalSearchOperator> LSOperators{
+	std::vector<LocalSearchOperator*> LSOperators {
 										Or_opt_1,
 										Or_opt_2,
 										Shaw_1,
@@ -233,7 +271,7 @@ int main(){
 		//"instances/AA10",
 		//"instances/AA15",
 		//"instances/AA20",
-		//"instances/AA25",
+		"instances/AA25",
 		//"instances/AA30",
 		//"instances/AA35",
 		//"instances/AA40",
@@ -255,7 +293,7 @@ int main(){
 		//"instances/BB45",
 		// "instances/BB50",
 		//"instances/BB55",
-		"instances/BB60",
+		// "instances/BB60",
 		// "instances/BB65",
 		// "instances/BB70",
 		// "instances/BB75",
@@ -264,7 +302,7 @@ int main(){
 		//"instances/CC15",
 		//"instances/CC20",
 		// "instances/CC25",
-		//"instances/CC30",
+		// "instances/CC30",
 		//"instances/CC35",
 		// "instances/CC40",
 		//"instances/CC45",
@@ -294,6 +332,7 @@ int main(){
 	
 	// Executando algoritmo
 	
+	
 	for (auto instancia: instancias){
 		
 		// Objeto instância
@@ -316,11 +355,11 @@ int main(){
 							LSOperators, // Vetor com operadores de busca local
 							PerturbationProcedures, // Vetor com métodos de perturbação
 							0.5, // eta: Determina b_UP no critério de aceitação
-							0.35, // kappa: Porcentagem de soluções aceitas
+							0.45, // kappa: Porcentagem de soluções aceitas
 							20, // Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
 							24, // d_b: Distância de referência ("ideal") entre soluções
-							0.01, // eta_noise: Utilizado no cálculo do ruído aleatório
-							0.01 // alpha: Probabilidade de aplicação do ruído aleatório
+							0.03, // eta_noise: Utilizado no cálculo do ruído aleatório
+							0.05 // alpha: Probabilidade de aplicação do ruído aleatório
 							);
 			
 			
@@ -328,8 +367,8 @@ int main(){
 			AILSObject.executeAILS(
 							10000, // max_it: Número máximo de iterações do algoritmo
 							2500, // max_it_no_improv: Número máximo de iterações sem melhoria
-							5, // it_RRH_interval: Intervalo de iterações para aplicação de route reduction heuristic
-							100 // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+							10, // it_RRH_interval: Intervalo de iterações para aplicação de route reduction heuristic
+							250 // it_RRH: Número iterações da route reduction heuristic a cada intervalo
 							);
 			
 			auto end = std::chrono::high_resolution_clock::now();
@@ -347,11 +386,8 @@ int main(){
 		
 	}
 	
-	
-	
-	
-	// return AILSObject.S_p.FO();
 	return 0;
+	
 }
 
-*/
+// */

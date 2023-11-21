@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=User
-Date                   :=17/11/2023
+Date                   :=21/11/2023
 CodeLitePath           :="C:/Program Files/CodeLite"
 LinkerName             :="C:/Program Files/mingw-w64/mingw64/bin/g++.exe"
 SharedObjectLinkerName :="C:/Program Files/mingw-w64/mingw64/bin/g++.exe" -shared -fPIC
@@ -62,7 +62,7 @@ AS       := "C:/Program Files/mingw-w64/mingw64/bin/as.exe"
 ## User defined environment variables
 ##
 CodeLiteDir:=C:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) $(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix) $(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/Instance.cpp$(ObjectSuffix) $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix) $(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix) 
 
 
 
@@ -105,29 +105,23 @@ $(IntermediateDirectory)/Sol.cpp$(ObjectSuffix): Sol.cpp
 $(IntermediateDirectory)/Sol.cpp$(PreprocessSuffix): Sol.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Sol.cpp$(PreprocessSuffix) Sol.cpp
 
-$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix): LocalSearchOperator.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/LocalSearchOperator.cpp$(DependSuffix) -MM LocalSearchOperator.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/LocalSearchOperator.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/LocalSearchOperator.cpp$(PreprocessSuffix): LocalSearchOperator.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/LocalSearchOperator.cpp$(PreprocessSuffix) LocalSearchOperator.cpp
-
 $(IntermediateDirectory)/AILS.cpp$(ObjectSuffix): AILS.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/AILS.cpp$(DependSuffix) -MM AILS.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/AILS.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/AILS.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/AILS.cpp$(PreprocessSuffix): AILS.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/AILS.cpp$(PreprocessSuffix) AILS.cpp
 
+$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix): LocalSearchOperator.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/LocalSearchOperator.cpp$(DependSuffix) -MM LocalSearchOperator.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/LocalSearchOperator.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/LocalSearchOperator.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/LocalSearchOperator.cpp$(PreprocessSuffix): LocalSearchOperator.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/LocalSearchOperator.cpp$(PreprocessSuffix) LocalSearchOperator.cpp
+
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
-
-$(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix): heuristicsFunctions.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/heuristicsFunctions.cpp$(DependSuffix) -MM heuristicsFunctions.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/User/Documents/AILS_OOP/AILS_OOP/heuristicsFunctions.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/heuristicsFunctions.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/heuristicsFunctions.cpp$(PreprocessSuffix): heuristicsFunctions.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/heuristicsFunctions.cpp$(PreprocessSuffix) heuristicsFunctions.cpp
 
 $(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix): Perturbation.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Perturbation.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Perturbation.cpp$(DependSuffix) -MM Perturbation.cpp

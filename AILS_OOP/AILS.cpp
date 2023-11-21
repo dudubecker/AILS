@@ -2,7 +2,6 @@
 #include "LocalSearchOperator.hpp"
 #include "Sol.hpp"
 #include "Instance.hpp"
-#include "heuristicsFunctions.h"
 #include <ctime>
 #include <algorithm>
 #include <stdio.h>
@@ -10,12 +9,9 @@
 #include <random>
 
 
-
 // Constructor com parâmetros da heurística
-AILS::AILS(Sol &S_inicial, std::vector<LocalSearchOperator> &LSOperatorsObjects, std::vector<Perturbation> &PerturbationProceduresObjects,
-		double eta_value, double kappa_value, double Gamma_value, double d_b_value, double eta_noise_value, double alpha_value)
-		
-{
+AILS::AILS(Sol &S_inicial, std::vector<LocalSearchOperator*> &LSOperatorsObjects, std::vector<Perturbation*> &PerturbationProceduresObjects,
+		double eta_value, double kappa_value, double Gamma_value, double d_b_value, double eta_noise_value, double alpha_value){
 	
 	// Atribuindo argumentos aos parâmetros
 	eta = eta_value;
@@ -36,19 +32,18 @@ AILS::AILS(Sol &S_inicial, std::vector<LocalSearchOperator> &LSOperatorsObjects,
 	// Parâmetro alpha - probabilidade de aplicação do ruído - atributo de LSOperators e PerturbationProcedures
 	for (auto LSOperator: LSOperators){
 		
-		LSOperator.alpha = alpha_value;
+		LSOperator->alpha = alpha_value;
 		
 	}
 	
 	for (auto PerturbationProcedure: PerturbationProcedures){
 		
-		PerturbationProcedure.alpha = alpha_value;
+		PerturbationProcedure->alpha = alpha_value;
 		
 	}
 	
 	// Parâmetro eta_noise - utilizado no cálculo da dimensão do ruído - atributo de Sol
 	S_inicial.eta_noise = eta_noise_value;
-	
 	
 	// Solução incumbente e melhor solução encontrada:
 	S_p = S_inicial;
@@ -70,8 +65,8 @@ AILS::~AILS()
 {
 }
 
+/*
 Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
-	
 	
 	// Criando uma cópia da rota:
 	Sol S = S_i;
@@ -110,20 +105,20 @@ Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 		
 		// Determinando quantidade de nós a serem removidos e reinseridos pela heurística
 		
-		int RRH_nodes = {};
+		//int RRH_nodes = {};
 		
-		if (S.Rotas.size() <= 2){
+		//if (S.Rotas.size() <= 2){
 			
-			RRH_nodes = 1;
+		//	RRH_nodes = 8;
 			
-		} else {
+		//} else {
 			
-			RRH_nodes = 4;
+		//	RRH_nodes = 8;
 			
-		}
+		//}
 		
 		// Aplicando random removal
-		PerturbationProcedures.at(0).apply(S, RRH_nodes);
+		PerturbationProcedures.at(0).aplicar(S);
 		
 		n_it += 1;
 		
@@ -134,6 +129,7 @@ Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 	
 	
 }
+*/
 
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 
@@ -145,7 +141,7 @@ Sol AILS::LocalSearch(Sol &S){
 	Sol S_r_LS = S;
 	
 	// Criando uma cópia do vetor que contém os operadores de busca local
-	std::vector<LocalSearchOperator> LSOperatorsIt = LSOperators;
+	std::vector<LocalSearchOperator*> LSOperatorsIt = LSOperators;
 	
 	// Enquanto o vetor não está vazio
 	while(LSOperatorsIt.size() > 0){
@@ -153,9 +149,9 @@ Sol AILS::LocalSearch(Sol &S){
 		// Aplicar operador de busca local aleatório
 		int index_LS = rand()%(LSOperatorsIt.size());
 		
-		LocalSearchOperator LSOperator = LSOperatorsIt.at(index_LS);
+		LocalSearchOperator* LSOperator = LSOperatorsIt.at(index_LS);
 		
-		LSOperator.apply(S);
+		LSOperator->aplicar(S);
 		
 		// Caso a solução tenha sido melhorada:
 		if ((S.FO() < S_r_LS.FO())){
@@ -221,19 +217,6 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 		
 	}
 	
-	// Printando matriz:
-	// std::cout << "\nMatriz: \n";
-	
-	// for (int i {0}; i < 2*S.inst.n + 2 ; i++){
-		
-	// 	for (int j {0}; j < 2*S.inst.n + 2 ; j++){
-		
-	// 		std::cout << E_S.at(i).at(j) << " ";
-	// 	}
-		
-	// 	std::cout << "\n";
-	// }
-	
 	// Contabilizando arcos incomuns entre as soluções:
 	
 	for (int i {0}; i < 2*S.inst.n + 2 ; i++){
@@ -243,7 +226,6 @@ int AILS::symmetricDistance(Sol &S, Sol &S_r){
 			// Caso o número em "i, j" nas matrizes seja diferente:
 			if (E_S.at(i).at(j) !=  E_S_r.at(i).at(j)){
 				
-				// std::cout << i << " " << j << " | ";
 				distance += 1;
 				
 			}
@@ -263,33 +245,33 @@ void AILS::updatePerturbationDegree(Sol &S, Sol &S_r, int perturbationProcedureI
 	// Contabilizando distância entre soluções:
 	
 	// Incrementando número de iterações da perturbação
-	PerturbationProcedures.at(perturbationProcedureIndex).it += 1;
+	PerturbationProcedures.at(perturbationProcedureIndex)->it += 1;
 	
 	// Alterando valor de distância média encontrada pela perturbação
-	PerturbationProcedures.at(perturbationProcedureIndex).avgDist = ((PerturbationProcedures.at(perturbationProcedureIndex).avgDist)*(PerturbationProcedures.at(perturbationProcedureIndex).it - 1)+(distance))/(PerturbationProcedures.at(perturbationProcedureIndex).it);
+	PerturbationProcedures.at(perturbationProcedureIndex)->avgDist = ((PerturbationProcedures.at(perturbationProcedureIndex)->avgDist)*(PerturbationProcedures.at(perturbationProcedureIndex)->it - 1)+(distance))/(PerturbationProcedures.at(perturbationProcedureIndex)->it);
 	
 	// std::cout << PerturbationProcedures.at(perturbationProcedureIndex).avgDist << std::endl;
 	
-	if (PerturbationProcedures.at(perturbationProcedureIndex).it == Gamma){
+	if (PerturbationProcedures.at(perturbationProcedureIndex)->it == Gamma){
 		
 		// Valor do novo grau de perturbação calculado
 		
 		// Corrigindo bug (relativamente raro) quando avgDist é igual a 0:
-		if (PerturbationProcedures.at(perturbationProcedureIndex).avgDist == 0){
+		if (PerturbationProcedures.at(perturbationProcedureIndex)->avgDist == 0){
 			
-			PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 1;
+			PerturbationProcedures.at(perturbationProcedureIndex)->avgDist = 1;
 			
 		}
 		
 		// Novo valor para o grau de perturbação
-		int new_perturbation_degree = std::round((PerturbationProcedures.at(perturbationProcedureIndex).w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex).avgDist));
+		int new_perturbation_degree = std::round((PerturbationProcedures.at(perturbationProcedureIndex)->w*d_b)/(PerturbationProcedures.at(perturbationProcedureIndex)->avgDist));
 		
-		PerturbationProcedures.at(perturbationProcedureIndex).w = std::min(S.inst.n/2, (std::max(1, new_perturbation_degree)));
+		PerturbationProcedures.at(perturbationProcedureIndex)->w = std::min(S.inst.n/2, (std::max(1, new_perturbation_degree)));
 		
 		// Reiniciando contagens
-		PerturbationProcedures.at(perturbationProcedureIndex).it = 0;
+		PerturbationProcedures.at(perturbationProcedureIndex)->it = 0;
 		
-		PerturbationProcedures.at(perturbationProcedureIndex).avgDist = 0;
+		PerturbationProcedures.at(perturbationProcedureIndex)->avgDist = 0;
 		
 	}
 }
@@ -411,11 +393,11 @@ void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, in
 		
 		// Aplicando código para redução de rotas, a cada it_RRH_interval iterações
 		
-		if ((it%it_RRH_interval == 0) && (S.Rotas.size() > 1)){
+		//if ((it%it_RRH_interval == 0) && (S.Rotas.size() > 1)){
 			
-			routeReductionHeuristic(S, it_RRH);
+		//	routeReductionHeuristic(S, it_RRH);
 			
-		}
+		//}
 		
 		// Escolhendo e aplicando método de perturbação
 		
@@ -423,7 +405,7 @@ void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, in
 		
 		int perturbationProcedureIndex = trunc(randomIndex);
 		
-		PerturbationProcedures.at(perturbationProcedureIndex).apply(S, PerturbationProcedures.at(perturbationProcedureIndex).w);
+		PerturbationProcedures.at(perturbationProcedureIndex)->aplicar(S);
 		
 		// Aplicando buscas locais, na forma de RVND
 		LocalSearch(S);
@@ -436,13 +418,6 @@ void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, in
 		if (acceptanceCriteria(S)){
 			
 			S_r = S;
-			
-			// std::cout << "Nova solucao de referencia" << std::endl;
-			
-			// S_r.print_sol();
-			
-			// std::cout << "\n FO: " << S_r.FO() << std::endl;
-			
 			
 		}
 		
@@ -460,8 +435,6 @@ void AILS::executeAILS(int max_it, int max_it_no_improv, int it_RRH_interval, in
 			
 		}
 		
-		
-
 		it += 1;
 		
 	}

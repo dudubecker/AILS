@@ -6,7 +6,6 @@
 #include "LocalSearchOperator.hpp"
 #include "Perturbation.hpp"
 
-
 class AILS
 {
 public:
@@ -14,10 +13,10 @@ public:
 	// Atributos
 	
 	// Vetor que guardará os operadores de busca local já inicializados
-	std::vector<LocalSearchOperator> LSOperators {};
+	std::vector<LocalSearchOperator*> LSOperators {};
 	
 	// Vetor que guardará os métodos de perturbação já inicializados
-	std::vector<Perturbation> PerturbationProcedures {};
+	std::vector<Perturbation*> PerturbationProcedures {};
 	
 	// Melhor solução encontrada pelo algoritmo:
 	Sol S_p;
@@ -63,7 +62,7 @@ public:
 	
 	
 	// Constructor
-	AILS(Sol &S_inicial, std::vector<LocalSearchOperator> &LSOperatorsObjects, std::vector<Perturbation> &PerturbationProceduresObjects,
+	AILS(Sol &S_inicial, std::vector<LocalSearchOperator*> &LSOperatorsObjects, std::vector<Perturbation*> &PerturbationProceduresObjects,
 		double eta_value, double kappa_value, double Gamma_value, double d_b_value, double eta_noise_value, double alpha_value);
 	
 	
@@ -92,5 +91,6 @@ public:
 	Sol routeReductionHeuristic(Sol &S_i, int it_RRH);
 	
 };
+
 
 #endif // _AILS_H_

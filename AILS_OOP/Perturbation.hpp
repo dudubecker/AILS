@@ -4,18 +4,16 @@
 #include "Sol.hpp"
 #include "Instance.hpp"
 
+
 class Perturbation
 {
 public:
-
-	// Nome do método de perturbação: 
-	char name {};
 	
 	// Número de nós a serem removidos e reinseridos pela perturbação (grau de perturbação)
-	double w {3};
+	int w {3};
 	
 	// Quantidade de iterações pelas quais o método de perturbação passou (até o valor Gamma)
-	double it {};
+	int it {};
 	
 	// Distância média entre as soluções obtidas pela perturbação e a solução de referência s_r
 	double avgDist {};
@@ -23,22 +21,56 @@ public:
 	// Probabilidade de aplicação do ruído aleatório
 	double alpha = {};
 	
-	//Perturbation();
+	// Métodos
 	
-	// Inicialização padrão, apenas com o character
-	Perturbation(char perturbation_name){
+	// Método "padrão" para os objetos LocalSearchOperator
+	virtual Sol aplicar(Sol &S);
+	
+	virtual Sol aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido) = 0;
+	
+	virtual ~Perturbation() {} // Adicionamos um destrutor virtual
+	
+	protected:
+	// Construtor protegido para evitar instanciar a classe Heuristic diretamente
+	Perturbation() {}
+	
+	
+};
+
+class RandomRemoval : public Perturbation {
+public:
+	
+	// Constructor
+	RandomRemoval(){};
+	
+	Sol aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido) override;
+	
+};
+
+class WorstRemoval : public Perturbation {
+public:
+	
+	// Parâmetro "delta" para controle da aleatoriedade 
+	int delta {6};
+	
+	// Constructor
+	WorstRemoval(int delta_value){
 		
-		name = perturbation_name;
+		delta = delta_value;
 		
-	}
+	};
 	
-	~Perturbation();
+	Sol aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido) override;
 	
-	// Methods
+};
+
+class ConcentricRemoval : public Perturbation {
+public:
 	
-	// Método de aplicação da perturbação: tem como entrada uma solução e um número de pedidos a serem alterados, e como saída uma solução alterada (Rotas, L e A)
-	Sol apply(Sol &S, int n_requests);
+	// Constructor
+	ConcentricRemoval(){};
 	
+	Sol aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido) override;
 	
 };
 

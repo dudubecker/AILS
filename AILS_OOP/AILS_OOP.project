@@ -95,8 +95,6 @@
   <VirtualDirectory Name="src">
     <File Name="AILS.cpp"/>
     <File Name="AILS.hpp"/>
-    <File Name="heuristicsFunctions.cpp"/>
-    <File Name="heuristicsFunctions.h"/>
     <File Name="Perturbation.cpp"/>
     <File Name="Perturbation.hpp"/>
     <File Name="LocalSearchOperator.cpp"/>
