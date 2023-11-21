@@ -62,7 +62,6 @@ int main(int argc, char *argv[]){
 	// Para ter controle sobre os outputs
 	srand(seed);
 	
-	// /*
 	
 	// Inicializando métodos de perturbação:
 	

@@ -979,12 +979,6 @@ std::vector<double> Sol::calcularDadosMelhorInsercao(double &pedido, int &index_
 // Executa a melhor inserção considerando todas as rotas:
 void Sol::executarMelhorInsercao(double &pedido, bool aplicar_ruido){
 	
-	// Índice do nó de pickup correspondente ao request
-	int no_pickup {pedido};
-	
-	// Índice do nó de delivery correspondente ao request
-	int no_delivery {pedido + inst.n};
-	
 	// Variável que controlará o número de rotas factíveis encontradas
 	int num_rotas_factiveis {0};
 	
@@ -1001,7 +995,7 @@ void Sol::executarMelhorInsercao(double &pedido, bool aplicar_ruido){
 	int index_rota_min {};
 	
 	// Avaliando inserções
-	for (auto index_rota {0}; index_rota < rotas.size(); index_rota++){
+	for (size_t index_rota {0}; index_rota < rotas.size(); index_rota++){
 		
 		for (auto pos_insercao_no_pickup {1}; pos_insercao_no_pickup < rotas_size.at(index_rota) + 1; pos_insercao_no_pickup++){
 			
@@ -1057,12 +1051,6 @@ void Sol::executarMelhorInsercao(double &pedido, bool aplicar_ruido){
 
 // Executa a melhor inserção de um pedido considerando uma rota específica:
 void Sol::executarMelhorInsercao(double &pedido, int index_rota, bool aplicar_ruido){
-	
-	// Índice do nó de pickup correspondente ao request
-	int no_pickup {pedido};
-	
-	// Índice do nó de delivery correspondente ao request
-	int no_delivery {pedido + inst.n};
 	
 	// Variável que controlará o número de rotas factíveis encontradas
 	int num_rotas_factiveis {0};
@@ -1138,7 +1126,7 @@ void Sol::executarMelhoresInsercoes(std::vector<double> &pedidos, bool aplicar_r
 	int qtd_inseridos {0};
 	
 	// Quantidade de pedidos não atendidos na solução 
-	int qtd_pedidos_nao_atendidos {pedidos.size()};
+	int qtd_pedidos_nao_atendidos {L_size};
 	
 	// Condição de parada do algoritmo: caso não tenham sido encontradas posições factíveis de inserção ou caso todos os pedidos tenham sido inseridos
 	while (true){
@@ -1222,7 +1210,7 @@ void Sol::executarMelhoresInsercoes(std::vector<double> &pedidos, int index_rota
 	int qtd_inseridos {0};
 	
 	// Quantidade de pedidos não atendidos na solução 
-	int qtd_pedidos_nao_atendidos {pedidos.size()};
+	int qtd_pedidos_nao_atendidos {L_size};
 	
 	// Condição de parada do algoritmo: caso não tenham sido encontradas posições factíveis de inserção ou caso todos os pedidos tenham sido inseridos
 	while (true){
