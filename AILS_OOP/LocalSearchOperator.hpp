@@ -8,9 +8,6 @@ class LocalSearchOperator
 {
 public:
 	
-	// Nome do operador: 
-	char name {};
-	
 	// Probabilidade de aplicação do ruído aleatório
 	double alpha = {};
 	

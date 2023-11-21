@@ -68,10 +68,6 @@ class Instance
 	
 	~Instance();
 	
-	// Methods
-	
-	// void read(std::string file_name);
-	
 };
 
 #endif // _INSTANCE_H_

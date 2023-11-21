@@ -34,38 +34,38 @@ Sol Swap::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// std::cout << "Aplicando operador Swap" << std::endl;
 	
 	// Swap só deve funcionar caso o número de rotas seja maior ou igual a 2!
-
+	
 	// Quantidade "m" de rotas na solução:
-	int m = S.Rotas.size();
-
+	int m = S.rotas.size();
+	
 	// Swap só deve funcionar caso o número de rotas seja maior ou igual a 2!
 	if (m >= 2){
 		
 		// Escolhendo índice da rota R1:
-		double index_R1 = rand()%(m);
+		double index_r1 = rand()%(m);
 		
 		// Escolhendo índice da rota R2, necessariamente diferente de R1:
-		double index_R2 = rand()%(m);
+		double index_r2 = rand()%(m);
 		
-		while (index_R1 == index_R2){
+		while (index_r1 == index_r2){
 			
-			index_R2 = rand()%(m);
+			index_r2 = rand()%(m);
 			
 		}
 		
 		// Tratando exceção: quando a rota possui menos pedidos do que "k1" ou "k2"
 		
 		// k1: número de pedidos a serem retirados de R1 e inseridos em R2
-		int k1_value = std::min(k1, (S.RotasSize.at(index_R1) - 2)/2);
+		int k1_value = std::min(k1, (S.rotas_size.at(index_r1) - 2)/2);
 		
 		// k2: número de pedidos a serem retirados de R2 e inseridos em R1
-		int k2_value = std::min(k2, (S.RotasSize.at(index_R2) - 2)/2);
+		int k2_value = std::min(k2, (S.rotas_size.at(index_r2) - 2)/2);
 		
 		// Vetor com pedidos retirados da rota R1:
-		std::vector<double> pedidosRemovidos_R1 {};
+		std::vector<double> pedidos_removidos_r1 {};
 		
 		// Vetor com pedidos retirados da rota R2:
-		std::vector<double> pedidosRemovidos_R2 {};
+		std::vector<double> pedidos_removidos_r2 {};
 		
 		// Contabilizando número de pedidos atendidos pela rota R1
 		
@@ -75,7 +75,7 @@ Sol Swap::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		for (int i {0}; i < k1_value; i++){
 			
 			// Número de nós da rota R1 (talvez fique mais rápido contabilizando isso fora do laço e subtraindo 2 a cada remoção);
-			int n_nodes = S.RotasSize.at(index_R1);
+			int n_nodes = S.rotas_size.at(index_r1);
 			
 			// Inicializando pedido a ser removido:
 			double pedido {9999};
@@ -86,21 +86,21 @@ Sol Swap::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 				// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
 				double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 				
-				pedido = S.Rotas.at(index_R1).at(index_pedido_removido);
+				pedido = S.rotas.at(index_r1).at(index_pedido_removido);
 				
 			}
 			
 			// Removendo pedido de R1:
 			
-			S.remover_pedido(pedido);
-			pedidosRemovidos_R1.push_back(pedido);
+			S.removerPedido(pedido);
+			pedidos_removidos_r1.push_back(pedido);
 			
 		}
 		
 		// Escolhendo aleatoriamente k2 pedidos da rota R2 para serem retirados:
 		for (int i {0}; i < k2_value; i++){
 			
-			int n_nodes = S.RotasSize.at(index_R2);
+			int n_nodes = S.rotas_size.at(index_r2);
 			
 			// Inicializando pedido a ser removido:
 			double pedido {9999};
@@ -111,30 +111,30 @@ Sol Swap::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 				// Índice do pedido a ser removido na rota R1 (a partir do índice 1)
 				double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 				
-				pedido = S.Rotas.at(index_R2).at(index_pedido_removido);
+				pedido = S.rotas.at(index_r2).at(index_pedido_removido);
 				
 			}
 			
 			// Removendo pedido de R2:
 			
-			S.remover_pedido(pedido);
-			pedidosRemovidos_R2.push_back(pedido);
+			S.removerPedido(pedido);
+			pedidos_removidos_r2.push_back(pedido);
 			
 		}
 		
 		
 		// Inserindo os "k1" pedidos na rota R2, na melhor posição factível:
-		S.executar_melhores_insercoes(pedidosRemovidos_R1, index_R2, aplicar_ruido);
+		S.executarMelhoresInsercoes(pedidos_removidos_r1, index_r2, aplicar_ruido);
 		
 		// Inserindo os "k2" pedidos na rota R1, na melhor posição factível:
-		S.executar_melhores_insercoes(pedidosRemovidos_R2, index_R1, aplicar_ruido);
+		S.executarMelhoresInsercoes(pedidos_removidos_r2, index_r1, aplicar_ruido);
 		
 		// Inserindo em quaisquer posições os pedidos após tentar trocá-los:
 		
 		std::vector<double> pedidos_nao_inseridos = S.L;
 		
-		S.executar_melhores_insercoes(pedidos_nao_inseridos, aplicar_ruido);
-	
+		S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
+		
 	}
 	
 	return S;
@@ -147,27 +147,27 @@ Sol Shift::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// std::cout << "Aplicando operador Shift" << std::endl;
 	
 	// Quantidade "m" de rotas na solução:
-	int m = S.Rotas.size();
+	int m = S.rotas.size();
 	
 	// Shift só deve funcionar caso o número de rotas seja maior ou igual a 2!
 	if (m >= 2){
 		
 		// Escolhendo índice da rota R1, que terá os nós removidos
-		double index_R1 = rand()%(m);
+		double index_r1 = rand()%(m);
 		
 		// Escolhendo índice da rota R2, necessariamente diferente de R1:
-		double index_R2 = rand()%(m);
+		double index_r2 = rand()%(m);
 		
-		while (index_R1 == index_R2){
+		while (index_r1 == index_r2){
 			
-			index_R2 = rand()%(m);
+			index_r2 = rand()%(m);
 			
 		}
 		
 		// Retirando subseção com "k" elementos da rota:
 		
 		// Número de nós da rota R1
-		int n_nodes = S.RotasSize.at(index_R1);
+		int n_nodes = S.rotas_size.at(index_r1);
 		
 		// Escolhendo índice do nó inicial para remoção (a partir do índice 1)
 		int index_no_inicial = 1 + rand()%(n_nodes - 2);
@@ -181,7 +181,7 @@ Sol Shift::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		for (int index {index_no_inicial}; index < index_no_final; index++){
 			
-			k_nodes.push_back(S.Rotas.at(index_R1).at(index));
+			k_nodes.push_back(S.rotas.at(index_r1).at(index));
 			
 		}
 		
@@ -191,7 +191,7 @@ Sol Shift::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 			// Se o nó referido for de pickup e o nó de delivery correspondente também estiver na subseção:
 			if ((node <= S.inst.n) && (count(k_nodes.begin(), k_nodes.end(), node + S.inst.n))){
 				
-				S.remover_pedido(node);
+				S.removerPedido(node);
 				
 			}
 			
@@ -200,11 +200,11 @@ Sol Shift::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		std::vector<double> pedidos_nao_atendidos = S.L;
 		
-		S.executar_melhores_insercoes(pedidos_nao_atendidos, index_R2, aplicar_ruido);
+		S.executarMelhoresInsercoes(pedidos_nao_atendidos, index_r2, aplicar_ruido);
 		
 		pedidos_nao_atendidos = S.L;
 		
-		S.executar_melhores_insercoes(pedidos_nao_atendidos, aplicar_ruido);
+		S.executarMelhoresInsercoes(pedidos_nao_atendidos, aplicar_ruido);
 		
 	}
 	
@@ -218,16 +218,16 @@ Sol OrOpt::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// std::cout << "Aplicando operador Or-opt" << std::endl;
 	
 	// Quantidade "m" de rotas na solução:
-	int m = S.Rotas.size();
+	int m = S.rotas.size();
 	
 	// Escolhendo índice da rota que terá os nós removidos
 	double index_rota = rand()%(m);
 	
 	// Número de nós contidos na rota:
-	int n_nodes = S.RotasSize.at(index_rota);
+	int n_nodes = S.rotas_size.at(index_rota);
 	
 	// Corrigindo bug quanto "or_opt" é maior do que o número de pedidos na rota
-	int n_requests = (S.RotasSize.at(index_rota) - 2)/2;
+	int n_requests = (S.rotas_size.at(index_rota) - 2)/2;
 	
 	// "or_opt" deve ser o mínimo entre o valor atribuído à heurística e o número de pedidos atendidos pela rota
 	
@@ -248,11 +248,11 @@ Sol OrOpt::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 			// double index_pedido_removido = 1 + rand()%(n_nodes - 3);
 			double index_pedido_removido = 1 + rand()%(n_nodes - 2);
 			
-			pedido = S.Rotas.at(index_rota).at(index_pedido_removido);
+			pedido = S.rotas.at(index_rota).at(index_pedido_removido);
 			
 		}
 		
-		S.remover_pedido(pedido);
+		S.removerPedido(pedido);
 		
 		// Atualizando variável com tamanho da rota, após remoção do pedido
 		n_nodes -= 2;
@@ -261,11 +261,11 @@ Sol OrOpt::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	
 	std::vector<double> pedidos_nao_atendidos = S.L;
 	
-	S.executar_melhores_insercoes(pedidos_nao_atendidos, index_rota, aplicar_ruido);
+	//S.executarMelhoresInsercoes(pedidos_nao_atendidos, index_rota, aplicar_ruido);
 	
 	pedidos_nao_atendidos = S.L;
 	
-	S.executar_melhores_insercoes(pedidos_nao_atendidos, aplicar_ruido);
+	S.executarMelhoresInsercoes(pedidos_nao_atendidos, aplicar_ruido);
 	
 	return S;
 };
@@ -283,7 +283,7 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector <double> T (2*(S.inst.n) + 2, 0);
 	
 	// Iterando para cada rota na solução 
-	for (auto &rota: S.Rotas){
+	for (auto &rota: S.rotas){
 		
 		// Inicializando tempo da rota
 		int tempo_rota {0};
@@ -354,7 +354,7 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// Criando vetor D com pedidos removidos, inicializado pelo primeiro pedido escolhido
 	std::vector <double> D {};
 	
-	if (S.LSize == 0){
+	if (S.L_size == 0){
 		
 		double r = S.A.at(rand()%((S.A).size()));
 		D.push_back(r);
@@ -374,7 +374,7 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	int n_pedidos_removidos {0};
 	
 	
-	// *obs: k_shaws - 1 porque o primeiro pedido de referência já foi removido ou está em L!
+	// k_shaws - 1 porque o primeiro pedido de referência já foi removido ou está em L!
 	
 	while (n_pedidos_removidos < k_shaw - 1){
 		
@@ -438,7 +438,7 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		if (!count(S.L.begin(), S.L.end(), pedido)){
 			
-			S.remover_pedido(pedido);
+			S.removerPedido(pedido);
 			
 		}
 		
@@ -446,7 +446,7 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	
 	std::vector<double> pedidos_nao_atendidos = S.L;
 	
-	S.executar_melhores_insercoes(pedidos_nao_atendidos, aplicar_ruido);
+	S.executarMelhoresInsercoes(pedidos_nao_atendidos, aplicar_ruido);
 	
 	return S;
 };

@@ -12,43 +12,6 @@
 #include <random>
 #include <unordered_map>
 
-/*
-int main(){
-	
-	// Para ter controle sobre os outputs
-	srand(123);
-	
-	
-	// Nome da instância
-	std::string instancia = "instances/AA30";
-	
-	// Objeto instância
-	Instance inst(instancia);
-	
-	// Inicializando objeto solução;
-	Sol S(inst);
-	
-	S.print_sol();
-	std::cout << "\nFO: " << S.FO() << std::endl;
-	
-	// Inicializando LocalSearchOperator - Swap
-	// Swap* Swap_2_2 = new Swap(2,2);
-	Swap Swap_2_2(2,2);
-	
-	Swap_2_2.aplicar(S);
-	
-	RandomRemoval Random;
-	
-	Random.aplicar(S);
-	
-	S.print_sol();
-	std::cout << "\nFO: " << S.FO() << std::endl;
-	
-	return 0;
-}
-
-*/
-
 
 // init para rodar IRACE
 
@@ -207,7 +170,7 @@ int main(){
 	// srand(time(NULL));
 	
 	// Para ter controle sobre os outputs
-	srand(125);
+	srand(120);
 	
 	// Inicializando métodos de perturbação:
 	
@@ -263,12 +226,12 @@ int main(){
 	// Instâncias
 	
 	// Número de iterações por instância
-	int iteracoes_por_instancia = 5;
+	int iteracoes_por_instancia = 3;
 	
 	std::vector<std::string> instancias = {
 		
 		//"instances/AA5",
-		//"instances/AA10",
+		"instances/AA10",
 		//"instances/AA15",
 		//"instances/AA20",
 		"instances/AA25",
@@ -278,7 +241,7 @@ int main(){
 		//"instances/AA45",
 		//"instances/AA50",
 		//"instances/AA55",
-		//"instances/AA60",
+		"instances/AA60",
 		//"instances/AA65",
 		//"instances/AA70",
 		//"instances/AA75",
@@ -289,7 +252,7 @@ int main(){
 		//"instances/BB25",
 		//"instances/BB30",
 		//"instances/BB35",
-		//"instances/BB40",
+		"instances/BB40",
 		//"instances/BB45",
 		// "instances/BB50",
 		//"instances/BB55",
@@ -299,14 +262,14 @@ int main(){
 		// "instances/BB75",
 		//"instances/CC5",
 		//"instances/CC10",
-		//"instances/CC15",
+		"instances/CC15",
 		//"instances/CC20",
 		// "instances/CC25",
 		// "instances/CC30",
 		//"instances/CC35",
 		// "instances/CC40",
 		//"instances/CC45",
-		// "instances/CC50",
+		"instances/CC50",
 		//"instances/CC55",
 		// "instances/CC60",
 		// "instances/CC65",
@@ -318,7 +281,7 @@ int main(){
 		//"instances/DD20",
 		//"instances/DD25",
 		//"instances/DD30",
-		//"instances/DD35",
+		"instances/DD35",
 		//"instances/DD40",
 		// "instances/DD45",
 		// "instances/DD50",
@@ -340,6 +303,8 @@ int main(){
 		
 		// Inicializando objeto solução;
 		Sol S(inst);
+		
+		
 		
 		for (int i {0}; i < iteracoes_por_instancia; i++){
 			
@@ -364,17 +329,18 @@ int main(){
 			
 			
 			// Executando algoritmo
-			AILSObject.executeAILS(
-							10000, // max_it: Número máximo de iterações do algoritmo
-							2500, // max_it_no_improv: Número máximo de iterações sem melhoria
+			AILSObject.executarAILS(
+							1000, // max_it: Número máximo de iterações do algoritmo
+							500, // max_it_sem_melhoria: Número máximo de iterações sem melhoria
 							10, // it_RRH_interval: Intervalo de iterações para aplicação de route reduction heuristic
-							250 // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+							250, // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+							600 // max_t: tempo máximo de execução do algoritmo
 							);
 			
 			auto end = std::chrono::high_resolution_clock::now();
 			auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 			
-			std::cout << "\n" << instancia << ";" << AILSObject.S_p.FO() << ";" << elapsed.count() * 1e-9 << std::endl;
+			std::cout << "\n" << instancia << ";" << AILSObject.S_p.calcularFO() << ";" << elapsed.count() * 1e-9 << std::endl;
 			// }
 			
 			// catch(...){
@@ -382,9 +348,12 @@ int main(){
 			//	std::cout << "\n\nErro: instancia " << instancia << "\n\n" << std::endl; 
 			//	
 			//}
-		}
 		
+		}
+	
 	}
+	
+	
 	
 	return 0;
 	

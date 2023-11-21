@@ -8,28 +8,23 @@ Instance::Instance()
 }
 
 
-Instance::~Instance()
-{
-}
-
-
 // Inicializando
 
 Instance::Instance(std::string &file_name){
 	
 	// A string "instancia" armazenará os dados linha a linha
 	std::string instancia;
-	std::fstream myFile;
+	std::fstream my_file;
 	
-	myFile.open(file_name, std::ios::in);
-	if (myFile.is_open()){
+	my_file.open(file_name, std::ios::in);
+	if (my_file.is_open()){
 		std::string line;
 		
-		while (getline(myFile, line)){
+		while (getline(my_file, line)){
 			instancia.append(line + ' ');
 			
 		}
-		myFile.close();
+		my_file.close();
 		
 	}
 	
@@ -133,6 +128,7 @@ Instance::Instance(std::string &file_name){
 		
 	}
 	
+	// Atribuindo valor máximo de t para o atributo "max_dist" (utilizado na aplicação de ruído no cálculo da FO)
 	max_dist = max_t;
 	
 	// Dados normalizados para Shaw's removal: demandas (q) e tempos de viagem (t)
@@ -191,4 +187,8 @@ Instance::Instance(std::string &file_name){
 	}
 	
 	
+}
+
+Instance::~Instance()
+{
 }

@@ -32,7 +32,7 @@ Sol RandomRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// std::cout << "Solucao apos random removal" << std::endl;
 	
 	// Corrigindo bug de quando há mais pedidos a serem retirados do que pedidos na solução
-	int num_pedidos = std::min(w, S.ASize);
+	int num_pedidos = std::min(w, S.A_size);
 	
 	// Variável com quantidade de pedidos removidos
 	int n_pedidos_removidos {0};
@@ -42,7 +42,7 @@ Sol RandomRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		double pedido_aleatorio = S.A.at(rand()%S.A.size());
 		
-		S.remover_pedido(pedido_aleatorio);
+		S.removerPedido(pedido_aleatorio);
 		
 		n_pedidos_removidos += 1;
 		
@@ -54,14 +54,14 @@ Sol RandomRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	// S.executar_melhores_insercoes(pedidos_nao_inseridos);
+	S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
-	for (auto pedido: pedidos_nao_inseridos){
+	//for (auto pedido: pedidos_nao_inseridos){
 		
-		S.executar_melhor_insercao(pedido, aplicar_ruido);
+	//	S.executarMelhorInsercao(pedido, aplicar_ruido);
 		
-	}
+	//}
 	
 	return S;
 };
@@ -69,11 +69,11 @@ Sol RandomRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	
 	// Corrigindo bug de quando há mais pedidos a serem retirados do que pedidos na solução
-	int num_pedidos = std::min(w, S.ASize);
+	int num_pedidos = std::min(w, S.A_size);
 	
 	// std::cout << "Solucao apos worst removal" << std::endl;
 	
-	// Pedidos contidos na solução: complemento de L!
+	// Pedidos contidos na solução: complemento de L
 	std::vector<double> pedidos = S.A;
 	
 	// Variável com quantidade de pedidos removidos
@@ -88,7 +88,7 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		for (auto pedido: pedidos){
 			
 			// Calculando variação no custo da rota com a remoção do pedido
-			double delta = S.delta_FO_rem(pedido);
+			double delta = S.calcularVariacaoFO(pedido);
 			
 			delta_custos.push_back(delta);
 			
@@ -126,8 +126,6 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		double p = (double) rand()/(RAND_MAX);
 		
-		// *obs: ver se está ok com a ALNS esse cálculo!
-		
 		// Posição na lista ordenada de pedidos do pedido a ser retirado da solução
 		
 		// Obs: "-1" é necessário porque, caso o valor p seja muito próximo de 1, a posição de retirada será igual ao tamanho do vetor e isso resultará em um erro de índice!
@@ -144,7 +142,7 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 		
 		// Retirando pedido da solução
 		
-		S.remover_pedido(pedido_retirado);
+		S.removerPedido(pedido_retirado);
 		
 		n_pedidos_removidos += 1;
 		
@@ -154,12 +152,12 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	// S.executar_melhores_insercoes(pedidos_nao_inseridos);
+	// S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
 	for (auto pedido: pedidos_nao_inseridos){
 		
-		S.executar_melhor_insercao(pedido, aplicar_ruido);
+		S.executarMelhorInsercao(pedido, aplicar_ruido);
 		
 	}
 	
@@ -169,7 +167,7 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 Sol ConcentricRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	
 	// Corrigindo bug de quando há mais pedidos a serem retirados do que pedidos na solução
-	int num_pedidos = std::min(w, S.ASize);
+	int num_pedidos = std::min(w, S.A_size);
 	
 	// std::cout << "Solucao apos concentric removal" << std::endl;
 	
@@ -177,7 +175,7 @@ Sol ConcentricRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	double pedido_aleatorio = S.A.at(rand()%S.A.size());
 	
 	// Removendo pedido aleatório
-	S.remover_pedido(pedido_aleatorio);
+	S.removerPedido(pedido_aleatorio);
 	
 	// Considerando "w - 1" pedidos mais próximos do pedido escolhido (que estão na solução!)
 	
@@ -218,7 +216,7 @@ Sol ConcentricRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 			
 			if (!count(S.L.begin(), S.L.end(), pedido)){
 				
-				S.remover_pedido(pedido);
+				S.removerPedido(pedido);
 				
 				qtdPedidosRemovidos += 1;
 				
@@ -230,12 +228,12 @@ Sol ConcentricRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	// S.executar_melhores_insercoes(pedidos_nao_inseridos, aplicar_ruido);
+	// S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
 	for (auto pedido: pedidos_nao_inseridos){
 		
-		S.executar_melhor_insercao(pedido, aplicar_ruido);
+		S.executarMelhorInsercao(pedido, aplicar_ruido);
 		
 	}
 	
