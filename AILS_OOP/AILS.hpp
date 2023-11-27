@@ -1,10 +1,10 @@
 #ifndef _AILS_H_
 #define _AILS_H_
-#include <iostream>
 #include "Sol.hpp"
 #include "Instance.hpp"
 #include "LocalSearchOperator.hpp"
 #include "Perturbation.hpp"
+#include <iostream>
 
 class AILS
 {

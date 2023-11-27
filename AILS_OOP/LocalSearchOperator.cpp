@@ -332,8 +332,8 @@ Sol Shaw::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	// Vetor com graus de semelhança
 	std::vector<std::vector<double>> R(S.inst.n + 1, std::vector<double> (S.inst.n + 1, 9999));
 	
-	for (unsigned i {1}; i < S.inst.n + 1; i++){
-		for (unsigned j {1}; j < S.inst.n + 1; j++){
+	for (int i {1}; i < S.inst.n + 1; i++){
+		for (int j {1}; j < S.inst.n + 1; j++){
 			
 			 // Calculando valor de R_ij
 			

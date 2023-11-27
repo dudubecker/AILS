@@ -65,8 +65,8 @@ AILS::~AILS()
 }
 
 // Método que tentará reduzir rotas
-/*
-Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
+// /*
+Sol AILS::reduzirRotas(Sol &S_i, int it_RRH){
 	
 	// Criando uma cópia da rota:
 	Sol S = S_i;
@@ -80,18 +80,18 @@ Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 	while (n_it < it_RRH){
 		
 		// Caso "L" esteja vazio, a rota é excluída e os pedidos são colocados no banco de pedidos não atendidos
-		if (S.L.size() == 0){
+		if (S.L_size == 0){
 			
 			BKS = S;
 			
 			// Quantidade "m" de rotas na solução:
-			int m = S.Rotas.size();
+			int m = S.rotas.size();
 			
 			// Escolhendo índice da rota que será removida
 			double index_rota = rand()%(m);
 			
 			// Removendo rota
-			S.remover_rota(index_rota);
+			S.removerRota(index_rota);
 			
 		}
 		
@@ -99,26 +99,12 @@ Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 		
 		// Escolhendo e aplicando método de perturbação
 		
-		// int randomIndex = std::rand() % PerturbationProcedures.size();
+		int random_index = std::rand() % metodos_perturbacao.size();
 		
-		// int perturbationProcedureIndex = trunc(randomIndex);
+		int perturbationProcedureIndex = trunc(random_index);
 		
-		// Determinando quantidade de nós a serem removidos e reinseridos pela heurística
-		
-		//int RRH_nodes = {};
-		
-		//if (S.Rotas.size() <= 2){
-			
-		//	RRH_nodes = 8;
-			
-		//} else {
-			
-		//	RRH_nodes = 8;
-			
-		//}
-		
-		// Aplicando random removal
-		PerturbationProcedures.at(0).aplicar(S);
+		// Aplicando perturbação
+		metodos_perturbacao.at(random_index)->aplicar(S);
 		
 		n_it += 1;
 		
@@ -129,7 +115,7 @@ Sol AILS::routeReductionHeuristic(Sol &S_i, int it_RRH){
 	
 	
 }
-*/
+// */
 
 // Método de aplicação iterativa das buscas locais até não haver mais melhorias
 Sol AILS::executarBuscaLocal(Sol &S){
@@ -194,7 +180,7 @@ int AILS::calcularDistanciaSimetrica(Sol &S, Sol &S_r){
 	
 	// Contabilizando arcos da solução S
 	
-	for (int index_rota {0}; index_rota < S.rotas.size(); index_rota++){
+	for (size_t index_rota {0}; index_rota < S.rotas.size(); index_rota++){
 		
 		for (int index_no {0}; index_no < S.rotas_size.at(index_rota) - 1; index_no++){
 			
@@ -207,7 +193,7 @@ int AILS::calcularDistanciaSimetrica(Sol &S, Sol &S_r){
 	
 	// Contabilizando arcos da solução S_r
 	
-	for (int index_rota {0}; index_rota < S_r.rotas.size(); index_rota++){
+	for (size_t index_rota {0}; index_rota < S_r.rotas.size(); index_rota++){
 		
 		for (int index_no {0}; index_no < S_r.rotas_size.at(index_rota) - 1; index_no++){
 			
@@ -382,14 +368,13 @@ void AILS::executarAILS(int max_it, int max_it_sem_melhoria, int it_RRH_interval
 		
 		Sol S = S_r;
 		
-		
 		// Aplicando código para redução de rotas, a cada it_RRH_interval iterações
 		
-		//if ((it%it_RRH_interval == 0) && (S.Rotas.size() > 1)){
+		if ((it%it_RRH_intervalo == 0) && (S.rotas.size() > 1)){
 			
-		//	routeReductionHeuristic(S, it_RRH);
+			reduzirRotas(S, it_RRH);
 			
-		//}
+		}
 		
 		// Escolhendo e aplicando método de perturbação
 		

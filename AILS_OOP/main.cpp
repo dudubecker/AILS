@@ -1,17 +1,17 @@
-#include <iostream>
-#include <vector>
 #include "Instance.hpp"
 #include "Sol.hpp"
 #include "LocalSearchOperator.hpp"
 #include "AILS.hpp"
 #include "Perturbation.hpp"
+#include <iostream>
+#include <vector>
 #include <iomanip>
 #include <iterator>
 #include <algorithm>
 #include <thread>
 #include <random>
 #include <unordered_map>
-
+#include <fstream>
 
 // init para rodar IRACE
 
@@ -165,11 +165,51 @@ int main(int argc, char *argv[]){
 
 int main(){
 	
-	// Para gerar números aleatórios
-	// srand(time(NULL));
+	// Parâmetros de controle dos critérios de parada
+	
+	int max_it = 10000; // Número máximo de iterações do algoritmo
+	int max_it_sem_melhoria = 5000; // Número máximo de iterações sem melhoria
+	int it_RRH_intervalo = 1000; // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
+	int it_RRH = 50; // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+	int iteracoes_por_instancia = 2;
+	
+	// Parâmetros da meta-heurística
+	
+	long long seed = 1382364237;
+	double eta = 0.5;
+	double kappa = 0.45;
+	double gamma = 20;
+	int d_b = 24;
+	double noise = 0.03;
+	double alpha = 0.05;
 	
 	// Para ter controle sobre os outputs
-	srand(120);
+	srand(seed);
+	
+	// Arquivo de saída
+	std::string output = "output.txt";
+	
+	std::ofstream output_file(output, std::ios::app);
+	
+	// Escrevendo parâmetros
+	
+	output_file << "/****Parametros de controle dos criterios de parada****/\n\n";
+	
+	output_file << "max_it : " << max_it << std::endl;
+	output_file << "max_it_no_improv : " << max_it_sem_melhoria << std::endl;
+	output_file << "it_RRH_intervalo : " << it_RRH_intervalo << std::endl;
+	output_file << "it_RRH : " << it_RRH << std::endl;
+	
+	output_file << "\n\n/****Parametros da meta-heuristica****/\n\n";
+	
+	output_file << "seed : " << seed << std::endl;
+	output_file << "eta : " << eta << std::endl;
+	output_file << "kappa : " << kappa << std::endl;
+	output_file << "gamma : " << gamma << std::endl;
+	output_file << "d_b : " << d_b << std::endl;
+	output_file << "noise : " << noise << std::endl;
+	output_file << "alpha : " << alpha << "\n\n\n";
+	
 	
 	// Inicializando métodos de perturbação:
 	
@@ -221,137 +261,136 @@ int main(){
 										Swap_2_2,
 									};
 	
+	// Caminho para as instância:
+	std::string path = "instances/";
 	
 	// Instâncias
 	
-	// Número de iterações por instância
-	int iteracoes_por_instancia = 3;
-	
 	std::vector<std::string> instancias = {
 		
-		//"instances/AA5",
-		"instances/AA10",
-		//"instances/AA15",
-		//"instances/AA20",
-		"instances/AA25",
-		//"instances/AA30",
-		//"instances/AA35",
-		//"instances/AA40",
-		//"instances/AA45",
-		//"instances/AA50",
-		//"instances/AA55",
-		"instances/AA60",
-		//"instances/AA65",
-		//"instances/AA70",
-		//"instances/AA75",
-		//"instances/BB5",
-		//"instances/BB10",
-		//"instances/BB15",
-		//"instances/BB20",
-		//"instances/BB25",
-		//"instances/BB30",
-		//"instances/BB35",
-		"instances/BB40",
-		//"instances/BB45",
-		// "instances/BB50",
-		//"instances/BB55",
-		// "instances/BB60",
-		// "instances/BB65",
-		// "instances/BB70",
-		// "instances/BB75",
-		//"instances/CC5",
-		//"instances/CC10",
-		"instances/CC15",
-		//"instances/CC20",
-		// "instances/CC25",
-		// "instances/CC30",
-		//"instances/CC35",
-		// "instances/CC40",
-		//"instances/CC45",
-		"instances/CC50",
-		//"instances/CC55",
-		// "instances/CC60",
-		// "instances/CC65",
-		//"instances/CC70",
-		//"instances/CC75",
-		//"instances/DD5",
-		//"instances/DD10",
-		//"instances/DD15",
-		//"instances/DD20",
-		//"instances/DD25",
-		//"instances/DD30",
-		"instances/DD35",
-		//"instances/DD40",
-		// "instances/DD45",
-		// "instances/DD50",
-		//"instances/DD55",
-		// "instances/DD60",
-		//"instances/DD65",
-		// "instances/DD70",
-		// "instances/DD75",
+		"AA5",
+		"AA10",
+		"AA15",
+		"AA20",
+		"AA25",
+		"AA30",
+		"AA35",
+		"AA40",
+		"AA45",
+		//"AA50",
+		//"AA55",
+		"AA60",
+		//"AA65",
+		"AA70",
+		//"AA75",
+		"BB5",
+		"BB10",
+		//"BB15",
+		"BB20",
+		"BB25",
+		//"BB30",
+		//"BB35",
+		"BB40",
+		//"BB45",
+		// "BB50",
+		"BB55",
+		"BB60",
+		// "BB65",
+		// "BB70",
+		// "BB75",
+		//"CC5",
+		//"CC10",
+		"CC15",
+		"CC20",
+		// "CC25",
+		// "CC30",
+		//"CC35",
+		// "CC40",
+		"CC45",
+		"CC50",
+		"CC55",
+		// "CC60",
+		// "CC65",
+		//"CC70",
+		//"CC75",
+		"DD5",
+		"DD10",
+		//"DD15",
+		"DD20",
+		//"DD25",
+		//"DD30",
+		"DD35",
+		//"DD40",
+		"DD45",
+		// "DD50",
+		//"DD55",
+		"DD60",
+		//"DD65",
+		// "DD70",
+		// "DD75",
 	};
 	
 	
 	// Executando algoritmo
 	
-	
 	for (auto instancia: instancias){
-		
-		// Objeto instância
-		Instance inst(instancia);
-		
-		// Inicializando objeto solução;
-		Sol S(inst);
-		
-		
 		
 		for (int i {0}; i < iteracoes_por_instancia; i++){
 			
+			// Abrindo arquivo de saída
+			// Modo append
+			std::ofstream output_file(output, std::ios::app);
 			
-			// try{
-				
 			// Medindo tempo
 			auto begin = std::chrono::high_resolution_clock::now();
 			
+			std::string path_to_instance = path + instancia;
+			
+			// Objeto instância
+			Instance inst(path_to_instance);
+			
+			// Inicializando objeto solução;
+			Sol S(inst);
 			
 			// Inicializando objeto da AILS
 			AILS AILSObject(S, // Solução inicial
 							LSOperators, // Vetor com operadores de busca local
 							PerturbationProcedures, // Vetor com métodos de perturbação
-							0.5, // eta: Determina b_UP no critério de aceitação
-							0.45, // kappa: Porcentagem de soluções aceitas
-							20, // Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-							24, // d_b: Distância de referência ("ideal") entre soluções
-							0.03, // eta_noise: Utilizado no cálculo do ruído aleatório
-							0.05 // alpha: Probabilidade de aplicação do ruído aleatório
+							eta, // eta: Determina b_UP no critério de aceitação
+							kappa, // kappa: Porcentagem de soluções aceitas
+							gamma, // Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
+							d_b, // d_b: Distância de referência ("ideal") entre soluções
+							noise, // noise: Utilizado no cálculo do ruído aleatório
+							alpha // alpha: Probabilidade de aplicação do ruído aleatório
 							);
 			
 			
 			// Executando algoritmo
 			AILSObject.executarAILS(
-							1000, // max_it: Número máximo de iterações do algoritmo
-							500, // max_it_sem_melhoria: Número máximo de iterações sem melhoria
-							10, // it_RRH_interval: Intervalo de iterações para aplicação de route reduction heuristic
-							250, // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+							max_it, // max_it: Número máximo de iterações do algoritmo
+							max_it_sem_melhoria, // max_it_sem_melhoria: Número máximo de iterações sem melhoria
+							it_RRH_intervalo, // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
+							it_RRH, // it_RRH: Número iterações da route reduction heuristic a cada intervalo
 							600 // max_t: tempo máximo de execução do algoritmo
 							);
 			
 			auto end = std::chrono::high_resolution_clock::now();
 			auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 			
-			std::cout << "\n" << instancia << ";" << AILSObject.S_p.calcularFO() << ";" << elapsed.count() * 1e-9 << std::endl;
-			// }
 			
-			// catch(...){
-				
-			//	std::cout << "\n\nErro: instancia " << instancia << "\n\n" << std::endl; 
-			//	
-			//}
-		
+			// Printando output
+			std::cout << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << elapsed.count() * 1e-9 << std::endl;
+			
+			// Escrevendo output no arquivo
+			output_file << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << elapsed.count() * 1e-9 << std::endl;
+			
+			// Fechando arquivo
+			output_file.close();
+			
+			
+			
 		}
-	
 	}
-	
 	
 	
 	return 0;

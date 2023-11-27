@@ -1,6 +1,5 @@
 #ifndef _SOL_H
 #define _SOL_H
-
 #include "Instance.hpp"
 #include <iostream>
 #include <algorithm>

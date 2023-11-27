@@ -1,8 +1,8 @@
 #ifndef _Perturbation_H_
 #define _Perturbation_H_
-#include <iostream>
 #include "Sol.hpp"
 #include "Instance.hpp"
+#include <iostream>
 
 
 class Perturbation

@@ -1,8 +1,8 @@
 #ifndef _LSOperator_H_
 #define _LSOperator_H_
-#include <iostream>
 #include "Sol.hpp"
 #include "Instance.hpp"
+#include <iostream>
 
 class LocalSearchOperator
 {
