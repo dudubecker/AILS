@@ -112,8 +112,6 @@ Sol AILS::reduzirRotas(Sol &S_i, int it_RRH){
 	
 	return BKS;
 	
-	
-	
 }
 // */
 
@@ -127,7 +125,6 @@ Sol AILS::executarBuscaLocal(Sol &S){
 	
 	// Criando uma cópia do vetor que contém os operadores de busca local
 	std::vector<LocalSearchOperator*> operadores_busca_local_it = operadores_busca_local;
-	
 	
 	// Enquanto o vetor não está vazio
 	while(operadores_busca_local_it.size() > 0){
@@ -149,8 +146,6 @@ Sol AILS::executarBuscaLocal(Sol &S){
 			operadores_busca_local_it = operadores_busca_local;
 			
 		} else { // Caso a solução não tenha sido melhorada:
-			
-			
 			
 			// Restaurar solução incumbente
 			S = S_r_ls;
@@ -348,7 +343,13 @@ void AILS::executarAILS(int max_it, int max_it_sem_melhoria, int it_RRH_interval
 	// Variável para o número de iterações sem melhoria:
 	int it_sem_melhoria = 0;
 	
-	while (it < max_it){
+	// Variável para o tempo de execução
+	double t_AILS {0};
+	
+	while ((it < max_it) && (t_AILS < max_t)){
+		
+		// Medindo tempo
+		auto begin = std::chrono::high_resolution_clock::now();
 		
 		if (it_sem_melhoria == max_it_sem_melhoria){
 			
@@ -356,23 +357,20 @@ void AILS::executarAILS(int max_it, int max_it_sem_melhoria, int it_RRH_interval
 			
 		}
 		
-		
-		//if (it%1000 == 0){
+		//if (it%200 == 0){
 			
 		//	std::cout << "Iteracao " << it << std::endl;
 			
 		//}
 		
-		
 		// Criando uma cópia da solução de referência
-		
 		Sol S = S_r;
 		
 		// Aplicando código para redução de rotas, a cada it_RRH_interval iterações
 		
 		if ((it%it_RRH_intervalo == 0) && (S.rotas.size() > 1)){
 			
-			reduzirRotas(S, it_RRH);
+			S = reduzirRotas(S, it_RRH);
 			
 		}
 		
@@ -412,6 +410,11 @@ void AILS::executarAILS(int max_it, int max_it_sem_melhoria, int it_RRH_interval
 		}
 		
 		it += 1;
+		
+		auto end = std::chrono::high_resolution_clock::now();
+		auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+		
+		t_AILS += elapsed.count() * 1e-9;
 		
 	}
 	

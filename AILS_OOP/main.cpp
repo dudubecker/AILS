@@ -18,6 +18,14 @@
 /*
 int main(int argc, char *argv[]){
 	
+	
+	// Parâmetros de controle dos critérios de parada
+	
+	int max_it = 1250; // Número máximo de iterações do algoritmo
+	int max_it_sem_melhoria = 750; // Número máximo de iterações sem melhoria
+	int it_RRH_intervalo = 125; // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
+	int it_RRH = 40; // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+	
 	// Verifica se o número correto de argumentos foi fornecido
 	if (argc != 17) {
 		std::cerr << "Uso: seu_executavel <id_configuration> <id_instance> <seed> <instancia> --eta <eta> --kappa <kappa> --Gamma <Gamma> --d_b <d_b> --noise <noise> --alpha <alpha>" << std::endl;
@@ -64,152 +72,6 @@ int main(int argc, char *argv[]){
 	
 	
 	// Inicializando métodos de perturbação:
-	
-	Perturbation Random('R');
-	
-	Perturbation Worst('W');
-	
-	Perturbation Concentric('C');
-	
-	// Inicializando operadores de busca local:
-	
-	LocalSearchOperator Or_opt_1('O', 1);
-	
-	LocalSearchOperator Or_opt_2('O', 2);
-	
-	LocalSearchOperator Shaw_1('H', 2,0.3,0.4,0.3);
-	
-	LocalSearchOperator Shaw_2('H', 2,1,0,0);
-	
-	LocalSearchOperator Shaw_3('H', 2,0,1,0);
-	
-	LocalSearchOperator Shaw_4('H', 2,0,0,1);
-	
-	LocalSearchOperator Shift_2('T', 2);
-	
-	LocalSearchOperator Shift_4('T', 4);
-	
-	LocalSearchOperator Swap_1_1('S', 1,1);
-	
-	LocalSearchOperator Swap_2_1('S', 2,1);
-	
-	LocalSearchOperator Swap_2_2('S', 2,2);
-	
-	
-	// Vetor que guardará os métodos de perturbação já inicializados
-	std::vector<Perturbation> PerturbationProcedures {Random, Worst, Concentric};
-	
-	// Vetor que guardará os operadores de busca local já inicializados
-	std::vector<LocalSearchOperator> LSOperators{
-										Or_opt_1,
-										Or_opt_2,
-										Shaw_1,
-										Shaw_2,
-										Shaw_3,
-										Shaw_4,
-										Shift_2,
-										Shift_4,
-										Swap_1_1,
-										Swap_2_1,
-										Swap_2_2,
-	};
-	
-	// Executando algoritmo
-	
-	// Objeto instância
-	Instance inst(instancia);
-	
-	// Inicializando objeto solução;
-	Sol S(inst);
-	
-	// Medindo tempo
-	// auto begin = std::chrono::high_resolution_clock::now();
-	
-	// Inicializando objeto da AILS
-	AILS AILSObject(S, // Solução inicial
-					LSOperators, // Vetor com operadores de busca local
-					PerturbationProcedures, // Vetor com métodos de perturbação
-					eta, // eta: Determina b_UP no critério de aceitação
-					kappa, // kappa: Porcentagem de soluções aceitas
-					Gamma, // Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
-					d_b, // d_b: Distância de referência ("ideal") entre soluções
-					noise, // noise: Utilizado no cálculo do ruído aleatório
-					alpha // alpha: Probabilidade de aplicação do ruído aleatório
-	);
-	
-	
-	// Executando algoritmo
-	AILSObject.executeAILS(
-					10000, // max_it: Número máximo de iterações do algoritmo
-					2500, // max_it_no_improv: Número máximo de iterações sem melhoria
-					10, // it_RRH_interval: Intervalo de iterações para aplicação de route reduction heuristic
-					10 // it_RRH: Número iterações da route reduction heuristic a cada intervalo
-	);
-	
-	// auto end = std::chrono::high_resolution_clock::now();
-	// auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-	
-	// std::cout << "\n" << instancia << ";" << AILSObject.S_p.FO() << ";" << elapsed.count() * 1e-9 << std::endl;
-	
-	std::cout << AILSObject.S_p.FO() << std::endl;
-	
-	// return AILSObject.S_p.FO();
-	// return 0;
-}
-*/
-
-
-// Init normal, para ensaios computacionais
-
-// /*
-
-int main(){
-	
-	// Parâmetros de controle dos critérios de parada
-	
-	int max_it = 10000; // Número máximo de iterações do algoritmo
-	int max_it_sem_melhoria = 5000; // Número máximo de iterações sem melhoria
-	int it_RRH_intervalo = 1000; // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
-	int it_RRH = 50; // it_RRH: Número iterações da route reduction heuristic a cada intervalo
-	int iteracoes_por_instancia = 2;
-	
-	// Parâmetros da meta-heurística
-	
-	long long seed = 1382364237;
-	double eta = 0.5;
-	double kappa = 0.45;
-	double gamma = 20;
-	int d_b = 24;
-	double noise = 0.03;
-	double alpha = 0.05;
-	
-	// Para ter controle sobre os outputs
-	srand(seed);
-	
-	// Arquivo de saída
-	std::string output = "output.txt";
-	
-	std::ofstream output_file(output, std::ios::app);
-	
-	// Escrevendo parâmetros
-	
-	output_file << "/****Parametros de controle dos criterios de parada****/\n\n";
-	
-	output_file << "max_it : " << max_it << std::endl;
-	output_file << "max_it_no_improv : " << max_it_sem_melhoria << std::endl;
-	output_file << "it_RRH_intervalo : " << it_RRH_intervalo << std::endl;
-	output_file << "it_RRH : " << it_RRH << std::endl;
-	
-	output_file << "\n\n/****Parametros da meta-heuristica****/\n\n";
-	
-	output_file << "seed : " << seed << std::endl;
-	output_file << "eta : " << eta << std::endl;
-	output_file << "kappa : " << kappa << std::endl;
-	output_file << "gamma : " << gamma << std::endl;
-	output_file << "d_b : " << d_b << std::endl;
-	output_file << "noise : " << noise << std::endl;
-	output_file << "alpha : " << alpha << "\n\n\n";
-	
 	
 	// Inicializando métodos de perturbação:
 	
@@ -259,75 +121,213 @@ int main(){
 										Swap_1_1,
 										Swap_2_1,
 										Swap_2_2,
+	};
+	
+	// Executando algoritmo
+	
+	// Objeto instância
+	Instance inst(instancia);
+	
+	// Inicializando objeto solução;
+	Sol S(inst);
+	
+	// Medindo tempo
+	// auto begin = std::chrono::high_resolution_clock::now();
+	
+	// Inicializando objeto da AILS
+	AILS AILSObject(S, // Solução inicial
+					LSOperators, // Vetor com operadores de busca local
+					PerturbationProcedures, // Vetor com métodos de perturbação
+					eta, // eta: Determina b_UP no critério de aceitação
+					kappa, // kappa: Porcentagem de soluções aceitas
+					Gamma, // Gamma: Determina quantas iterações cada heurística de perturbação realizará com um mesmo "peso"
+					d_b, // d_b: Distância de referência ("ideal") entre soluções
+					noise, // noise: Utilizado no cálculo do ruído aleatório
+					alpha // alpha: Probabilidade de aplicação do ruído aleatório
+	);
+	
+	// Executando algoritmo
+	AILSObject.executarAILS(
+					max_it, // max_it: Número máximo de iterações do algoritmo
+					max_it_sem_melhoria, // max_it_sem_melhoria: Número máximo de iterações sem melhoria
+					it_RRH_intervalo, // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
+					it_RRH, // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+					600 // max_t: tempo máximo de execução do algoritmo
+	);
+	
+	// auto end = std::chrono::high_resolution_clock::now();
+	// auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+	
+	// std::cout << "\n" << instancia << ";" << AILSObject.S_p.FO() << ";" << elapsed.count() * 1e-9 << std::endl;
+	
+	std::cout << AILSObject.S_p.calcularFO() << std::endl;
+	
+}
+*/
+
+
+// Init normal, para ensaios computacionais
+
+// /*
+
+int main(){
+	
+	// Parâmetros de controle dos critérios de parada
+	
+	int max_it = 2000; // Número máximo de iterações do algoritmo
+	int max_it_sem_melhoria = 1500; // Número máximo de iterações sem melhoria
+	int it_RRH_intervalo = 125; // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
+	int it_RRH = 40; // it_RRH: Número iterações da route reduction heuristic a cada intervalo
+	int max_t = 3600; // Tempo máximo de execução do algoritmo
+	int iteracoes_por_instancia = 5;
+	
+	// Parâmetros da meta-heurística
+	
+	long long seed = 1382364237;
+	double eta = 0.7;
+	double kappa = 0.80;
+	double gamma = 25;
+	int d_b = 16;
+	double noise = 0.07;
+	double alpha = 0.03;
+	
+	// Para ter controle sobre os outputs
+	srand(seed);
+	
+	// Arquivo de saída
+	std::string output = "output.txt";
+	
+	std::ofstream output_file(output, std::ios::app);
+	
+	// Escrevendo parâmetros
+	
+	output_file << "Parametros de controle dos criterios de parada\n\n";
+	
+	output_file << "max_it : " << max_it << std::endl;
+	output_file << "max_it_no_improv : " << max_it_sem_melhoria << std::endl;
+	output_file << "it_RRH_intervalo : " << it_RRH_intervalo << std::endl;
+	output_file << "it_RRH : " << it_RRH << std::endl;
+	
+	output_file << "\n\nParametros da meta-heuristica\n\n";
+	
+	output_file << "seed : " << seed << std::endl;
+	output_file << "eta : " << eta << std::endl;
+	output_file << "kappa : " << kappa << std::endl;
+	output_file << "gamma : " << gamma << std::endl;
+	output_file << "d_b : " << d_b << std::endl;
+	output_file << "noise : " << noise << std::endl;
+	output_file << "alpha : " << alpha << "\n\n\n";
+	
+	
+	// Inicializando métodos de perturbação:
+	
+	RandomRemoval* Random = new RandomRemoval;
+	
+	WorstRemoval* Worst = new WorstRemoval(3);
+	
+	ConcentricRemoval* Concentric = new ConcentricRemoval;
+	
+	// Inicializando operadores de busca local:
+	
+	OrOpt* Or_opt_1 = new OrOpt(1);
+	
+	OrOpt* Or_opt_2 = new OrOpt(2);
+	
+	Shaw* Shaw_1 = new Shaw(2,0.3,0.4,0.3);
+	
+	Shift* Shift_2 = new Shift(2);
+	
+	Shift* Shift_4 = new Shift(4);
+	
+	Swap* Swap_1_1 = new Swap(1,1);
+	
+	Swap* Swap_2_1 = new Swap(2,1);
+	
+	Swap* Swap_2_2 = new Swap(2,2);
+	
+	// Vetor que guardará os métodos de perturbação já inicializados
+	std::vector<Perturbation*> PerturbationProcedures {Random, Worst, Concentric};
+	
+	// Vetor que guardará os operadores de busca local já inicializados
+	std::vector<LocalSearchOperator*> LSOperators {
+										Or_opt_1,
+										Or_opt_2,
+										Shaw_1,
+										Shift_2,
+										Shift_4,
+										Swap_1_1,
+										Swap_2_1,
+										Swap_2_2,
 									};
 	
 	// Caminho para as instância:
-	std::string path = "instances/";
+	std::string path = "instances/li_lim/400/";
 	
 	// Instâncias
 	
 	std::vector<std::string> instancias = {
 		
-		"AA5",
-		"AA10",
-		"AA15",
-		"AA20",
-		"AA25",
-		"AA30",
-		"AA35",
-		"AA40",
-		"AA45",
+		//"AA5",
+		//"AA10",
+		//"AA15",
+		//"AA20",
+		//"AA25",
+		//"AA30",
+		//"AA35",
+		//"AA40",
+		//"AA45",
 		//"AA50",
 		//"AA55",
-		"AA60",
+		//"AA60",
 		//"AA65",
-		"AA70",
+		//"AA70",
 		//"AA75",
-		"BB5",
-		"BB10",
+		//"BB5",
+		//"BB10",
 		//"BB15",
-		"BB20",
-		"BB25",
+		//"BB20",
+		//"BB25",
 		//"BB30",
 		//"BB35",
-		"BB40",
+		//"BB40",
 		//"BB45",
-		// "BB50",
-		"BB55",
-		"BB60",
+		//"BB50",
+		//"BB55",
+		//"BB60",
 		// "BB65",
-		// "BB70",
+		//"BB70",
 		// "BB75",
 		//"CC5",
 		//"CC10",
-		"CC15",
-		"CC20",
+		//"CC15",
+		//"CC20",
 		// "CC25",
-		// "CC30",
+		//"CC30",
 		//"CC35",
-		// "CC40",
-		"CC45",
-		"CC50",
-		"CC55",
+		//"CC40",
+		//"CC45",
+		//"CC50",
+		//"CC55",
 		// "CC60",
 		// "CC65",
 		//"CC70",
 		//"CC75",
-		"DD5",
-		"DD10",
+		//"DD5",
+		//"DD10",
 		//"DD15",
-		"DD20",
+		//"DD20",
 		//"DD25",
 		//"DD30",
-		"DD35",
+		//"DD35",
 		//"DD40",
-		"DD45",
+		//"DD45",
 		// "DD50",
 		//"DD55",
-		"DD60",
+		//"DD60",
 		//"DD65",
 		// "DD70",
 		// "DD75",
+		"LR2_4_4.txt",
 	};
 	
 	
@@ -371,7 +371,7 @@ int main(){
 							max_it_sem_melhoria, // max_it_sem_melhoria: Número máximo de iterações sem melhoria
 							it_RRH_intervalo, // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
 							it_RRH, // it_RRH: Número iterações da route reduction heuristic a cada intervalo
-							600 // max_t: tempo máximo de execução do algoritmo
+							max_t // max_t: tempo máximo de execução do algoritmo
 							);
 			
 			auto end = std::chrono::high_resolution_clock::now();
@@ -379,11 +379,11 @@ int main(){
 			
 			
 			// Printando output
-			std::cout << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << elapsed.count() * 1e-9 << std::endl;
+			std::cout << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << AILSObject.S_p.rotas.size() << ";" << elapsed.count() * 1e-9 << std::endl;
 			
 			// Escrevendo output no arquivo
-			output_file << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << elapsed.count() * 1e-9 << std::endl;
-			
+			output_file << instancia << ";" << std::setprecision(7) << AILSObject.S_p.calcularFO() << ";" << AILSObject.S_p.checarFactibilidadeSolucao() << ";" << AILSObject.S_p.rotas.size() << ";" << elapsed.count() * 1e-9 << std::endl;
+
 			// Fechando arquivo
 			output_file.close();
 			

@@ -1,0 +1,954 @@
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 10000
+max_it_no_improv : 5000
+it_RRH_intervalo : 1000
+it_RRH : 50
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31119.07;1;32.80926
+AA30;31121.33;1;17.36512
+AA30;31119.07;1;31.79703
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1500
+max_it_no_improv : 1000
+it_RRH_intervalo : 250
+it_RRH : 50
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31120.56;1;5.875298
+AA30;31120.1;1;4.361424
+AA30;31121.27;1;3.627133
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1500
+max_it_no_improv : 1000
+it_RRH_intervalo : 250
+it_RRH : 50
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31120.56;1;5.356947
+AA30;31120.1;1;4.454896
+AA30;31121.27;1;3.691412
+AA50;41797.39;1;9.589701
+AA50;41799.2;1;9.859667
+AA50;41791.69;1;9.766288
+BB30;31088.92;1;4.83961
+BB30;31086.27;1;4.792366
+BB30;31089.53;1;3.845557
+BB50;41762.73;1;9.977685
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1500
+max_it_no_improv : 750
+it_RRH_intervalo : 200
+it_RRH : 50
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31122.32;1;4.018241
+AA30;31121.06;1;4.975213
+AA30;31121.26;1;5.419978
+AA50;41796.9;1;8.224093
+AA50;41798.47;1;10.00158
+AA50;41810.79;1;6.234653
+BB30;31086.27;1;4.537041
+BB30;31086.27;1;4.717343
+BB30;31091.02;1;3.338997
+BB50;51722.6;1;9.610096
+BB50;51715.79;1;4.698643
+BB50;41815.04;1;9.580758
+CC30;31102.14;1;3.104169
+CC30;31095.22;1;4.529201
+CC30;31089.55;1;4.998981
+CC50;41745.04;1;9.010177
+CC50;51741.13;1;8.524755
+CC50;51743.26;1;5.61379
+DD60;51935.33;1;9.966684
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1200
+max_it_no_improv : 750
+it_RRH_intervalo : 250
+it_RRH : 75
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31123.11;1;4.791793
+AA30;31119.07;1;3.960942
+AA30;31120.95;1;3.036002
+AA50;41799.82;1;8.258694
+AA50;41795.6;1;7.769687
+AA50;41804.12;1;7.875363
+BB30;31086.27;1;2.70901
+BB30;31090.95;1;4.122492
+BB30;31088.92;1;5.652559
+BB50;51722.17;1;7.55047
+BB50;51713.04;1;7.094838
+BB50;51730.12;1;7.283962
+CC30;31093.56;1;3.832024
+CC30;31092.97;1;2.556283
+CC30;31088.02;1;3.747658
+CC50;51722.22;1;7.057221
+CC50;51735.56;1;6.890246
+CC50;51742.71;1;6.671103
+alpha : 0.05
+
+
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1500
+max_it_no_improv : 750
+it_RRH_intervalo : 150
+it_RRH : 25
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31121.05;1;5.543022
+AA30;31121.12;1;5.137057
+AA30;31120.2;1;4.793879
+AA50;41801.38;1;9.392167
+AA50;41784.31;1;8.169779
+AA50;41795.64;1;6.364129
+BB30;31086.27;1;4.656827
+BB30;31088.92;1;4.811836
+BB30;31089.27;1;2.365916
+BB50;41736.29;1;8.002398
+BB50;41716.26;1;7.421405
+BB50;51722.02;1;6.225852
+CC30;31097.7;1;3.171717
+CC30;31094.74;1;4.626075
+CC30;31095.07;1;3.371976
+CC50;51738.77;1;8.231904
+CC50;51745.2;1;8.302031
+CC50;41762.29;1;8.366401
+alpha : 0.05
+
+
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1250
+max_it_no_improv : 900
+it_RRH_intervalo : 100
+it_RRH : 10
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31121.48;1;4.698951
+AA30;31121.06;1;4.117549
+AA30;31122.21;1;4.05248
+AA50;41788.08;1;8.216101
+AA50;41805.2;1;8.117963
+AA50;41803.93;1;8.49579
+BB30;31086.27;1;3.907195
+BB30;31086.88;1;4.119516
+BB30;31090.5;1;3.955872
+BB50;51720.49;1;8.17259
+BB50;51717.04;1;7.450764
+BB50;51723.81;1;7.446817
+CC30;31095.22;1;3.946885
+CC30;31089.25;1;3.234394
+CC30;31094.7;1;3.948579
+CC50;51740.79;1;7.349182
+CC50;51737.64;1;7.163256
+CC50;51734.5;1;7.221497
+alpha : 0.05
+
+
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 150
+it_RRH : 30
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA30;31121.09;1;4.801579
+AA30;31121.29;1;3.730721
+AA30;31122.05;1;4.220186
+AA50;41792.92;1;9.249737
+AA50;41816.93;1;8.484196
+AA50;41807.7;1;6.094857
+BB30;31086.62;1;3.979527
+BB30;31090.29;1;3.417172
+BB30;31086.62;1;2.758901
+BB50;41730.3;1;7.142015
+BB50;51720.81;1;5.197344
+BB50;51721.66;1;9.196079
+CC30;31115.25;1;5.289888
+CC30;31102.38;1;3.498195
+CC30;31098.13;1;2.825282
+CC50;41764.48;1;4.93584
+CC50;51750.95;1;7.168174
+CC50;51742.84;1;6.014144
+alpha : 0.05
+
+
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 150
+it_RRH : 30
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA70;62373.06;1;12.07009
+AA70;62400.91;1;7.532407
+AA70;62396.37;1;12.55515
+BB70;82945.66;1;8.453735
+BB70;82940.22;1;11.06465
+BB70;82938.75;1;10.9456
+alpha : 0.05
+
+
+/****Parametros de controle dos criterios de parada****/
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 150
+it_RRH : 30
+
+
+/****Parametros da meta-heuristica****/
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA70;62373.06;1;12.69716
+AA70;62400.91;1;8.776733
+AA70;62396.37;1;12.67112
+BB70;82945.66;1;7.93269
+BB70;82940.22;1;11.13914
+BB70;82938.75;1;10.99975
+alpha : 0.05
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.05
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.05
+AA70;62404.25;1;11.32733
+AA70;62390.14;1;12.15975
+AA70;62398.45;1;19.44284
+AA70;62411.19;1;11.46147
+AA70;62377.91;1;11.18955
+BB70;82953.92;1;10.5777
+BB70;82933.08;1;10.17672
+BB70;82948.89;1;9.961014
+BB70;82938.95;1;10.71796
+BB70;82920.29;1;9.826457
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.5
+kappa : 0.45
+gamma : 20
+d_b : 24
+noise : 0.03
+AA70;62426.06;1;11.87744
+AA70;62391.43;1;12.32266
+AA70;62398.07;1;12.02766
+AA70;62401.02;1;13.87605
+AA70;62413.38;1;11.60793
+BB70;82953.5;1;13.58486
+BB70;82948.68;1;8.489338
+BB70;73039.26;1;12.34885
+BB70;82954.62;1;11.01072
+BB70;82961;1;12.04602
+alpha : 0.05
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62385.66;1;15.54832
+AA70;62365.88;1;11.47436
+AA70;62401.43;1;11.65858
+AA70;62397.02;1;10.61398
+AA70;62408.56;1;23.1778
+BB70;82971.07;1;22.45929
+BB70;82929.59;1;19.47314
+BB70;72953.89;1;13.26921
+BB70;82937.89;1;9.393923
+BB70;82924.51;1;6.754833
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62402.25;1;6;24.9177
+AA70;62391.83;1;6;19.22121
+AA70;62406.96;1;6;28.72113
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62404.13;1;6;25.82679
+AA70;62401.65;1;6;19.56772
+AA70;62413.43;1;6;17.31538
+AA70;62416.39;1;6;11.462
+AA70;62398.34;1;6;11.70985
+BB70;72996.7;1;7;11.62885
+BB70;82949.54;1;8;13.45154
+BB70;82940.6;1;8;11.29522
+BB70;82948.34;1;8;12.78544
+BB70;82940.31;1;8;16.8397
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62391.31;1;6;9.209295
+AA70;62390.34;1;6;8.781909
+AA70;62419.42;1;6;7.368064
+AA70;62378.9;1;6;11.31103
+AA70;62379.35;1;6;7.038006
+BB70;82941.26;1;8;13.23496
+BB70;82941.76;1;8;8.289081
+BB70;82933.67;1;8;9.259799
+BB70;82942.8;1;8;7.290933
+BB70;82945.18;1;8;6.579748
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.75
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62390.92;1;6;15.62705
+AA70;62393.93;1;6;12.63886
+AA70;62397.69;1;6;14.20922
+AA70;62385.26;1;6;15.75059
+AA70;62406.44;1;6;15.2397
+BB70;82950.63;1;8;10.55082
+BB70;82958.29;1;8;9.539796
+BB70;82955.94;1;8;12.85691
+BB70;82944.21;1;8;9.558669
+BB70;82910.49;1;8;12.63117
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62394.27;1;6;11.65138
+AA70;62405.67;1;6;10.51891
+AA70;62409.85;1;6;11.40091
+AA70;62420.91;1;6;9.069626
+AA70;62389.82;1;6;11.79266
+BB70;82959.52;1;8;8.612476
+BB70;82956.85;1;8;10.04126
+BB70;82959.34;1;8;9.979855
+BB70;72975.13;1;7;10.87991
+BB70;73026.37;1;7;11.74461
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62374.06;1;6;15.89842
+AA70;62395.71;1;6;12.26869
+AA70;62400.28;1;6;7.630357
+AA70;62401.84;1;6;7.81113
+AA70;62407.43;1;6;10.39356
+BB70;82950.24;1;8;8.268312
+BB70;82957.68;1;8;8.534161
+BB70;72963.31;1;7;9.358994
+BB70;82931.8;1;8;5.97396
+BB70;82935.44;1;8;8.850281
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62374.06;1;6;11.78099
+AA70;62395.71;1;6;15.49074
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62374.06;1;6;17.76092
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;62374.06;1;6;10.83579
+AA70;62395.71;1;6;10.23166
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52441.16;1;5;12.78693
+AA70;52453.3;1;5;11.79789
+AA70;52462.17;1;5;13.72835
+AA70;52462.48;1;5;12.38381
+AA70;52452.57;1;5;11.91876
+BB70;72996.45;1;7;7.621551
+BB70;73009.6;1;7;15.17858
+BB70;73015.93;1;7;10.37439
+BB70;73025.76;1;7;9.463513
+BB70;72940.97;1;7;10.11702
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52441.16;1;5;12.30087
+AA70;52453.3;1;5;11.61935
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52441.16;1;5;12.28754
+AA70;52453.3;1;5;11.54514
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52441.16;1;5;11.97083
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52453.81;1;5;9.551042
+AA70;52456.73;1;5;7.599689
+AA70;52445.89;1;5;8.498881
+AA70;52461.92;1;5;8.354211
+AA70;52464.56;1;5;7.937417
+BB70;72976.24;1;7;7.396438
+BB70;72998.11;1;7;6.718274
+BB70;72968.13;1;7;6.927895
+BB70;72959.72;1;7;6.343294
+BB70;72978.13;1;7;7.295733
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52467.2;1;5;14.26415
+AA70;52442.71;1;5;11.40779
+AA70;52429.99;1;5;12.70928
+AA70;52480.27;1;5;12.45356
+AA70;52430.26;1;5;12.26217
+BB70;73169.91;1;7;8.720687
+BB70;82942.29;1;8;8.764973
+BB70;82955.95;1;8;8.843657
+BB70;72972.05;1;7;9.552696
+BB70;82925.18;1;8;8.93337
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 1250
+max_it_no_improv : 750
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52453.81;1;5;10.15439
+AA70;52456.73;1;5;15.29694
+Parametros de controle dos criterios de parada
+
+max_it : 5000
+max_it_no_improv : 5000
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52438.44;1;5;35.22487
+AA70;52422.73;1;5;40.67102
+AA70;52426.76;1;5;37.95993
+AA70;52427.96;1;5;36.33284
+AA70;52425.52;1;5;56.82124
+BB70;72955.67;1;7;36.06348
+BB70;72971.95;1;7;36.40278
+BB70;72954.36;1;7;38.7956
+BB70;72940.34;1;7;33.44706
+BB70;72954.6;1;7;33.10077
+alpha : 0.03
+
+
+Parametros de controle dos criterios de parada
+
+max_it : 5000
+max_it_no_improv : 5000
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52438.44;1;5;30.27237
+AA70;52422.47;1;5;30.18077
+Parametros de controle dos criterios de parada
+
+max_it : 5000
+max_it_no_improv : 5000
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+AA70;52438.44;1;5;45.91271
+AA70;52422.73;1;5;42.95384
+Parametros de controle dos criterios de parada
+
+max_it : 2000
+max_it_no_improv : 1500
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 2000
+max_it_no_improv : 1500
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+Parametros de controle dos criterios de parada
+
+max_it : 2000
+max_it_no_improv : 1500
+it_RRH_intervalo : 125
+it_RRH : 40
+
+
+Parametros da meta-heuristica
+
+seed : 1382364237
+eta : 0.7
+kappa : 0.8
+gamma : 25
+d_b : 16
+noise : 0.07
+LR2_4_4.txt;47423.58;1;4;200.2386
+LR2_4_4.txt;46780.06;1;4;215.9651

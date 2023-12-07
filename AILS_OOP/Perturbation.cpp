@@ -54,14 +54,14 @@ Sol RandomRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
+	//S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
-	//for (auto pedido: pedidos_nao_inseridos){
+	for (auto pedido: pedidos_nao_inseridos){
 		
-	//	S.executarMelhorInsercao(pedido, aplicar_ruido);
+		S.executarMelhorInsercao(pedido, aplicar_ruido);
 		
-	//}
+	}
 	
 	return S;
 };
@@ -152,7 +152,7 @@ Sol WorstRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	// S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
+	//S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
 	for (auto pedido: pedidos_nao_inseridos){
@@ -228,7 +228,7 @@ Sol ConcentricRemoval::aplicarMetodoEspecifico(Sol &S, bool aplicar_ruido){
 	std::vector<double> pedidos_nao_inseridos = S.L;
 	
 	// Código guloso
-	// S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
+	//S.executarMelhoresInsercoes(pedidos_nao_inseridos, aplicar_ruido);
 	
 	// Código não guloso
 	for (auto pedido: pedidos_nao_inseridos){

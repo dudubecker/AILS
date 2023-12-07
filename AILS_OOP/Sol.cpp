@@ -534,7 +534,6 @@ double Sol::calcularFO(){
 	
 	custos_totais += 10000*(L_size);
 	
-	
 	return (double) custos_totais;
 }
 
