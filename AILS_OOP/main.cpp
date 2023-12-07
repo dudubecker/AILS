@@ -174,8 +174,8 @@ int main(){
 	
 	// Parâmetros de controle dos critérios de parada
 	
-	int max_it = 2000; // Número máximo de iterações do algoritmo
-	int max_it_sem_melhoria = 1500; // Número máximo de iterações sem melhoria
+	int max_it = 12000; // Número máximo de iterações do algoritmo
+	int max_it_sem_melhoria = 5000; // Número máximo de iterações sem melhoria
 	int it_RRH_intervalo = 125; // it_RRH_intervalo: Intervalo de iterações para aplicação de route reduction heuristic
 	int it_RRH = 40; // it_RRH: Número iterações da route reduction heuristic a cada intervalo
 	int max_t = 3600; // Tempo máximo de execução do algoritmo
@@ -296,7 +296,7 @@ int main(){
 		//"BB60",
 		// "BB65",
 		//"BB70",
-		// "BB75",
+		//"BB75",
 		//"CC5",
 		//"CC10",
 		//"CC15",
@@ -327,7 +327,8 @@ int main(){
 		//"DD65",
 		// "DD70",
 		// "DD75",
-		"LR2_4_4.txt",
+		//"LR2_4_4.txt",
+		"LRC2_4_2.txt"
 	};
 	
 	

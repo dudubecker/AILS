@@ -357,11 +357,11 @@ void AILS::executarAILS(int max_it, int max_it_sem_melhoria, int it_RRH_interval
 			
 		}
 		
-		//if (it%200 == 0){
+		if (it%200 == 0){
 			
-		//	std::cout << "Iteracao " << it << std::endl;
+			std::cout << "Iteracao " << it << std::endl;
 			
-		//}
+		}
 		
 		// Criando uma cópia da solução de referência
 		Sol S = S_r;
